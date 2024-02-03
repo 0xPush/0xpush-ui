@@ -1,1 +1,1 @@
-### BlastPush 🚀
+### Blastpush.xyz 🚀

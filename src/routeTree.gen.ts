@@ -8,23 +8,17 @@ import { Route as rootRoute } from './routes/__root'
 
 // Create Virtual Routes
 
-const CreateLazyImport = createFileRoute('/create')()
-const AboutLazyImport = createFileRoute('/about')()
+const FaqLazyImport = createFileRoute('/faq')()
 const IndexLazyImport = createFileRoute('/')()
 const WPrivateKeyLazyImport = createFileRoute('/w/$privateKey')()
 const WPrivateKeyDepositLazyImport = createFileRoute('/w/$privateKey/deposit')()
 
 // Create/Update Routes
 
-const CreateLazyRoute = CreateLazyImport.update({
-  path: '/create',
+const FaqLazyRoute = FaqLazyImport.update({
+  path: '/faq',
   getParentRoute: () => rootRoute,
-} as any).lazy(() => import('./routes/create.lazy').then((d) => d.Route))
-
-const AboutLazyRoute = AboutLazyImport.update({
-  path: '/about',
-  getParentRoute: () => rootRoute,
-} as any).lazy(() => import('./routes/about.lazy').then((d) => d.Route))
+} as any).lazy(() => import('./routes/faq.lazy').then((d) => d.Route))
 
 const IndexLazyRoute = IndexLazyImport.update({
   path: '/',
@@ -51,12 +45,8 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexLazyImport
       parentRoute: typeof rootRoute
     }
-    '/about': {
-      preLoaderRoute: typeof AboutLazyImport
-      parentRoute: typeof rootRoute
-    }
-    '/create': {
-      preLoaderRoute: typeof CreateLazyImport
+    '/faq': {
+      preLoaderRoute: typeof FaqLazyImport
       parentRoute: typeof rootRoute
     }
     '/w/$privateKey': {
@@ -74,8 +64,7 @@ declare module '@tanstack/react-router' {
 
 export const routeTree = rootRoute.addChildren([
   IndexLazyRoute,
-  AboutLazyRoute,
-  CreateLazyRoute,
+  FaqLazyRoute,
   WPrivateKeyLazyRoute,
   WPrivateKeyDepositLazyRoute,
 ])
