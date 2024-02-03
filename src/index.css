@@ -1,0 +1,31 @@
+@font-face {
+  font-family: Geomgraphic;
+  src: url("/fonts/geom-regular.otf") format("opentype");
+}
+
+@font-face {
+  font-family: Geomgraphic;
+  font-weight: 300;
+  src: url("/fonts/geom-light.otf") format("opentype");
+}
+
+@font-face {
+  font-family: Geomgraphic;
+  font-weight: 500;
+  src: url("/fonts/geom-semibold.otf") format("opentype");
+}
+
+@font-face {
+  font-family: Geomgraphic;
+  font-weight: 600;
+  src: url("/fonts/geom-bold.otf") format("opentype");
+}
+
+body {
+  margin: 0;
+  font-family: Geomgraphic, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  background-color: #000000;
+  color: white;
+}
