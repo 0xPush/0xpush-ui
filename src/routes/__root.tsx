@@ -41,9 +41,7 @@ export const Route = createRootRoute({
           </AppContainer>
         </PriceProvider>
       </ChakraProvider>
-      <Suspense>
-        <TanStackRouterDevtools />
-      </Suspense>
+      <Suspense>{/* <TanStackRouterDevtools /> */}</Suspense>
     </Web3ModalProvider>
   ),
 });

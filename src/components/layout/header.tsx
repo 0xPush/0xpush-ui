@@ -1,7 +1,5 @@
-import styled from "@emotion/styled";
 import {
   Button,
-  Icon,
   IconButton,
   Link,
   Menu,
@@ -13,17 +11,13 @@ import {
   useColorMode,
   useMediaQuery,
 } from "@chakra-ui/react";
+import styled from "@emotion/styled";
 
 import { ChevronDownIcon, MoonIcon, SunIcon } from "@chakra-ui/icons";
-import {
-  useWeb3Modal,
-  useWeb3ModalAccount,
-  useWeb3ModalProvider,
-  useWeb3ModalState,
-  useWeb3ModalTheme,
-} from "@web3modal/ethers/react";
-import { HeaderWalletConnect } from "./header-wallet-connect";
+import { useWeb3ModalTheme } from "@web3modal/ethers/react";
 import { useEffect } from "react";
+import { HeaderWalletConnect } from "./header-wallet-connect";
+import { useNavigate } from "@tanstack/react-router";
 
 const Container = styled.header<{ bg: string }>`
   display: flex;
@@ -106,6 +100,8 @@ export const Header = () => {
   const bgColor = { light: "rgba(255, 255, 255, 0.5)", dark: "transparent" };
   const [showSomeActions] = useMediaQuery("(min-width: 600px)");
 
+  const navigate = useNavigate();
+
   const { setThemeMode } = useWeb3ModalTheme();
 
   useEffect(() => {
@@ -120,7 +116,7 @@ export const Header = () => {
             <Menu>
               <MenuButton as="div">
                 <Stack direction="row">
-                  <h1>BlastPush</h1>
+                  <div>BlastPush</div>
                   {/* <Image className="logo" src={LogoImage} /> */}
                   <ChevronDownIcon
                     width="24px"
@@ -130,14 +126,11 @@ export const Header = () => {
                 </Stack>
               </MenuButton>
               <MenuList>
-                <Link href={"/"}>
+                <Link onClick={() => navigate({ to: "/" })}>
                   <MenuItem>Create new push</MenuItem>
                 </Link>
                 <Link href={"/faq"}>
                   <MenuItem>FAQ</MenuItem>
-                </Link>
-                <Link href={"/api-docs"}>
-                  <MenuItem>API</MenuItem>
                 </Link>
                 <a
                   href={"https://twitter.com/solpushcom"}

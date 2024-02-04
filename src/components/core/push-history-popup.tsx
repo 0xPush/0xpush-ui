@@ -154,7 +154,7 @@ export const PushHistoryPopup = (): JSX.Element => {
             align="baseline"
           >
             <Heading color="gray.300" size="md">
-              Push History
+              History
             </Heading>
             <div style={{ width: "1px" }} />
             <Button
@@ -176,7 +176,7 @@ export const PushHistoryPopup = (): JSX.Element => {
             <Table variant="simple" size="sm">
               <Thead>
                 <Tr>
-                  <Th>Key</Th>
+                  <Th>Address</Th>
                   <Th>Recipient</Th>
                   <Th>Type</Th>
                   <Th isNumeric>Link</Th>

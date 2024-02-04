@@ -8,6 +8,7 @@ import {
   useWeb3ModalState,
 } from "@web3modal/ethers/react";
 import { blastTestnet } from "../../providers/web3-modal-provider";
+import { shortString } from "../../lib/string";
 
 const Container = styled.div`
   display: flex;
@@ -42,7 +43,9 @@ export const HeaderWalletConnect = ({ className }: Props): JSX.Element => {
         </Button>
       )}
       {isConnected && chainId === blastTestnet.chainId && (
-        <w3m-button size="sm" />
+        <Button variant="outline" onClick={() => open({ view: "Account" })}>
+          {shortString(address as string)}
+        </Button>
       )}
     </Container>
   );
