@@ -1,7 +1,11 @@
 import { ChakraProvider, createLocalStorageManager } from "@chakra-ui/react";
 import styled from "@emotion/styled";
 
-import { RouterProvider, createRouter } from "@tanstack/react-router";
+import {
+  RouterProvider,
+  createMemoryHistory,
+  createRouter,
+} from "@tanstack/react-router";
 import { Content } from "./components/layout/content";
 import { Header } from "./components/layout/header";
 import { PriceProvider } from "./providers/price-provider";
@@ -10,7 +14,11 @@ import { theme } from "./theme";
 import { Web3ModalProvider } from "./providers/web3-modal-provider";
 
 // Create a new router instance
-const router = createRouter({ routeTree });
+const memoryHistory = createMemoryHistory({
+  initialEntries: ["/"],
+});
+
+const router = createRouter({ routeTree, history: memoryHistory });
 
 // Register the router instance for type safety
 declare module "@tanstack/react-router" {
