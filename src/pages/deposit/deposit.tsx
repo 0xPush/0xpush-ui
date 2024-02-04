@@ -49,8 +49,6 @@ export const Deposit = ({ className }: Props): JSX.Element => {
 
   const fromPush = false;
 
-  console.log(wallet, router.state.location);
-
   const hostname = window?.location.origin;
 
   const handleLinkCopy = () => {
@@ -60,9 +58,7 @@ export const Deposit = ({ className }: Props): JSX.Element => {
 
   return (
     <Container className={className}>
-      {" "}
       <Container>
-        {/* <History /> */}
         <Fade in={true}>
           <Stack justify="center" align="center" mb={2} mx={2}>
             <$Heading size="lg" textAlign="center">
@@ -70,8 +66,7 @@ export const Deposit = ({ className }: Props): JSX.Element => {
             </$Heading>
             {!fromPush && (
               <Text mb={4} textAlign="center">
-                The recipient will obtain the funds and will be able to use them
-                via the link
+                The recipient will get access to the funds via the link
               </Text>
             )}
             {fromPush && (
@@ -109,7 +104,15 @@ export const Deposit = ({ className }: Props): JSX.Element => {
                 borderRadius="lg"
                 boxShadow="md"
               >
-                <TransferTokens to={wallet.address} />
+                <TransferTokens
+                  to={wallet.address}
+                  onSuccess={() =>
+                    toast({ title: "Success deposit", colorScheme: "green" })
+                  }
+                  onError={(e) =>
+                    toast({ title: e.message, colorScheme: "green" })
+                  }
+                />
               </Box>
             </ConnectWalletBlur>
           </Fade>

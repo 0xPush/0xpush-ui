@@ -1,6 +1,7 @@
 import styled from "@emotion/styled";
 import {
   Button,
+  Icon,
   IconButton,
   Link,
   Menu,
@@ -14,6 +15,15 @@ import {
 } from "@chakra-ui/react";
 
 import { ChevronDownIcon, MoonIcon, SunIcon } from "@chakra-ui/icons";
+import {
+  useWeb3Modal,
+  useWeb3ModalAccount,
+  useWeb3ModalProvider,
+  useWeb3ModalState,
+  useWeb3ModalTheme,
+} from "@web3modal/ethers/react";
+import { HeaderWalletConnect } from "./header-wallet-connect";
+import { useEffect } from "react";
 
 const Container = styled.header<{ bg: string }>`
   display: flex;
@@ -69,28 +79,9 @@ const Actions = styled.div`
   flex-flow: row nowrap;
   align-items: center;
   gap: 4px;
-
-  .wallet-adapter-button {
-    transform: scale(0.8);
-    transition: background-color 0.2s;
-    border-radius: var(--chakra-radii-md);
-  }
-
-  .wallet-adapter-button-start-icon {
-    display: none;
-  }
-
-  .wallet-adapter-button-trigger {
-    background: unset;
-    border: 1px solid var(--chakra-colors-pink-500);
-    color: var(--chakra-colors-pink-500);
-    padding: 0 10px 0 12px;
-  }
-
-  .wallet-adapter-button:not([disabled]):hover {
-    background: var(--chakra-colors-pink-100);
-  }
 `;
+
+const $HeaderWalletConnect = styled(HeaderWalletConnect)``;
 
 function ColorMode() {
   const { colorMode, toggleColorMode } = useColorMode();
@@ -114,6 +105,12 @@ export const Header = () => {
   const { colorMode } = useColorMode();
   const bgColor = { light: "rgba(255, 255, 255, 0.5)", dark: "transparent" };
   const [showSomeActions] = useMediaQuery("(min-width: 600px)");
+
+  const { setThemeMode } = useWeb3ModalTheme();
+
+  useEffect(() => {
+    setThemeMode(colorMode);
+  }, [colorMode, setThemeMode]);
 
   return (
     <>
@@ -147,18 +144,14 @@ export const Header = () => {
                   target="_blank"
                   rel="noreferrer noopener"
                 >
-                  <MenuItem>
-                    {/* Twitter <Icon ml={2} as={FaTwitter} /> */}
-                  </MenuItem>
+                  <MenuItem>Twitter</MenuItem>
                 </a>
                 <a
-                  href={"https://t.me/solanapush"}
+                  href={"https://t.me/blastpush"}
                   target="_blank"
                   rel="noreferrer noopener"
                 >
-                  <MenuItem>
-                    {/* Telegram <Icon ml={2} as={FaTelegramPlane} /> */}
-                  </MenuItem>
+                  <MenuItem>Telegram</MenuItem>
                 </a>
               </MenuList>
             </Menu>
@@ -173,7 +166,7 @@ export const Header = () => {
             </Link>
           )}
           <ColorMode />
-          {/* <WalletMultiButton /> */}
+          <$HeaderWalletConnect />
         </Actions>
       </Container>
       <FakeHeader />

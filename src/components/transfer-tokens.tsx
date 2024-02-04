@@ -73,7 +73,7 @@ export const TransferTokens = ({
   label = "Send",
   useBrowserWallet = true,
 }: Props) => {
-  const { wallet } = useInnerWalletContext();
+  const { wallet, updateBalance } = useInnerWalletContext();
   const { address, isConnected } = useWeb3ModalAccount();
   const { walletProvider } = useWeb3ModalProvider();
 
@@ -119,6 +119,7 @@ export const TransferTokens = ({
 
         const receipt = await tx.wait();
         console.log(receipt);
+        updateBalance();
 
         onSuccess?.(receipt?.hash as string);
       } catch (e) {
@@ -143,8 +144,6 @@ export const TransferTokens = ({
 
     return label;
   };
-
-  console.log(amount, balance, amount > balance);
 
   return (
     <div className={className}>

@@ -2,18 +2,9 @@ import React from "react";
 import ReactDOM from "react-dom/client";
 import "normalize.css";
 import "./index.css";
-import {
-  RouterProvider,
-  createMemoryHistory,
-  createRouter,
-} from "@tanstack/react-router";
+import { RouterProvider, createRouter } from "@tanstack/react-router";
 
 import { routeTree } from "./routeTree.gen";
-
-// Create a new router instance
-// const memoryHistory = createMemoryHistory({
-//   initialEntries: ["/"],
-// });
 
 const router = createRouter({ routeTree });
 

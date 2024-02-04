@@ -67,7 +67,7 @@ export const PublicKey = ({ publicKey }: PublicKeyProps) => {
       boxShadow="md"
     >
       <Text textAlign="center" fontSize="12px" mb={2}>
-        You can send ETH, NFTs and other crypto to this address
+        You can send ETH to this address
       </Text>
       <KeyRow>
         <Content onClick={handleClick}>{publicKey}</Content>

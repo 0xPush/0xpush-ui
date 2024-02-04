@@ -40,17 +40,22 @@ export const InnerWalletProvider = ({
     wallet.provider
       ?.getBalance(wallet.address)
       .then((data) => setEthBalance(data));
-  }, []);
+  }, [wallet.address, wallet.provider]);
 
   useEffect(() => {
     if (wallet) {
       updateBalance();
     }
-  }, [wallet]);
+  }, [updateBalance, wallet]);
 
   const value = useMemo(
-    (): InnerWalletContextValue => ({ wallet, privateKey, ethBalance }),
-    [wallet, privateKey, ethBalance]
+    (): InnerWalletContextValue => ({
+      wallet,
+      privateKey,
+      ethBalance,
+      updateBalance,
+    }),
+    [wallet, privateKey, ethBalance, updateBalance]
   );
 
   return (
