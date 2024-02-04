@@ -2,6 +2,7 @@ import { Wallet, ethers } from "ethers";
 import {
   ReactNode,
   createContext,
+  useCallback,
   useContext,
   useEffect,
   useMemo,
@@ -12,6 +13,7 @@ interface InnerWalletContextValue {
   wallet: Wallet;
   privateKey: string;
   ethBalance: bigint;
+  updateBalance: () => void;
 }
 
 // @ts-ignore
@@ -34,11 +36,15 @@ export const InnerWalletProvider = ({
 
   const [ethBalance, setEthBalance] = useState<bigint>(0n);
 
+  const updateBalance = useCallback(() => {
+    wallet.provider
+      ?.getBalance(wallet.address)
+      .then((data) => setEthBalance(data));
+  }, []);
+
   useEffect(() => {
     if (wallet) {
-      wallet.provider
-        ?.getBalance(wallet.address)
-        .then((data) => setEthBalance(data));
+      updateBalance();
     }
   }, [wallet]);
 

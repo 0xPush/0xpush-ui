@@ -14,7 +14,7 @@ export interface Token {
   isEth: boolean;
 }
 
-export const ETHER_TOKEN = {
+export const ETHER_TOKEN: Token = {
   id: 0,
   name: "ETH",
   ticker: "ETH",

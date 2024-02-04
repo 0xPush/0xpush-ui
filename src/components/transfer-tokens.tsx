@@ -7,12 +7,16 @@ import {
   Text,
 } from "@chakra-ui/react";
 import styled from "@emotion/styled";
-import { formatEther, parseUnits } from "ethers";
-import { useState } from "react";
-import { ETHER_TOKEN, Token } from "../models/token";
+import { BrowserProvider, formatEther, parseUnits } from "ethers";
+import { useEffect, useState } from "react";
+import { ETHER_TOKEN } from "../models/token";
 import { useInnerWalletContext } from "../providers/inner-wallet-provider";
 import { usePrice } from "../providers/price-provider";
 import { TokenSelect } from "./token-select";
+import {
+  useWeb3ModalAccount,
+  useWeb3ModalProvider,
+} from "@web3modal/ethers/react";
 
 const $InputGroup = styled(InputGroup)`
   z-index: 1;
@@ -52,13 +56,12 @@ const FormLabel = styled.div`
 
 interface Props {
   to: string;
-  onSuccess?: (sig: string) => void;
+  onSuccess?: (txHash: string) => void;
   onError?: (err: Error) => void;
-  initialAmount?: string;
   label?: string;
   className?: string;
   disabled?: boolean;
-  max?: number;
+  useBrowserWallet?: boolean;
 }
 
 export const TransferTokens = ({
@@ -68,49 +71,83 @@ export const TransferTokens = ({
   disabled,
   className,
   label = "Send",
+  useBrowserWallet = true,
 }: Props) => {
   const { wallet } = useInnerWalletContext();
+  const { address, isConnected } = useWeb3ModalAccount();
+  const { walletProvider } = useWeb3ModalProvider();
 
   const { ethPriceUsd } = usePrice();
 
-  const [amount, setAmount] = useState<bigint>(0n);
-  const [input, setInput] = useState<string>("0");
-  const [token, setToken] = useState<Token>(ETHER_TOKEN);
+  const [amount, setAmount] = useState(parseUnits("0.1"));
+  const [input, setInput] = useState("0.1");
+  const [token, setToken] = useState(ETHER_TOKEN);
+
+  const [balance, setBalance] = useState(0n);
+
+  useEffect(() => {
+    // Update balance
+    const fn = async () => {
+      const ethersProvider = new BrowserProvider(walletProvider!);
+      const signer = await ethersProvider.getSigner();
+      const balance = await ethersProvider.getBalance(signer.address);
+      setBalance(balance);
+    };
+
+    if (isConnected && useBrowserWallet) {
+      fn();
+    }
+  }, [isConnected, useBrowserWallet, walletProvider]);
 
   // const [fee, setFee] = useState(5000);
 
   const [isSending, setIsSending] = useState(false);
-
   const usdAmount = (parseFloat(formatEther(amount)) * ethPriceUsd).toFixed(2);
 
   const handleSend = async () => {
     setIsSending(true);
+
+    if (useBrowserWallet) {
+      const ethersProvider = new BrowserProvider(walletProvider!);
+      const signer = await ethersProvider.getSigner();
+
+      try {
+        const tx = await signer.sendTransaction({
+          to,
+          value: amount,
+        });
+
+        const receipt = await tx.wait();
+        console.log(receipt);
+
+        onSuccess?.(receipt?.hash as string);
+      } catch (e) {
+        console.error(e);
+        onError?.(e as Error);
+      }
+    }
+
     setIsSending(false);
   };
 
-  const getMax = () => {
-    const value: number = 0;
-    // if (!token) {
-    //   value = (lamports - fee) / LAMPORTS_PER_SOL;
-    // } else {
-    //   value =
-    //     tokens.find((item) => item.raw.info.mint === token!.raw.info.mint)
-    //       ?.tokenAmount.uiAmount || 0;
-    // }
-    return value;
-  };
-
   const setMax = () => {
-    setInput(String(getMax()));
-    // setAmount(getMax());
+    // TODO: ensure tx fee
+    setInput(formatEther(balance));
+    setAmount(balance);
   };
 
-  //   useEffect(() => {
-  //     setMax();
-  //   }, [balanceHash, token]);
+  const getLabel = () => {
+    if (amount > balance) {
+      return "Insufficient";
+    }
+
+    return label;
+  };
+
+  console.log(amount, balance, amount > balance);
 
   return (
-    <>
+    <div className={className}>
       <FormLabel>You pay</FormLabel>
       <$InputGroup mb={2}>
         <$NumberInput
@@ -137,15 +174,15 @@ export const TransferTokens = ({
       <Stack mt={3} justify="center">
         <Button
           onClick={handleSend}
-          disabled={!to || disabled || amount > getMax() || amount === 0n}
+          isDisabled={!to || disabled || amount > balance || amount === 0n}
           colorScheme="purple"
           isLoading={isSending}
           loadingText="Wait..."
           type="submit"
         >
-          {label} {token?.ticker}
+          {getLabel()} {token?.ticker}
         </Button>
       </Stack>
-    </>
+    </div>
   );
 };

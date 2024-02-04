@@ -16,7 +16,7 @@ const Blur = styled.div`
   position: absolute;
   inset: 0;
   backdrop-filter: blur(4px) grayscale(30%) sepia(20%);
-  z-index: 1;
+  z-index: 2;
 `;
 
 const Content = styled.div`
@@ -26,7 +26,7 @@ const Content = styled.div`
   flex-flow: column nowrap;
   justify-content: center;
   align-items: center;
-  z-index: 2;
+  z-index: 3;
 
   .wallet-adapter-button {
     transition: background-color 0.2s;
