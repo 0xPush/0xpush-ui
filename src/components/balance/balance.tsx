@@ -1,24 +1,12 @@
-import {
-  Box,
-  Button,
-  Collapse,
-  Divider,
-  Stack,
-  useColorMode,
-  useDisclosure,
-} from "@chakra-ui/react";
+import { Box, useColorMode } from "@chakra-ui/react";
 
 import styled from "@emotion/styled";
 
-// import { usePushContext } from "components/core/push/push-provider";
-// import { getShortMint } from "lib/get-tokens";
-// import { NftModal } from "components/core/nft-modal";
 import { forwardRef, useState } from "react";
-import { ChevronDownIcon, ChevronUpIcon } from "@chakra-ui/icons";
 import { useInnerWalletContext } from "../../providers/inner-wallet-provider";
 
+import { formatEther, formatUnits } from "ethers";
 import EtherLogo from "../../assets/eth-logo.svg?react";
-import { formatEther } from "ethers";
 import { usePrice } from "../../providers/price-provider";
 
 const $Box = styled(Box)`
@@ -124,7 +112,12 @@ export const Balance = forwardRef<
           <EtherLogo width={28} height={28} />
           <Column>
             <CoinName>Ethereum</CoinName>
-            <CoinAmount>{formatEther(ethBalance)} ETH</CoinAmount>
+            <CoinAmount>
+              {parseFloat(formatUnits(ethBalance, 18)).toLocaleString("en", {
+                minimumFractionDigits: 4,
+              })}{" "}
+              ETH
+            </CoinAmount>
           </Column>
         </Row>
         <UsdAmount dark={colorMode === "dark"}>${ethBalanceUsd} USD</UsdAmount>

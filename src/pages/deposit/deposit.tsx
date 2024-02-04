@@ -19,6 +19,7 @@ import { QrModal } from "../../components/qr-modal";
 import { copyTextToClipboard } from "../../lib/copy";
 import { Balance } from "../../components/balance/balance";
 import { ConnectWalletBlur } from "../../components/balance/connect-wallet-blur";
+import { TransferTokens } from "../../components/transfer-tokens";
 
 const Container = styled.div`
   margin-top: 2vh;
@@ -108,13 +109,7 @@ export const Deposit = ({ className }: Props): JSX.Element => {
                 borderRadius="lg"
                 boxShadow="md"
               >
-                transfers
-                {/* <PushProvider wallet={wallet!}>
-                  <TransferTokens
-                    to={keypair.publicKey.toString()}
-                    label="Deposit"
-                  />
-                </PushProvider> */}
+                <TransferTokens to={wallet.address} />
               </Box>
             </ConnectWalletBlur>
           </Fade>
