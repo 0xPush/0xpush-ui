@@ -14,7 +14,7 @@ interface InnerWalletContextValue {
   wallet: Wallet;
   privateKey: string;
   ethBalance: bigint;
-  totalUsdAmount: number;
+  totalUsdAmount: string;
   updateBalance: () => void;
 }
 

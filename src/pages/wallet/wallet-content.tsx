@@ -19,6 +19,8 @@ import { ActionCard } from "./action-card";
 import { WalletActions } from "./wallet-actions";
 import { Balance } from "../../components/balance/balance";
 import { usePrice } from "../../providers/price-provider";
+import { Earn } from "./cards/earn";
+import { Send } from "./cards/send";
 
 const Container = styled.div`
   margin-top: 2vh;
@@ -41,8 +43,7 @@ const Highlight = styled.span`
 type Action = "send" | "swap" | "earn" | "games" | "markets" | null;
 
 export const WalletContent = () => {
-  const { ethPriceUsd } = usePrice();
-  const { wallet, ethBalance, privateKey, updateBalance } =
+  const { wallet, ethBalance, totalUsdAmount, privateKey, updateBalance } =
     useInnerWalletContext();
   const [action, setAction] = useState<Action>(null);
 
@@ -80,14 +81,12 @@ export const WalletContent = () => {
     }
   };
 
-  const totalUsdAmountLabel = 10;
-
   return (
     <Container>
       <Fade in={true}>
-        <Stack data-testid="greeting" justify="center" align="center" mb={8}>
+        <Stack justify="center" align="center" mb={8}>
           <$Heading textAlign="center" size="lg">
-            You received <Highlight>{totalUsdAmountLabel}</Highlight> USD{" "}
+            You received <Highlight>{totalUsdAmount}</Highlight> USD{" "}
             {preset?.from && `from ${preset.from}`}
           </$Heading>
         </Stack>
@@ -118,7 +117,6 @@ export const WalletContent = () => {
         </Stack>
         <Stack width={370} direction="row" spacing={4}>
           <ActionCard
-            ref={earnRef}
             onClick={() => handleActionClick("earn")}
             active={action === "earn"}
             label="Earn"
@@ -142,9 +140,9 @@ export const WalletContent = () => {
         </Stack>
       </Stack>
       <Stack align="center" mt={7} mb={3}>
-        {/* {action === "send" && <Send />}
-        {action === "swap" && <Swap />}
-        {action === "earn" && <Earn />} */}
+        {action === "earn" && <Earn />}
+        {action === "send" && <Send />}
+        {action === "swap" && <p>Swaps are coming soon 👀</p>}
         {/* {action === "games" && <Games />}
         {action === "markets" && <Markets />} */}
       </Stack>
