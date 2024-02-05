@@ -1,10 +1,18 @@
-import { createLazyFileRoute } from "@tanstack/react-router"
+import { createLazyFileRoute } from "@tanstack/react-router";
+import { InnerWalletProvider } from "../providers/inner-wallet-provider";
+import { PushHistoryPopup } from "../components/core/push-history-popup";
+import { WalletContent } from "../pages/wallet";
 
-export const Route = createLazyFileRoute('/w/$privateKey')({
-    component: Wallet,
-  })
-  
-function Wallet() {
+export const Route = createLazyFileRoute("/w/$privateKey")({
+  component: Component,
+});
+
+function Component() {
   const { privateKey } = Route.useParams();
- return <div className="p-2">key: {privateKey}</div>
+  return (
+    <InnerWalletProvider privateKey={privateKey}>
+      <WalletContent />
+      <PushHistoryPopup />
+    </InnerWalletProvider>
+  );
 }

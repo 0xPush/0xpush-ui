@@ -133,7 +133,7 @@ export const Header = () => {
                   <MenuItem>FAQ</MenuItem>
                 </Link>
                 <a
-                  href={"https://twitter.com/solpushcom"}
+                  href={"https://twitter.com/blast_push"}
                   target="_blank"
                   rel="noreferrer noopener"
                 >

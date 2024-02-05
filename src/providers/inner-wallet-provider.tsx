@@ -1,4 +1,4 @@
-import { Wallet, ethers } from "ethers";
+import { Wallet, ethers, formatEther } from "ethers";
 import {
   ReactNode,
   createContext,
@@ -8,11 +8,13 @@ import {
   useMemo,
   useState,
 } from "react";
+import { usePrice } from "./price-provider";
 
 interface InnerWalletContextValue {
   wallet: Wallet;
   privateKey: string;
   ethBalance: bigint;
+  totalUsdAmount: number;
   updateBalance: () => void;
 }
 
@@ -29,12 +31,18 @@ export const InnerWalletProvider = ({
   privateKey: string;
   children: ReactNode;
 }) => {
+  const { ethPriceUsd } = usePrice();
+
   const wallet = useMemo(
     () => new ethers.Wallet(privateKey, ethersProvider),
     [privateKey]
   );
 
   const [ethBalance, setEthBalance] = useState<bigint>(0n);
+
+  const totalUsdAmount = (
+    ethPriceUsd * Number(formatEther(ethBalance))
+  ).toFixed(2);
 
   const updateBalance = useCallback(() => {
     wallet.provider
@@ -54,8 +62,9 @@ export const InnerWalletProvider = ({
       privateKey,
       ethBalance,
       updateBalance,
+      totalUsdAmount,
     }),
-    [wallet, privateKey, ethBalance, updateBalance]
+    [wallet, privateKey, ethBalance, updateBalance, totalUsdAmount]
   );
 
   return (

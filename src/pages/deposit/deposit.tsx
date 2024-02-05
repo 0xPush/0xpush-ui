@@ -39,7 +39,7 @@ interface Props {
 }
 
 export const Deposit = ({ className }: Props): JSX.Element => {
-  const { wallet } = useInnerWalletContext();
+  const { wallet, updateBalance } = useInnerWalletContext();
   const { colorMode } = useColorMode();
   const { isOpen, onOpen, onClose } = useDisclosure();
   const toast = useToast();
@@ -106,9 +106,10 @@ export const Deposit = ({ className }: Props): JSX.Element => {
               >
                 <TransferTokens
                   to={wallet.address}
-                  onSuccess={() =>
-                    toast({ title: "Success deposit", colorScheme: "green" })
-                  }
+                  onSuccess={() => {
+                    toast({ title: "Success deposit", colorScheme: "green" });
+                    updateBalance();
+                  }}
                   onError={(e) =>
                     toast({ title: e.message, colorScheme: "green" })
                   }

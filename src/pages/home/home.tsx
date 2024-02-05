@@ -33,6 +33,11 @@ const TypewriterContainer = styled.span`
 
   .Typewriter__cursor {
     opacity: 0;
+    max-width: 2px !important;
+  }
+
+  .Typewriter__wrapper {
+    padding: 0;
   }
 `;
 
@@ -46,7 +51,7 @@ export const Home = ({ className }: Props): JSX.Element => {
       {/* <History /> */}
       <Stack justify="center" align="center" mb={10}>
         <HeadingBlock>
-          <$Heading textAlign="center">Share</$Heading>
+          <$Heading textAlign="center">Share </$Heading>
           <TypewriterContainer>
             <$Heading>
               <Typewriter
@@ -60,7 +65,7 @@ export const Home = ({ className }: Props): JSX.Element => {
               />
             </$Heading>
           </TypewriterContainer>
-          <$Heading textAlign="center">&nbsp; in Blast L2</$Heading>
+          <$Heading textAlign="center">&nbsp;in Blast L2</$Heading>
         </HeadingBlock>
         <$Heading mb={12} textAlign="center">
           with native yield

@@ -72,12 +72,7 @@ export const Balance = forwardRef<
   HTMLDivElement | undefined,
   BalanceDisplayProps
 >(function BalanceDisplay({ className }, ref) {
-  const { wallet, ethBalance } = useInnerWalletContext();
-  const { ethPriceUsd } = usePrice();
-
-  const ethBalanceUsd = (ethPriceUsd * Number(formatEther(ethBalance))).toFixed(
-    2
-  );
+  const { wallet, ethBalance, totalUsdAmount } = useInnerWalletContext();
 
   //   wallet.provider?.getBalance()
 
@@ -120,7 +115,7 @@ export const Balance = forwardRef<
             </CoinAmount>
           </Column>
         </Row>
-        <UsdAmount dark={colorMode === "dark"}>${ethBalanceUsd} USD</UsdAmount>
+        <UsdAmount dark={colorMode === "dark"}>${totalUsdAmount} USD</UsdAmount>
       </BalanceItem>
       {/* {showMore && tokens.length > 0 && <Divider my={0} py={0} />} */}
       {/* {tokens.length > 0 && (

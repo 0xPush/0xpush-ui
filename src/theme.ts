@@ -28,7 +28,7 @@ const colors = {
   },
 };
 
-const dark = "#232323";
+const dark = "#11140C";
 const light = "#f0f0f0";
 
 const config: ThemeConfig = {
