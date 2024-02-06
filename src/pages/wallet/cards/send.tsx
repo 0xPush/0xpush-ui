@@ -53,7 +53,7 @@ export const Send = () => {
           fromConnectedWallet={false}
           onSuccess={(tx) => {
             toast({
-              title: `${formatEther(tx.value)} ETH sent. Transaction hash: ${tx.hash}.`,
+              title: `${formatEther(tx.value)} ETH sent. Tx: ${tx.hash}.`,
               colorScheme: "green",
             });
           }}

@@ -12,13 +12,14 @@ import {
 import styled from "@emotion/styled";
 import {
   BrowserProvider,
+  Contract,
   TransactionReceipt,
   TransactionRequest,
   TransactionResponse,
   formatEther,
   parseUnits,
 } from "ethers";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { ETHER_TOKEN } from "../models/token";
 import { useInnerWalletContext } from "../providers/inner-wallet-provider";
 import { usePrice } from "../providers/price-provider";
@@ -28,6 +29,7 @@ import {
   useWeb3ModalProvider,
 } from "@web3modal/ethers/react";
 import { QuestionOutlineIcon } from "@chakra-ui/icons";
+import { readPushData, savePushData } from "../lib/storage-contract";
 
 const $InputGroup = styled(InputGroup)`
   z-index: 1;
@@ -82,32 +84,36 @@ export const SetupCustomization = ({
   className,
 }: Props) => {
   const { wallet, ethBalance, updateBalance } = useInnerWalletContext();
-  const { isConnected } = useWeb3ModalAccount();
   const { walletProvider } = useWeb3ModalProvider();
 
-  const { ethPriceUsd } = usePrice();
+  const ethersProvider = useMemo(
+    () => new BrowserProvider(walletProvider!),
+    [walletProvider]
+  );
+
+  useEffect(() => {
+    readPushData(to)
+      .then((data) => {
+        console.log(data);
+        setFromName(data.from_name);
+        setToName(data.to_name);
+      })
+      .catch((e) => {
+        console.log(e);
+      });
+  }, [to]);
 
   const [fromName, setFromName] = useState("");
   const [toName, setToName] = useState("");
 
   const [isSending, setIsSending] = useState(false);
 
-  // todo: read from contract
-
   const handleSend = async () => {
     setIsSending(true);
 
-    const ethersProvider = new BrowserProvider(walletProvider!);
-    const signer = await ethersProvider.getSigner();
-
-    // todo: save to contract
-
     try {
-      const tx = await signer.sendTransaction({
-        to,
-        // value: amount,
-      });
-
+      const signer = await ethersProvider.getSigner();
+      const tx = await savePushData(signer, to, fromName, toName);
       const receipt = await tx.wait();
 
       console.log(receipt);
@@ -125,7 +131,7 @@ export const SetupCustomization = ({
     <div className={className}>
       <Heading mb={2} fontSize="small" textAlign="center">
         Customize
-        <Tooltip label={"Save some on-chain data for receiver"}>
+        <Tooltip label={"Show data for recipient (stored on-chain)"}>
           <QuestionOutlineIcon ml="6px" />
         </Tooltip>
       </Heading>
@@ -135,6 +141,7 @@ export const SetupCustomization = ({
         placeholder="Alex"
         value={fromName}
         onChange={({ target: { value } }) => setFromName(value)}
+        disabled={isSending}
         maxLength={60}
       />
       <FormLabel>Recipient name</FormLabel>
@@ -143,6 +150,7 @@ export const SetupCustomization = ({
         placeholder="Alice"
         value={toName}
         onChange={({ target: { value } }) => setToName(value)}
+        disabled={isSending}
         maxLength={60}
       />
 

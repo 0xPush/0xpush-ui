@@ -110,7 +110,7 @@ export const Deposit = ({ className }: Props): JSX.Element => {
                   to={wallet.address}
                   onSuccess={(tx) => {
                     toast({
-                      title: `${formatEther(tx.value)} ETH sent. Transaction hash: ${tx.hash}.`,
+                      title: `${formatEther(tx.value)} ETH sent. Tx: ${tx.hash}.`,
                       colorScheme: "green",
                     });
                   }}
@@ -139,7 +139,7 @@ export const Deposit = ({ className }: Props): JSX.Element => {
                   to={wallet.address}
                   onSuccess={(tx) => {
                     toast({
-                      title: `${formatEther(tx.value)} ETH sent. Transaction hash: ${tx.hash}.`,
+                      title: `Data saved. Tx: ${tx.hash}.`,
                       colorScheme: "green",
                     });
                   }}
