@@ -7,7 +7,14 @@ import {
   Text,
 } from "@chakra-ui/react";
 import styled from "@emotion/styled";
-import { BrowserProvider, formatEther, parseUnits } from "ethers";
+import {
+  BrowserProvider,
+  TransactionReceipt,
+  TransactionRequest,
+  TransactionResponse,
+  formatEther,
+  parseUnits,
+} from "ethers";
 import { useEffect, useState } from "react";
 import { ETHER_TOKEN } from "../models/token";
 import { useInnerWalletContext } from "../providers/inner-wallet-provider";
@@ -56,12 +63,12 @@ const FormLabel = styled.div`
 
 interface Props {
   to: string;
-  onSuccess?: (txHash: string) => void;
+  onSuccess?: (tx: TransactionResponse, receipt: TransactionReceipt) => void;
   onError?: (err: Error) => void;
   label?: string;
   className?: string;
   disabled?: boolean;
-  useBrowserWallet?: boolean;
+  fromConnectedWallet?: boolean;
 }
 
 export const TransferTokens = ({
@@ -71,10 +78,10 @@ export const TransferTokens = ({
   disabled,
   className,
   label = "Send",
-  useBrowserWallet = true,
+  fromConnectedWallet = true,
 }: Props) => {
-  const { wallet, updateBalance } = useInnerWalletContext();
-  const { address, isConnected } = useWeb3ModalAccount();
+  const { wallet, ethBalance, updateBalance } = useInnerWalletContext();
+  const { isConnected } = useWeb3ModalAccount();
   const { walletProvider } = useWeb3ModalProvider();
 
   const { ethPriceUsd } = usePrice();
@@ -83,7 +90,8 @@ export const TransferTokens = ({
   const [input, setInput] = useState("0.1");
   const [token, setToken] = useState(ETHER_TOKEN);
 
-  const [balance, setBalance] = useState(0n);
+  const [connectedWalletBalance, setConnectedWalletBalanceBalance] =
+    useState(0n);
 
   useEffect(() => {
     // Update balance
@@ -91,13 +99,13 @@ export const TransferTokens = ({
       const ethersProvider = new BrowserProvider(walletProvider!);
       const signer = await ethersProvider.getSigner();
       const balance = await ethersProvider.getBalance(signer.address);
-      setBalance(balance);
+      setConnectedWalletBalanceBalance(balance);
     };
 
-    if (isConnected && useBrowserWallet) {
+    if (isConnected && fromConnectedWallet) {
       fn();
     }
-  }, [isConnected, useBrowserWallet, walletProvider]);
+  }, [isConnected, fromConnectedWallet, walletProvider]);
 
   // const [fee, setFee] = useState(5000);
 
@@ -107,7 +115,7 @@ export const TransferTokens = ({
   const handleSend = async () => {
     setIsSending(true);
 
-    if (useBrowserWallet) {
+    if (fromConnectedWallet) {
       const ethersProvider = new BrowserProvider(walletProvider!);
       const signer = await ethersProvider.getSigner();
 
@@ -118,10 +126,31 @@ export const TransferTokens = ({
         });
 
         const receipt = await tx.wait();
+
         console.log(receipt);
         updateBalance();
+        onSuccess?.(tx, receipt!);
+      } catch (e) {
+        console.error(e);
+        onError?.(e as Error);
+      }
+    } else {
+      // send from push
 
-        onSuccess?.(receipt?.hash as string);
+      try {
+        const transaction: TransactionRequest = {
+          to,
+          value: amount,
+          // gasLimit: estimateGas,
+          // gasPrice: gasPrice,
+        };
+
+        const tx = await wallet.sendTransaction(transaction);
+        const receipt = await tx.wait();
+
+        console.log(receipt);
+        updateBalance();
+        onSuccess?.(tx, receipt!);
       } catch (e) {
         console.error(e);
         onError?.(e as Error);
@@ -133,16 +162,29 @@ export const TransferTokens = ({
 
   const setMax = () => {
     // TODO: ensure tx fee
-    setInput(formatEther(balance));
-    setAmount(balance);
+    if (fromConnectedWallet) {
+      setAmount(connectedWalletBalance);
+      setInput(formatEther(connectedWalletBalance));
+    } else {
+      setAmount(ethBalance);
+      setInput(formatEther(ethBalance));
+    }
   };
 
   const getLabel = () => {
-    if (amount > balance) {
+    if (fromConnectedWallet && amount > connectedWalletBalance) {
       return "Insufficient";
     }
 
     return label;
+  };
+
+  const isDisabled = () => {
+    if (fromConnectedWallet && amount > connectedWalletBalance) {
+      return true;
+    }
+
+    return disabled || !to || amount === 0n;
   };
 
   return (
@@ -173,7 +215,7 @@ export const TransferTokens = ({
       <Stack mt={3} justify="center">
         <Button
           onClick={handleSend}
-          isDisabled={!to || disabled || amount > balance || amount === 0n}
+          isDisabled={isDisabled()}
           colorScheme="purple"
           isLoading={isSending}
           loadingText="Wait..."

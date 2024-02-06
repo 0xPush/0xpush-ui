@@ -16,10 +16,8 @@ import {
   useColorMode,
   useDisclosure,
   useOutsideClick,
-  useToast,
 } from "@chakra-ui/react";
 import styled from "@emotion/styled";
-import { copyTextToClipboard } from "../../lib/copy";
 import { HistoryItem, PushHistory } from "../../lib/history";
 import { shortString } from "../../lib/string";
 import { useEffect, useRef, useState } from "react";
@@ -110,17 +108,15 @@ const $TableContainer = styled(TableContainer)`
 export const PushHistoryPopup = (): JSX.Element => {
   const { isOpen, onClose, onToggle } = useDisclosure();
   const ref = useRef<HTMLDivElement>();
-  const toast = useToast();
 
   const [history, setHistory] = useState<HistoryItem[]>([]);
 
   const { colorMode } = useColorMode();
   const bgColor = { light: "#ffffff", dark: "#3f3f3f" };
 
-  const copyLink = (secret: string) => {
+  const openLink = (privateKey: string) => {
     const hostname = window?.location.origin;
-    copyTextToClipboard(`${hostname}/w/${secret}`);
-    toast({ title: "Push link copied", colorScheme: "green" });
+    window.open(`${hostname}/w/${privateKey}`, "_blank");
   };
 
   useEffect(() => {
@@ -205,11 +201,11 @@ export const PushHistoryPopup = (): JSX.Element => {
                         <Button
                           colorScheme="blackAlpha"
                           height="28px"
-                          onClick={() => copyLink(secret)}
+                          onClick={() => openLink(secret)}
                           color="gray.300"
                           size="sm"
                         >
-                          Copy link
+                          Open
                         </Button>
                       </Td>
                     </Tr>

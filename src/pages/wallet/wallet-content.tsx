@@ -18,7 +18,6 @@ import { PushHistory } from "../../lib/history";
 import { ActionCard } from "./action-card";
 import { WalletActions } from "./wallet-actions";
 import { Balance } from "../../components/balance/balance";
-import { usePrice } from "../../providers/price-provider";
 import { Earn } from "./cards/earn";
 import { Send } from "./cards/send";
 
@@ -43,8 +42,7 @@ const Highlight = styled.span`
 type Action = "send" | "swap" | "earn" | "games" | "markets" | null;
 
 export const WalletContent = () => {
-  const { wallet, ethBalance, totalUsdAmount, privateKey, updateBalance } =
-    useInnerWalletContext();
+  const { wallet, totalUsdAmount, updateBalance } = useInnerWalletContext();
   const [action, setAction] = useState<Action>(null);
 
   const {

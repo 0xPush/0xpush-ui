@@ -1,8 +1,9 @@
-import { Box, Input, Stack, useColorMode } from "@chakra-ui/react";
+import { Box, Input, Stack, useColorMode, useToast } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
 import styled from "@emotion/styled";
 import { useWeb3ModalAccount } from "@web3modal/ethers/react";
 import { TransferTokens } from "../../../components/transfer-tokens";
+import { formatEther } from "ethers";
 
 const FormLabel = styled.div`
   display: flex;
@@ -18,6 +19,8 @@ const FormLabel = styled.div`
 export const Send = () => {
   const { address } = useWeb3ModalAccount();
   const [to, setTo] = useState("");
+
+  const toast = useToast();
 
   useEffect(() => {
     if (address) {
@@ -41,12 +44,21 @@ export const Send = () => {
         <FormLabel>EVM address</FormLabel>
         <Input
           mb={2}
-          //   isInvalid={!isPubkeyValid()}
           placeholder="0x123..."
           value={to}
           onChange={({ target: { value } }) => setTo(value)}
         />
-        <TransferTokens to={to} />
+        <TransferTokens
+          to={to}
+          fromConnectedWallet={false}
+          onSuccess={(tx) => {
+            toast({
+              title: `${formatEther(tx.value)} ETH sent. Transaction hash: ${tx.hash}.`,
+              colorScheme: "green",
+            });
+          }}
+          onError={(e) => toast({ title: e.message, colorScheme: "red" })}
+        />
       </Box>
     </Stack>
   );

@@ -20,6 +20,7 @@ import { copyTextToClipboard } from "../../lib/copy";
 import { Balance } from "../../components/balance/balance";
 import { ConnectWalletBlur } from "../../components/balance/connect-wallet-blur";
 import { TransferTokens } from "../../components/transfer-tokens";
+import { formatEther } from "ethers";
 
 const Container = styled.div`
   margin-top: 2vh;
@@ -106,12 +107,14 @@ export const Deposit = ({ className }: Props): JSX.Element => {
               >
                 <TransferTokens
                   to={wallet.address}
-                  onSuccess={() => {
-                    toast({ title: "Success deposit", colorScheme: "green" });
-                    updateBalance();
+                  onSuccess={(tx) => {
+                    toast({
+                      title: `${formatEther(tx.value)} ETH sent. Transaction hash: ${tx.hash}.`,
+                      colorScheme: "green",
+                    });
                   }}
                   onError={(e) =>
-                    toast({ title: e.message, colorScheme: "green" })
+                    toast({ title: e.message, colorScheme: "red" })
                   }
                 />
               </Box>
