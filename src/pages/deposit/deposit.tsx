@@ -21,6 +21,7 @@ import { Balance } from "../../components/balance/balance";
 import { ConnectWalletBlur } from "../../components/balance/connect-wallet-blur";
 import { TransferTokens } from "../../components/transfer-tokens";
 import { formatEther } from "ethers";
+import { SetupCustomization } from "../../components/setup-customization";
 
 const Container = styled.div`
   margin-top: 2vh;
@@ -106,6 +107,35 @@ export const Deposit = ({ className }: Props): JSX.Element => {
                 boxShadow="md"
               >
                 <TransferTokens
+                  to={wallet.address}
+                  onSuccess={(tx) => {
+                    toast({
+                      title: `${formatEther(tx.value)} ETH sent. Transaction hash: ${tx.hash}.`,
+                      colorScheme: "green",
+                    });
+                  }}
+                  label="Deposit"
+                  onError={(e) =>
+                    toast({ title: e.message, colorScheme: "red" })
+                  }
+                />
+              </Box>
+            </ConnectWalletBlur>
+          </Fade>
+        </Stack>
+
+        <Stack mb={5} justify="center" align="center">
+          <Fade in={true}>
+            <ConnectWalletBlur>
+              <Box
+                bg={bgColor[colorMode]}
+                w="370px"
+                maxWidth="100%"
+                p={4}
+                borderRadius="lg"
+                boxShadow="md"
+              >
+                <SetupCustomization
                   to={wallet.address}
                   onSuccess={(tx) => {
                     toast({

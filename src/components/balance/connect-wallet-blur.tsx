@@ -6,6 +6,7 @@ import {
   useWeb3ModalProvider,
 } from "@web3modal/ethers/react";
 import React, { ReactNode } from "react";
+import { blastTestnet } from "../../providers/web3-modal-provider";
 
 const Container = styled.div`
   position: relative;
@@ -67,6 +68,19 @@ export const ConnectWalletBlur = ({
         </Content>
       )}
       {!isConnected && <Blur />}
+      {isConnected && chainId !== blastTestnet.chainId && (
+        <>
+          <Blur />
+          <Content>
+            <Button
+              variant="outline"
+              onClick={() => open({ view: "Networks" })}
+            >
+              Wrong network
+            </Button>
+          </Content>
+        </>
+      )}
       {children}
     </Container>
   );

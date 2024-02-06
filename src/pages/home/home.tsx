@@ -15,7 +15,7 @@ const Container = styled.div`
 
 const HeadingBlock = styled.div`
   display: flex;
-  flex-flow: row nowrap;
+  flex-flow: row wrap;
   justify-content: center;
   align-items: center;
 `;
@@ -48,7 +48,6 @@ interface Props {
 export const Home = ({ className }: Props): JSX.Element => {
   return (
     <Container>
-      {/* <History /> */}
       <Stack justify="center" align="center" mb={10}>
         <HeadingBlock>
           <$Heading textAlign="center">Share </$Heading>
