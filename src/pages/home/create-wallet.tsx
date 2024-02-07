@@ -16,7 +16,6 @@ export const CreateWallet = ({ className }: Props): JSX.Element => {
   const navigate = useNavigate();
   const handleCreate = () => {
     const newWallet = ethers.Wallet.createRandom();
-    console.log(newWallet);
 
     PushHistory.addToHistory({
       secret: newWallet.privateKey,
@@ -32,7 +31,14 @@ export const CreateWallet = ({ className }: Props): JSX.Element => {
 
   return (
     <Container className={className}>
-      <Button onClick={handleCreate}>Create wallet</Button>
+      <Button
+        variant="solid"
+        colorScheme="yellow"
+        size="lg"
+        onClick={handleCreate}
+      >
+        Create push
+      </Button>
     </Container>
   );
 };

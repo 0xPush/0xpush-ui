@@ -7,7 +7,7 @@ import Select, {
   OptionProps,
   SingleValueProps,
 } from "react-select";
-import { ETHER_TOKEN, Token } from "../models/token";
+import { ETHER_TOKEN, Token } from "../types/token";
 
 const Container = styled.div<{ dark: boolean }>`
   z-index: 1;

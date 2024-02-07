@@ -16,7 +16,7 @@ import {
   parseUnits,
 } from "ethers";
 import { useEffect, useState } from "react";
-import { ETHER_TOKEN } from "../models/token";
+import { ETHER_TOKEN } from "../types/token";
 import { useInnerWalletContext } from "../providers/inner-wallet-provider";
 import { usePrice } from "../providers/price-provider";
 import { TokenSelect } from "./token-select";

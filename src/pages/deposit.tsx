@@ -1,5 +1,5 @@
 import styled from "@emotion/styled";
-import { useInnerWalletContext } from "../../providers/inner-wallet-provider";
+import { useInnerWalletContext } from "../providers/inner-wallet-provider";
 import {
   Fade,
   Heading,
@@ -11,17 +11,16 @@ import {
   useToast,
   Box,
 } from "@chakra-ui/react";
-import { moveBg } from "../../components/moveBg";
+import { moveBg } from "../components/moveBg";
 import { useRouter } from "@tanstack/react-router";
 import { ChevronLeftIcon } from "@chakra-ui/icons";
-import { PublicKey } from "../../components/public-key";
-import { QrModal } from "../../components/qr-modal";
-import { copyTextToClipboard } from "../../lib/copy";
-import { Balance } from "../../components/balance/balance";
-import { ConnectWalletBlur } from "../../components/balance/connect-wallet-blur";
-import { TransferTokens } from "../../components/transfer-tokens";
+import { PublicKey } from "../components/public-key";
+import { QrModal } from "../components/qr-modal";
+import { copyTextToClipboard } from "../lib/copy";
+import { Balance, ConnectWalletBlur } from "components/balance";
+import { TransferTokens } from "../components/transfer-tokens";
 import { formatEther } from "ethers";
-import { SetupCustomization } from "../../components/setup-customization";
+import { SetupCustomization } from "../components/setup-customization";
 import { AiOutlineQrcode, AiOutlineLink } from "react-icons/ai";
 
 const Container = styled.div`
@@ -51,7 +50,6 @@ export const Deposit = ({ className }: Props): JSX.Element => {
   const router = useRouter();
 
   const fromPush = !!(router.state.location.search as any).fromPush;
-
   const hostname = window?.location.origin;
 
   const handleLinkCopy = () => {

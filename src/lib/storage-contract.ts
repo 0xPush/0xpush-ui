@@ -1,6 +1,6 @@
 import { Contract, JsonRpcProvider, JsonRpcSigner } from "ethers";
 import { blastTestnet } from "../providers/web3-modal-provider";
-import { PushPreset } from "./preset";
+import { PushPreset } from "../types/preset";
 
 const abi = [
   {

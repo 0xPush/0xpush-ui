@@ -21,7 +21,7 @@ import { Balance } from "../../components/balance/balance";
 import { Earn } from "./cards/earn";
 import { Send } from "./cards/send";
 import { readPushPreset } from "../../lib/storage-contract";
-import { PushPreset } from "../../lib/preset";
+import { PushPreset } from "../../types/preset";
 
 const Container = styled.div`
   margin-top: 2vh;

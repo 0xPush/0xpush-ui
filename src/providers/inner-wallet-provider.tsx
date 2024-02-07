@@ -9,6 +9,7 @@ import {
   useState,
 } from "react";
 import { usePrice } from "./price-provider";
+import { shortString } from "lib/string";
 
 interface InnerWalletContextValue {
   wallet: Wallet;
@@ -53,7 +54,13 @@ export const InnerWalletProvider = ({
   useEffect(() => {
     if (wallet) {
       updateBalance();
+
+      document.title = `${shortString(wallet.address)} | BlastPush`;
     }
+
+    return () => {
+      document.title = "BlastPush";
+    };
   }, [updateBalance, wallet]);
 
   const value = useMemo(

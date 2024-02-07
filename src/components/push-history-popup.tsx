@@ -18,8 +18,8 @@ import {
   useOutsideClick,
 } from "@chakra-ui/react";
 import styled from "@emotion/styled";
-import { HistoryItem, PushHistory } from "../../lib/history";
-import { shortString } from "../../lib/string";
+import { HistoryItem, PushHistory } from "../lib/history";
+import { shortString } from "../lib/string";
 import { useEffect, useRef, useState } from "react";
 
 const Trigger = styled.div<{ bg: string }>`

@@ -33,7 +33,7 @@ const TypewriterContainer = styled.span`
 
   .Typewriter__cursor {
     opacity: 0;
-    max-width: 2px !important;
+    font-size: 20px;
   }
 
   .Typewriter__wrapper {
@@ -55,10 +55,10 @@ export const Home = ({ className }: Props): JSX.Element => {
             <$Heading>
               <Typewriter
                 options={{
-                  strings: ["Ether", "USD", "NFTs", "Crypto", "Tips"],
+                  strings: ["Ether", "USD", "NFT", "Crypto", "Tips"],
                   autoStart: true,
                   loop: true,
-                  // @ts-ignore
+                  // @ts-expect-error
                   pauseFor: 3000,
                 }}
               />
@@ -66,7 +66,7 @@ export const Home = ({ className }: Props): JSX.Element => {
           </TypewriterContainer>
           <$Heading textAlign="center">&nbsp;in Blast L2</$Heading>
         </HeadingBlock>
-        <$Heading mb={12} textAlign="center">
+        <$Heading mb={5} textAlign="center">
           with native yield
         </$Heading>
       </Stack>
