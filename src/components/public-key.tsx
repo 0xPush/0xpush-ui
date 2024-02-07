@@ -54,7 +54,7 @@ export const PublicKey = ({ publicKey }: PublicKeyProps) => {
 
   const handleClick = () => {
     copyTextToClipboard(publicKey);
-    toast({ title: `Address copied` });
+    toast({ title: `Address copied`, status: "info" });
   };
 
   return (

@@ -63,12 +63,12 @@ export const ExportWalletModal = forwardRef<
 
   const handleClick = () => {
     copyTextToClipboard(privateKey);
-    toast({ title: "Private Key copied", colorScheme: "green" });
+    toast({ title: "Private Key copied", status: "info" });
   };
 
   const copyAddress = () => {
     copyTextToClipboard(wallet.address);
-    toast({ title: "Address copied", colorScheme: "green" });
+    toast({ title: "Address copied", status: "info" });
   };
 
   return (

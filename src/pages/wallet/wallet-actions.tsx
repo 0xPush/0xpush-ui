@@ -32,6 +32,7 @@ export const WalletActions = ({
               router.navigate({
                 to: "/w/$privateKey/deposit",
                 params: { privateKey: wallet.privateKey },
+                search: { fromPush: true },
               });
             }}
             label="Deposit"

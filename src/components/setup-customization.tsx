@@ -1,60 +1,15 @@
-import {
-  Button,
-  Heading,
-  Input,
-  InputGroup,
-  NumberInput,
-  NumberInputField,
-  Stack,
-  Text,
-  Tooltip,
-} from "@chakra-ui/react";
+import { QuestionOutlineIcon } from "@chakra-ui/icons";
+import { Button, Heading, Input, Stack, Tooltip } from "@chakra-ui/react";
 import styled from "@emotion/styled";
+import { useWeb3ModalProvider } from "@web3modal/ethers/react";
 import {
   BrowserProvider,
-  Contract,
   TransactionReceipt,
-  TransactionRequest,
   TransactionResponse,
-  formatEther,
-  parseUnits,
 } from "ethers";
 import { useEffect, useMemo, useState } from "react";
-import { ETHER_TOKEN } from "../models/token";
+import { readPushPreset, writePushPreset } from "../lib/storage-contract";
 import { useInnerWalletContext } from "../providers/inner-wallet-provider";
-import { usePrice } from "../providers/price-provider";
-import { TokenSelect } from "./token-select";
-import {
-  useWeb3ModalAccount,
-  useWeb3ModalProvider,
-} from "@web3modal/ethers/react";
-import { QuestionOutlineIcon } from "@chakra-ui/icons";
-import { readPushData, savePushData } from "../lib/storage-contract";
-
-const $InputGroup = styled(InputGroup)`
-  z-index: 1;
-`;
-
-const $NumberInput = styled(NumberInput)`
-  flex: 1;
-  margin-right: 10px;
-` as typeof NumberInput;
-
-const $TokenSelect = styled(TokenSelect)`
-  flex: 1;
-  max-width: 80px;
-`;
-
-const MaxContainer = styled.div`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  position: absolute;
-  top: 50%;
-  right: 0;
-  transform: translateY(-50%) scale(0.8);
-  z-index: 1;
-`;
 
 const FormLabel = styled.div`
   display: flex;
@@ -92,11 +47,10 @@ export const SetupCustomization = ({
   );
 
   useEffect(() => {
-    readPushData(to)
-      .then((data) => {
-        console.log(data);
-        setFromName(data.from_name);
-        setToName(data.to_name);
+    readPushPreset(to)
+      .then((preset) => {
+        setFromName(preset.fromName || "");
+        setToName(preset.toName || "");
       })
       .catch((e) => {
         console.log(e);
@@ -113,7 +67,7 @@ export const SetupCustomization = ({
 
     try {
       const signer = await ethersProvider.getSigner();
-      const tx = await savePushData(signer, to, fromName, toName);
+      const tx = await writePushPreset(signer, to, fromName, toName);
       const receipt = await tx.wait();
 
       console.log(receipt);

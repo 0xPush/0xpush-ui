@@ -54,10 +54,10 @@ export const Send = () => {
           onSuccess={(tx) => {
             toast({
               title: `${formatEther(tx.value)} ETH sent. Tx: ${tx.hash}.`,
-              colorScheme: "green",
+              status: "success",
             });
           }}
-          onError={(e) => toast({ title: e.message, colorScheme: "red" })}
+          onError={(e) => toast({ title: e.message, status: "error" })}
         />
       </Box>
     </Stack>

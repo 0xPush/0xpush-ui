@@ -31,7 +31,13 @@ const manager = createLocalStorageManager("color-theme");
 export const Route = createRootRoute({
   component: () => (
     <Web3ModalProvider>
-      <ChakraProvider theme={theme} colorModeManager={manager}>
+      <ChakraProvider
+        theme={theme}
+        colorModeManager={manager}
+        toastOptions={{
+          defaultOptions: { isClosable: true, position: "bottom-right" },
+        }}
+      >
         <PriceProvider>
           <AppContainer>
             <Header />

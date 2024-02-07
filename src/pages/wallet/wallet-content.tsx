@@ -20,6 +20,8 @@ import { WalletActions } from "./wallet-actions";
 import { Balance } from "../../components/balance/balance";
 import { Earn } from "./cards/earn";
 import { Send } from "./cards/send";
+import { readPushPreset } from "../../lib/storage-contract";
+import { PushPreset } from "../../lib/preset";
 
 const Container = styled.div`
   margin-top: 2vh;
@@ -45,6 +47,12 @@ export const WalletContent = () => {
   const { wallet, totalUsdAmount, updateBalance } = useInnerWalletContext();
   const [action, setAction] = useState<Action>(null);
 
+  const [{ fromName, toName }, setPreset] = useState<PushPreset>({
+    fromName: null,
+    toName: null,
+    fromAddress: null,
+  });
+
   const {
     isOpen: showWalletActions,
     onToggle: toggleWalletActions,
@@ -56,9 +64,13 @@ export const WalletContent = () => {
   const earnRef = useRef();
   const walletRef = useRef();
 
-  const preset = {
-    from: null,
-  };
+  useEffect(() => {
+    readPushPreset(wallet.address)
+      .then(setPreset)
+      .catch((e) => {
+        console.log(e);
+      });
+  }, [wallet.address]);
 
   useEffect(() => {
     if (!wallet) {
@@ -67,6 +79,7 @@ export const WalletContent = () => {
     PushHistory.addToHistory({
       secret: wallet.privateKey,
       type: "viewed",
+      date: new Date(),
     });
   }, [wallet]);
 
@@ -83,9 +96,14 @@ export const WalletContent = () => {
     <Container>
       <Fade in={true}>
         <Stack justify="center" align="center" mb={8}>
+          {toName && (
+            <$Heading mb={3} textAlign="center" size="lg">
+              Hey, {toName}
+            </$Heading>
+          )}
           <$Heading textAlign="center" size="lg">
             You received <Highlight>{totalUsdAmount}</Highlight> USD{" "}
-            {preset?.from && `from ${preset.from}`}
+            {fromName && `from ${fromName}`}
           </$Heading>
         </Stack>
       </Fade>

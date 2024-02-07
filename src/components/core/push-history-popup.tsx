@@ -89,19 +89,19 @@ const $TableContainer = styled(TableContainer)`
   /* Track */
 
   ::-webkit-scrollbar-track {
-    background: #9f9f9f;
+    background: #373737;
   }
 
   /* Handle */
 
   ::-webkit-scrollbar-thumb {
-    background: #5d5d5d;
+    background: #bbbbbb;
   }
 
   /* Handle on hover */
 
   ::-webkit-scrollbar-thumb:hover {
-    background: #555;
+    background: #dcdcdc;
   }
 `;
 
@@ -159,8 +159,9 @@ export const PushHistoryPopup = (): JSX.Element => {
               variant="outline"
               height="23px"
               onClick={() => {
-                PushHistory.clear();
-                onClose();
+                if (confirm("Are you sure? This action cannot be undone.")) {
+                  PushHistory.clear();
+                }
               }}
               color="gray.300"
               size="sm"
@@ -173,18 +174,23 @@ export const PushHistoryPopup = (): JSX.Element => {
               <Thead>
                 <Tr>
                   <Th>Address</Th>
-                  <Th>Recipient</Th>
-                  <Th>Type</Th>
+                  <Th>Date</Th>
+                  <Th>Action</Th>
                   <Th isNumeric>Link</Th>
                 </Tr>
               </Thead>
               <Tbody>
-                {history.map(({ secret, to, type }, index) => {
+                {history.map(({ secret, date, type }, index) => {
                   return (
                     <Tr key={index}>
                       <Td>{shortString(secret)}</Td>
-                      <Td maxW="100px" overflow="hidden">
-                        {to || "—"}
+                      <Td minW={160} overflow="hidden">
+                        {date
+                          ? new Intl.DateTimeFormat(undefined, {
+                              dateStyle: "short",
+                              timeStyle: "medium",
+                            }).format(new Date(date as string))
+                          : "-"}
                       </Td>
                       <Td>
                         <Badge

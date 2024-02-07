@@ -13,7 +13,7 @@ import {
 } from "@chakra-ui/react";
 import { moveBg } from "../../components/moveBg";
 import { useRouter } from "@tanstack/react-router";
-import { ChevronLeftIcon, LinkIcon } from "@chakra-ui/icons";
+import { ChevronLeftIcon } from "@chakra-ui/icons";
 import { PublicKey } from "../../components/public-key";
 import { QrModal } from "../../components/qr-modal";
 import { copyTextToClipboard } from "../../lib/copy";
@@ -22,6 +22,7 @@ import { ConnectWalletBlur } from "../../components/balance/connect-wallet-blur"
 import { TransferTokens } from "../../components/transfer-tokens";
 import { formatEther } from "ethers";
 import { SetupCustomization } from "../../components/setup-customization";
+import { AiOutlineQrcode, AiOutlineLink } from "react-icons/ai";
 
 const Container = styled.div`
   margin-top: 2vh;
@@ -41,7 +42,7 @@ interface Props {
 }
 
 export const Deposit = ({ className }: Props): JSX.Element => {
-  const { wallet, updateBalance } = useInnerWalletContext();
+  const { wallet } = useInnerWalletContext();
   const { colorMode } = useColorMode();
   const { isOpen, onOpen, onClose } = useDisclosure();
   const toast = useToast();
@@ -49,13 +50,16 @@ export const Deposit = ({ className }: Props): JSX.Element => {
 
   const router = useRouter();
 
-  const fromPush = false;
+  const fromPush = !!(router.state.location.search as any).fromPush;
 
   const hostname = window?.location.origin;
 
   const handleLinkCopy = () => {
     copyTextToClipboard(`${hostname}/w/${wallet.privateKey}`);
-    toast({ title: `Push link copied. Share it with the recipient!` });
+    toast({
+      title: `Push link copied. Share it with the recipient!`,
+      status: "info",
+    });
   };
 
   return (
@@ -63,27 +67,13 @@ export const Deposit = ({ className }: Props): JSX.Element => {
       <Container>
         <Fade in={true}>
           <Stack justify="center" align="center" mb={2} mx={2}>
-            <$Heading size="lg" textAlign="center">
+            <$Heading size="lg" textAlign="center" {...(fromPush && { mb: 4 })}>
               {fromPush ? "Deposit" : "Deposit and share"}
             </$Heading>
             {!fromPush && (
               <Text mb={4} textAlign="center">
                 The recipient will get access to the funds via the link
               </Text>
-            )}
-            {fromPush && (
-              <Button
-                onClick={() =>
-                  router.navigate({
-                    to: `/w/$privateKey`,
-                    params: { privateKey: wallet.privateKey },
-                  })
-                }
-                leftIcon={<ChevronLeftIcon />}
-                variant="ghost"
-              >
-                Back to push
-              </Button>
             )}
           </Stack>
         </Fade>
@@ -111,71 +101,83 @@ export const Deposit = ({ className }: Props): JSX.Element => {
                   onSuccess={(tx) => {
                     toast({
                       title: `${formatEther(tx.value)} ETH sent. Tx: ${tx.hash}.`,
-                      colorScheme: "green",
+                      status: "success",
                     });
                   }}
                   label="Deposit"
-                  onError={(e) =>
-                    toast({ title: e.message, colorScheme: "red" })
-                  }
+                  onError={(e) => toast({ title: e.message, status: "error" })}
                 />
               </Box>
             </ConnectWalletBlur>
           </Fade>
         </Stack>
 
-        <Stack mb={5} justify="center" align="center">
-          <Fade in={true}>
-            <ConnectWalletBlur>
-              <Box
-                bg={bgColor[colorMode]}
-                w="370px"
-                maxWidth="100%"
-                p={4}
-                borderRadius="lg"
-                boxShadow="md"
-              >
-                <SetupCustomization
-                  to={wallet.address}
-                  onSuccess={(tx) => {
-                    toast({
-                      title: `Data saved. Tx: ${tx.hash}.`,
-                      colorScheme: "green",
-                    });
-                  }}
-                  onError={(e) =>
-                    toast({ title: e.message, colorScheme: "red" })
-                  }
-                />
-              </Box>
-            </ConnectWalletBlur>
-          </Fade>
-        </Stack>
         {!fromPush && (
-          <Stack mt={5} mb={10} justify="center" align="center">
-            {/*<Box bg="white" w="370px" maxWidth="100%" p={4} borderRadius="lg" boxShadow="md">*/}
-            <Stack justify="center" align="center">
+          <Stack mb={5} justify="center" align="center">
+            <Fade in={true}>
+              <ConnectWalletBlur>
+                <Box
+                  bg={bgColor[colorMode]}
+                  w="370px"
+                  maxWidth="100%"
+                  p={4}
+                  borderRadius="lg"
+                  boxShadow="md"
+                >
+                  <SetupCustomization
+                    to={wallet.address}
+                    onSuccess={(tx) => {
+                      toast({
+                        title: `Data saved. Tx: ${tx.hash}.`,
+                        status: "success",
+                      });
+                    }}
+                    onError={(e) =>
+                      toast({ title: e.message, status: "error" })
+                    }
+                  />
+                </Box>
+              </ConnectWalletBlur>
+            </Fade>
+          </Stack>
+        )}
+        <Stack mt={5} mb={7} justify="center" align="center">
+          {/*<Box bg="white" w="370px" maxWidth="100%" p={4} borderRadius="lg" boxShadow="md">*/}
+          <Stack direction="row" justify="center" align="center" gap={3}>
+            <Button
+              rightIcon={<AiOutlineLink />}
+              onClick={handleLinkCopy}
+              variant="outline"
+              colorScheme="pink"
+            >
+              {fromPush ? "Copy link" : "Share"}
+            </Button>
+            {!fromPush && (
               <Button
-                rightIcon={<LinkIcon />}
-                onClick={handleLinkCopy}
-                variant="outline"
-                colorScheme="pink"
-              >
-                Share Push
-              </Button>
-            </Stack>
-            <Stack justify="center" align="center">
-              <Button
-                mt={2}
-                size="sm"
+                rightIcon={<AiOutlineQrcode />}
                 onClick={onOpen}
                 variant="outline"
                 colorScheme="pink"
               >
-                Share QR
+                Show
               </Button>
-            </Stack>
-            {/*</Box>*/}
+            )}
+          </Stack>
+        </Stack>
+        {fromPush && (
+          <Stack justify="center" align="center">
+            <Button
+              onClick={() =>
+                router.navigate({
+                  to: `/w/$privateKey`,
+                  params: { privateKey: wallet.privateKey },
+                })
+              }
+              leftIcon={<ChevronLeftIcon />}
+              variant="ghost"
+            >
+              Back to push
+            </Button>
           </Stack>
         )}
         <QrModal

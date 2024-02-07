@@ -18,7 +18,11 @@ export const CreateWallet = ({ className }: Props): JSX.Element => {
     const newWallet = ethers.Wallet.createRandom();
     console.log(newWallet);
 
-    PushHistory.addToHistory({ secret: newWallet.privateKey, type: "created" });
+    PushHistory.addToHistory({
+      secret: newWallet.privateKey,
+      type: "created",
+      date: new Date(),
+    });
 
     navigate({
       to: "/w/$privateKey/deposit",

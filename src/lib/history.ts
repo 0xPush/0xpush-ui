@@ -1,7 +1,7 @@
 export interface HistoryItem {
   secret: string;
-  to?: string;
   type: "created" | "viewed";
+  date?: Date | unknown;
 }
 
 const KEY = "push-history";
