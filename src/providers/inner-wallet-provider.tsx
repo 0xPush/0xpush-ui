@@ -16,6 +16,7 @@ interface InnerWalletContextValue {
   privateKey: string;
   ethBalance: bigint;
   totalUsdAmount: string;
+  transferEstimateFee: bigint;
   updateBalance: () => void;
 }
 
@@ -40,6 +41,7 @@ export const InnerWalletProvider = ({
   );
 
   const [ethBalance, setEthBalance] = useState<bigint>(0n);
+  const [estimateFee, setEstimateFee] = useState<bigint>(0n);
 
   const totalUsdAmount = (
     ethPriceUsd * Number(formatEther(ethBalance))
@@ -51,9 +53,23 @@ export const InnerWalletProvider = ({
       .then((data) => setEthBalance(data));
   }, [wallet.address, wallet.provider]);
 
+  const updateEstimateFee = useCallback(async () => {
+    const gasPrice = (await ethersProvider.getFeeData()).maxFeePerGas!;
+
+    // Estimate gas limit
+    const estimateGas = await wallet.estimateGas({
+      to: wallet.address,
+      value: 0,
+    });
+
+    const estimateFee = estimateGas * gasPrice * 1000n;
+    setEstimateFee(estimateFee);
+  }, [wallet]);
+
   useEffect(() => {
     if (wallet) {
       updateBalance();
+      updateEstimateFee();
 
       document.title = `${shortString(wallet.address)} | BlastPush`;
     }
@@ -61,7 +77,7 @@ export const InnerWalletProvider = ({
     return () => {
       document.title = "BlastPush";
     };
-  }, [updateBalance, wallet]);
+  }, [updateBalance, updateEstimateFee, wallet]);
 
   const value = useMemo(
     (): InnerWalletContextValue => ({
@@ -70,8 +86,9 @@ export const InnerWalletProvider = ({
       ethBalance,
       updateBalance,
       totalUsdAmount,
+      transferEstimateFee: estimateFee,
     }),
-    [wallet, privateKey, ethBalance, updateBalance, totalUsdAmount]
+    [wallet, privateKey, ethBalance, updateBalance, totalUsdAmount, estimateFee]
   );
 
   return (

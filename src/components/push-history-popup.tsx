@@ -1,4 +1,4 @@
-import { RepeatClockIcon } from "@chakra-ui/icons";
+import { QuestionOutlineIcon, RepeatClockIcon } from "@chakra-ui/icons";
 import {
   Badge,
   Button,
@@ -151,6 +151,9 @@ export const PushHistoryPopup = (): JSX.Element => {
           >
             <Heading color="gray.300" size="md">
               History
+              <Tooltip label="Data stored in your browser">
+                <QuestionOutlineIcon w={4} ml="8px" mb="2px" />
+              </Tooltip>
             </Heading>
             <div style={{ width: "1px" }} />
             <Button

@@ -1,5 +1,13 @@
 import { QuestionOutlineIcon } from "@chakra-ui/icons";
-import { Button, Heading, Input, Stack, Tooltip } from "@chakra-ui/react";
+import {
+  Button,
+  Heading,
+  Input,
+  Stack,
+  Tag,
+  Tooltip,
+  useColorMode,
+} from "@chakra-ui/react";
 import styled from "@emotion/styled";
 import { useWeb3ModalProvider } from "@web3modal/ethers/react";
 import {
@@ -38,8 +46,12 @@ export const SetupCustomization = ({
   onSuccess,
   className,
 }: Props) => {
-  const { wallet, ethBalance, updateBalance } = useInnerWalletContext();
+  const { updateBalance } = useInnerWalletContext();
   const { walletProvider } = useWeb3ModalProvider();
+
+  const { colorMode } = useColorMode();
+  const tagBgColor = { light: "gray.100", dark: "whiteAlpha.100" };
+  const tagTextColor = { light: "gray.500", dark: "whiteAlpha.500" };
 
   const ethersProvider = useMemo(
     () => new BrowserProvider(walletProvider!),
@@ -89,6 +101,16 @@ export const SetupCustomization = ({
           <QuestionOutlineIcon ml="6px" />
         </Tooltip>
       </Heading>
+      <Stack my={3} justify="center" align="center">
+        <Tag
+          variant="solid"
+          bg={tagBgColor[colorMode]}
+          textColor={tagTextColor[colorMode]}
+        >
+          Apply customization to earn points
+        </Tag>
+      </Stack>
+
       <FormLabel>Sender</FormLabel>
       <Input
         mb={3}
@@ -111,13 +133,13 @@ export const SetupCustomization = ({
       <Stack mt={3} justify="center">
         <Button
           onClick={handleSend}
-          isDisabled={false}
+          isDisabled={!fromName || !toName}
           colorScheme="purple"
           isLoading={isSending}
           loadingText="Wait..."
           type="submit"
         >
-          Save data
+          Apply
         </Button>
       </Stack>
     </div>

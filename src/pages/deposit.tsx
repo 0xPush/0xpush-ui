@@ -70,7 +70,7 @@ export const Deposit = ({ className }: Props): JSX.Element => {
             </$Heading>
             {!fromPush && (
               <Text mb={4} textAlign="center">
-                The recipient will get access to the funds via the link
+                The recipient will get crypto via the link
               </Text>
             )}
           </Stack>

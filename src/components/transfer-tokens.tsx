@@ -80,7 +80,8 @@ export const TransferTokens = ({
   label = "Send",
   fromConnectedWallet = true,
 }: Props) => {
-  const { wallet, ethBalance, updateBalance } = useInnerWalletContext();
+  const { wallet, ethBalance, updateBalance, transferEstimateFee } =
+    useInnerWalletContext();
   const { isConnected } = useWeb3ModalAccount();
   const { walletProvider } = useWeb3ModalProvider();
 
@@ -106,8 +107,6 @@ export const TransferTokens = ({
       fn();
     }
   }, [isConnected, fromConnectedWallet, walletProvider]);
-
-  // const [fee, setFee] = useState(5000);
 
   const [isSending, setIsSending] = useState(false);
   const usdAmount = (parseFloat(formatEther(amount)) * ethPriceUsd).toFixed(2);
@@ -161,13 +160,22 @@ export const TransferTokens = ({
   };
 
   const setMax = () => {
-    // TODO: ensure tx fee
     if (fromConnectedWallet) {
+      const value = connectedWalletBalance - transferEstimateFee;
+      if (value <= 0) {
+        return;
+      }
       setAmount(connectedWalletBalance);
       setInput(formatEther(connectedWalletBalance));
     } else {
-      setAmount(ethBalance);
-      setInput(formatEther(ethBalance));
+      // from push
+      const value = ethBalance - transferEstimateFee;
+      if (value <= 0) {
+        return;
+      }
+
+      setAmount(value);
+      setInput(formatEther(value));
     }
   };
 
