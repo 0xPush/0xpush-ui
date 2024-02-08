@@ -8,12 +8,18 @@ import { Route as rootRoute } from './routes/__root'
 
 // Create Virtual Routes
 
+const PointsLazyImport = createFileRoute('/points')()
 const FaqLazyImport = createFileRoute('/faq')()
 const IndexLazyImport = createFileRoute('/')()
 const WPrivateKeyLazyImport = createFileRoute('/w/$privateKey')()
 const WPrivateKeyDepositLazyImport = createFileRoute('/w/$privateKey/deposit')()
 
 // Create/Update Routes
+
+const PointsLazyRoute = PointsLazyImport.update({
+  path: '/points',
+  getParentRoute: () => rootRoute,
+} as any).lazy(() => import('./routes/points.lazy').then((d) => d.Route))
 
 const FaqLazyRoute = FaqLazyImport.update({
   path: '/faq',
@@ -49,6 +55,10 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof FaqLazyImport
       parentRoute: typeof rootRoute
     }
+    '/points': {
+      preLoaderRoute: typeof PointsLazyImport
+      parentRoute: typeof rootRoute
+    }
     '/w/$privateKey': {
       preLoaderRoute: typeof WPrivateKeyLazyImport
       parentRoute: typeof rootRoute
@@ -65,6 +75,7 @@ declare module '@tanstack/react-router' {
 export const routeTree = rootRoute.addChildren([
   IndexLazyRoute,
   FaqLazyRoute,
+  PointsLazyRoute,
   WPrivateKeyLazyRoute,
   WPrivateKeyDepositLazyRoute,
 ])

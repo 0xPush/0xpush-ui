@@ -18,6 +18,7 @@ import { useWeb3ModalTheme } from "@web3modal/ethers/react";
 import { useEffect } from "react";
 import { HeaderWalletConnect } from "./header-wallet-connect";
 import { useNavigate } from "@tanstack/react-router";
+import { HeaderDrawer } from "./header-drawer";
 
 const Container = styled.header<{ bg: string }>`
   display: flex;
@@ -33,10 +34,6 @@ const Container = styled.header<{ bg: string }>`
   right: 0;
   backdrop-filter: saturate(180%) blur(4px);
   z-index: 2;
-
-  @media (max-width: 600px) {
-    padding: 0 0 0 10px;
-  }
 `;
 
 const FakeHeader = styled.div`
@@ -98,7 +95,7 @@ function ColorMode() {
 export const Header = () => {
   const { colorMode } = useColorMode();
   const bgColor = { light: "rgba(255, 255, 255, 0.5)", dark: "transparent" };
-  const [showSomeActions] = useMediaQuery("(min-width: 600px)");
+  const [isMobile] = useMediaQuery("(max-width: 600px)");
 
   const navigate = useNavigate();
 
@@ -118,40 +115,44 @@ export const Header = () => {
                 <Stack direction="row">
                   <div>BlastPush</div>
                   {/* <Image className="logo" src={LogoImage} /> */}
-                  <ChevronDownIcon
-                    width="24px"
-                    height="24px"
-                    color="gray.500"
-                  />
+                  {!isMobile && (
+                    <ChevronDownIcon
+                      width="24px"
+                      height="24px"
+                      color="gray.500"
+                    />
+                  )}
                 </Stack>
               </MenuButton>
-              <MenuList>
-                <Link onClick={() => navigate({ to: "/" })}>
-                  <MenuItem>Create new push</MenuItem>
-                </Link>
-                <Link href={"/faq"}>
-                  <MenuItem>FAQ</MenuItem>
-                </Link>
-                <a
-                  href={"https://twitter.com/blast_push"}
-                  target="_blank"
-                  rel="noreferrer noopener"
-                >
-                  <MenuItem>Twitter</MenuItem>
-                </a>
-                <a
-                  href={"https://t.me/blastpush"}
-                  target="_blank"
-                  rel="noreferrer noopener"
-                >
-                  <MenuItem>Telegram</MenuItem>
-                </a>
-              </MenuList>
+              {!isMobile && (
+                <MenuList>
+                  <Link onClick={() => navigate({ to: "/" })}>
+                    <MenuItem>Create Push</MenuItem>
+                  </Link>
+                  <Link href={"/faq"}>
+                    <MenuItem>FAQ</MenuItem>
+                  </Link>
+                  <a
+                    href={"https://twitter.com/blast_push"}
+                    target="_blank"
+                    rel="noreferrer noopener"
+                  >
+                    <MenuItem>Twitter</MenuItem>
+                  </a>
+                  <a
+                    href={"https://t.me/blastpush"}
+                    target="_blank"
+                    rel="noreferrer noopener"
+                  >
+                    <MenuItem>Telegram</MenuItem>
+                  </a>
+                </MenuList>
+              )}
             </Menu>
           </LogoImageWrapper>
         </Logo>
         <Actions>
-          {showSomeActions && (
+          {!isMobile && (
             <Link href={"/faq"}>
               <Button variant="outline" mr={1}>
                 FAQ
@@ -159,7 +160,8 @@ export const Header = () => {
             </Link>
           )}
           <ColorMode />
-          <$HeaderWalletConnect />
+          {!isMobile && <$HeaderWalletConnect />}
+          {isMobile && <HeaderDrawer />}
         </Actions>
       </Container>
       <FakeHeader />

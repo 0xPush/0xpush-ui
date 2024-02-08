@@ -23,12 +23,16 @@ const HeadingBlock = styled.div`
 const $Heading = styled(Heading)`
   font-size: 2.5rem !important;
   ${moveBg};
+
+  @media screen and (max-width: 600px) {
+    font-size: 1.5rem !important;
+  }
 `;
 
 const TypewriterContainer = styled.span`
   margin-left: 10px;
   padding: 4px 0 4px 10px;
-  border-radius: 16px;
+  border-radius: 10px;
   background: rgba(255, 128, 0, 0.15);
 
   .Typewriter__cursor {
@@ -38,6 +42,15 @@ const TypewriterContainer = styled.span`
 
   .Typewriter__wrapper {
     padding: 0;
+  }
+
+  @media screen and (max-width: 600px) {
+    padding: 1px 0 1px 4px;
+    border-radius: 6px;
+
+    .Typewriter__cursor {
+      font-size: 10px;
+    }
   }
 `;
 

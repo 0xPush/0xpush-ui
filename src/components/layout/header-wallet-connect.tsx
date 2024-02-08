@@ -16,16 +16,23 @@ const Container = styled.div`
 
 interface Props {
   className?: string;
+  onClick?: () => void;
 }
 
-export const HeaderWalletConnect = ({ className }: Props): JSX.Element => {
+export const HeaderWalletConnect = ({
+  className,
+  onClick,
+}: Props): JSX.Element => {
   const { open } = useWeb3Modal();
   const { address, chainId, isConnected } = useWeb3ModalAccount();
 
+  const [isMobile] = useMediaQuery("(max-width: 600px)");
+
   return (
-    <Container className={className}>
+    <Container className={className} onClick={onClick}>
       {!isConnected && (
         <Button
+          flex={isMobile ? 1 : undefined}
           rightIcon={<LinkIcon />}
           variant="outline"
           onClick={() => open()}
@@ -35,6 +42,7 @@ export const HeaderWalletConnect = ({ className }: Props): JSX.Element => {
       )}
       {isConnected && chainId !== blastTestnet.chainId && (
         <Button
+          flex={isMobile ? 1 : undefined}
           rightIcon={<LinkIcon />}
           variant="outline"
           onClick={() => open({ view: "Networks" })}
@@ -43,7 +51,11 @@ export const HeaderWalletConnect = ({ className }: Props): JSX.Element => {
         </Button>
       )}
       {isConnected && chainId === blastTestnet.chainId && (
-        <Button variant="outline" onClick={() => open({ view: "Account" })}>
+        <Button
+          flex={isMobile ? 1 : undefined}
+          variant="outline"
+          onClick={() => open({ view: "Account" })}
+        >
           {shortString(address as string)}
         </Button>
       )}
