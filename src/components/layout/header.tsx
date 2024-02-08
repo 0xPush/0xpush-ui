@@ -14,6 +14,8 @@ import {
 import styled from "@emotion/styled";
 
 import { ChevronDownIcon, MoonIcon, SunIcon } from "@chakra-ui/icons";
+import { FaRegStar } from "react-icons/fa";
+
 import { useWeb3ModalTheme } from "@web3modal/ethers/react";
 import { useEffect } from "react";
 import { HeaderWalletConnect } from "./header-wallet-connect";
@@ -52,17 +54,13 @@ const LogoImageWrapper = styled.div`
   width: 130px;
   transition: all 0.2s;
   position: relative;
+`;
 
-  .logo {
-    -webkit-user-drag: none;
-    user-select: none;
-  }
-
-  &:hover {
-    .logo {
-      filter: brightness(70%);
-    }
-  }
+const LogoLabel = styled.h4`
+  font-family: Geomgraphic;
+  font-weight: 500;
+  font-size: 20px;
+  line-height: 24px;
 `;
 
 const Actions = styled.div`
@@ -113,8 +111,7 @@ export const Header = () => {
             <Menu>
               <MenuButton as="div">
                 <Stack direction="row">
-                  <div>BlastPush</div>
-                  {/* <Image className="logo" src={LogoImage} /> */}
+                  <LogoLabel>BlastPush</LogoLabel>
                   {!isMobile && (
                     <ChevronDownIcon
                       width="24px"
@@ -126,12 +123,12 @@ export const Header = () => {
               </MenuButton>
               {!isMobile && (
                 <MenuList>
-                  <Link onClick={() => navigate({ to: "/" })}>
+                  <a onClick={() => navigate({ to: "/" })}>
                     <MenuItem>Create Push</MenuItem>
-                  </Link>
-                  <Link href={"/faq"}>
+                  </a>
+                  <a onClick={() => navigate({ to: "/faq" })}>
                     <MenuItem>FAQ</MenuItem>
-                  </Link>
+                  </a>
                   <a
                     href={"https://twitter.com/blast_push"}
                     target="_blank"
@@ -153,11 +150,29 @@ export const Header = () => {
         </Logo>
         <Actions>
           {!isMobile && (
-            <Link href={"/faq"}>
-              <Button variant="outline" mr={1}>
-                FAQ
-              </Button>
-            </Link>
+            <>
+              <Link onClick={() => navigate({ to: "/points" })}>
+                <Button
+                  variant="outline"
+                  mr={0}
+                  _hover={{
+                    bg: { light: "orange.100", dark: "orange.900" }[colorMode],
+                  }}
+                  rightIcon={
+                    <FaRegStar
+                      fill={{ light: "#cf5300", dark: "orange" }[colorMode]}
+                    />
+                  }
+                >
+                  Points
+                </Button>
+              </Link>
+              <Link onClick={() => navigate({ to: "/faq" })}>
+                <Button variant="outline" mr={3}>
+                  FAQ
+                </Button>
+              </Link>
+            </>
           )}
           <ColorMode />
           {!isMobile && <$HeaderWalletConnect />}
