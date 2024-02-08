@@ -124,7 +124,7 @@ export const Header = () => {
               {!isMobile && (
                 <MenuList>
                   <a onClick={() => navigate({ to: "/" })}>
-                    <MenuItem>Create Push</MenuItem>
+                    <MenuItem>Home</MenuItem>
                   </a>
                   <a onClick={() => navigate({ to: "/faq" })}>
                     <MenuItem>FAQ</MenuItem>

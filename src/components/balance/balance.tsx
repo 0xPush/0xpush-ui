@@ -1,13 +1,12 @@
-import { Box, useColorMode } from "@chakra-ui/react";
+import { Box, Tooltip, useColorMode } from "@chakra-ui/react";
 
 import styled from "@emotion/styled";
 
 import { forwardRef, useState } from "react";
 import { useInnerWalletContext } from "../../providers/inner-wallet-provider";
 
-import { formatEther, formatUnits } from "ethers";
+import { formatUnits } from "ethers";
 import EtherLogo from "../../assets/eth-logo.svg?react";
-import { usePrice } from "../../providers/price-provider";
 
 const $Box = styled(Box)`
   display: flex;
@@ -58,6 +57,13 @@ const CoinName = styled.div`
 
 const CoinAmount = styled.div``;
 
+const UsdAmountWrapper = styled.div`
+  display: flex;
+  flex-flow: row nowrap;
+  align-items: center;
+  gap: 12px;
+`;
+
 const UsdAmount = styled.div<{ dark: boolean }>`
   justify-self: flex-end;
   font-size: 14px;
@@ -102,21 +108,30 @@ export const Balance = forwardRef<
       boxShadow="md"
     >
       {/* <NftModal nft={nft!} isOpen={nftIsOpen} onClose={onNftClose} /> */}
-      <BalanceItem key={0}>
-        <Row>
-          <EtherLogo width={28} height={28} />
-          <Column>
-            <CoinName>Ethereum</CoinName>
-            <CoinAmount>
-              {parseFloat(formatUnits(ethBalance, 18)).toLocaleString("en", {
-                minimumFractionDigits: 4,
-              })}{" "}
-              ETH
-            </CoinAmount>
-          </Column>
-        </Row>
-        <UsdAmount dark={colorMode === "dark"}>${totalUsdAmount} USD</UsdAmount>
-      </BalanceItem>
+      <Tooltip label="Blast L2 provides 4% APR yield on ETH">
+        <BalanceItem key={0}>
+          <Row>
+            <EtherLogo width={28} height={28} />
+            <Column>
+              <CoinName>Ethereum</CoinName>
+              <CoinAmount>
+                {parseFloat(formatUnits(ethBalance, 18)).toLocaleString("en", {
+                  minimumFractionDigits: 4,
+                })}{" "}
+                ETH
+              </CoinAmount>
+            </Column>
+          </Row>
+          <UsdAmountWrapper>
+            {/* <Tooltip>
+            <AiOutlineThunderbolt height="40px" width="40px" fill="red" />
+          </Tooltip> */}
+            <UsdAmount dark={colorMode === "dark"}>
+              ${totalUsdAmount} USD
+            </UsdAmount>
+          </UsdAmountWrapper>
+        </BalanceItem>
+      </Tooltip>
       {/* {showMore && tokens.length > 0 && <Divider my={0} py={0} />} */}
       {/* {tokens.length > 0 && (
         <Collapse in={showMore}>

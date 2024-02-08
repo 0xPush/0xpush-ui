@@ -161,17 +161,17 @@ export const TransferTokens = ({
 
   const setMax = () => {
     if (fromConnectedWallet) {
-      const value = connectedWalletBalance - transferEstimateFee;
+      let value = connectedWalletBalance - transferEstimateFee;
       if (value <= 0) {
-        return;
+        value = 0n;
       }
       setAmount(connectedWalletBalance);
       setInput(formatEther(connectedWalletBalance));
     } else {
       // from push
-      const value = ethBalance - transferEstimateFee;
+      let value = ethBalance - transferEstimateFee;
       if (value <= 0) {
-        return;
+        value = 0n;
       }
 
       setAmount(value);
@@ -184,11 +184,19 @@ export const TransferTokens = ({
       return "Insufficient";
     }
 
+    if (!fromConnectedWallet && amount > ethBalance) {
+      return "Insufficient";
+    }
+
     return label;
   };
 
   const isDisabled = () => {
     if (fromConnectedWallet && amount > connectedWalletBalance) {
+      return true;
+    }
+
+    if (!fromConnectedWallet && amount > ethBalance) {
       return true;
     }
 

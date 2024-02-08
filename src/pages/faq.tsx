@@ -27,7 +27,7 @@ const HeadingBlock = styled.div`
 `;
 
 const $Heading = styled(Heading)`
-  font-size: 2.5rem !important;
+  font-size: 2rem !important;
   ${moveBg};
 
   @media screen and (max-width: 600px) {
@@ -49,7 +49,7 @@ export const Faq = (): JSX.Element => {
     <Container>
       <Stack justify="center" align="center" mb={10}>
         <HeadingBlock>
-          <$Heading textAlign="center">Points season coming soon</$Heading>
+          <$Heading textAlign="center">Frequently Asked Questions</$Heading>
         </HeadingBlock>
       </Stack>
       <Stack justify="center" align="center">
@@ -62,35 +62,35 @@ export const Faq = (): JSX.Element => {
           boxShadow="sm"
           p={5}
         >
-          <Heading size="sm">How to earn points?</Heading>
+          <Heading size="sm">How it works?</Heading>
           <Text>
-            Share pushes. Use customizations.
+            Create a new Push (with or without the specified settings), send ETH
+            to it's address. Then just share the Push link with the recipient.
             <br />
-            The program is designed to be sybil-resistant - rewarding real users
-            and real activity.
+            <br />
+            The recipient will be able to claim crypto via the link.
           </Text>
           <Divider />
-          <Heading size="sm">
-            Are pushes considered without customization?
-          </Heading>
-          <Text>No. On-chain activity is needed to earn points.</Text>
-          <Divider />
-          <Heading size="sm">When will the points be distributed?</Heading>
+          <Heading size="sm">It is secure?</Heading>
           <Text>
-            We will inform you about this in the announcements. <br />
-            The previous activity will be taken.
+            A Push link is access to funds. Share it only with the recipient of
+            the funds. The hash of the link contains a private key. This
+            application is a thin client, the private key is not stored anywhere
+            in any form (except browser), and is used only on the client side.
+            <br />
+            <br />
+            Customization data is stored on-chain and applied only by public
+            key.
           </Text>
           <Divider />
-          <Heading size="sm">What is the utility of the points?</Heading>
-          <UnorderedList>
-            <ListItem>Access to new features</ListItem>
-            <ListItem>Claiming a share of the users gas fee</ListItem>
-            <ListItem>Early adopters NFTs</ListItem>
-            <ListItem>Blast dev-points distribution</ListItem>
-            <ListItem>Token distribution</ListItem>
-          </UnorderedList>
-
-          <Text mt={4}>Criteria and rules can be changed</Text>
+          <Heading size="sm">I lost the Push link. What to do?</Heading>
+          <Text>
+            If you haven't saved the link, try to find it in your browser
+            history.
+            <br />
+            <br />
+            We do not have access to private keys.
+          </Text>
         </$Box>
       </Stack>
     </Container>

@@ -5,6 +5,7 @@ import {
   Heading,
   Icon,
   Stack,
+  Tooltip,
   useDisclosure,
 } from "@chakra-ui/react";
 import styled from "@emotion/styled";
@@ -39,6 +40,12 @@ const Highlight = styled.span`
   border-radius: 16px;
   background-color: rgba(255, 128, 0, 0.15);
   padding: 4px 6px;
+  cursor: pointer;
+
+  &:hover {
+    padding: 6px 6px;
+    background-color: rgba(255, 38, 0, 0.208);
+  }
 `;
 
 type Action = "send" | "swap" | "earn" | "games" | "markets" | null;
@@ -102,8 +109,11 @@ export const WalletContent = () => {
             </$Heading>
           )}
           <$Heading textAlign="center" size="lg">
-            You received <Highlight>{totalUsdAmount}</Highlight> USD{" "}
-            {fromName && `from ${fromName}`}
+            You received{" "}
+            <Tooltip label="4% for ETH and 5% for stablecoins APR yield">
+              <Highlight>{totalUsdAmount}</Highlight>
+            </Tooltip>{" "}
+            USD {fromName && `from ${fromName}`}
           </$Heading>
         </Stack>
       </Fade>
