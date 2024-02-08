@@ -39,7 +39,9 @@ const Trigger = styled.div<{ bg: string }>`
   z-index: 1;
 
   @media (max-width: 600px) {
-    display: none;
+    top: unset;
+    bottom: 10%;
+    box-shadow: 0 0 1px 1px rgba(0, 0, 0, 0.1);
   }
 
   &:hover {
@@ -54,20 +56,27 @@ const Container = styled.div`
   transform: translateY(-50%);
   width: min(600px, 90%);
   height: 40vh;
-  border-top-left-radius: 16px;
-  border-bottom-left-radius: 16px;
+  border-top-left-radius: 8px;
+  border-bottom-left-radius: 8px;
   background-color: #1f1f1f;
   color: #fff;
-  padding: 20px;
+  padding: 14px 0 10px 6px;
   display: flex;
   flex-flow: column nowrap;
   z-index: 2;
-  backdrop-filter: blur(2px);
-  box-shadow: 0 0 20px 20px rgba(0, 0, 0, 0.5);
+  box-shadow: 0 0 2px 2px rgba(0, 0, 0, 0.5);
+
+  @media (max-width: 600px) {
+    box-shadow: unset;
+    width: 95%;
+    border-top-left-radius: 4px;
+    border-bottom-left-radius: 4px;
+    padding: 10px;
+  }
 `;
 
 const $TableContainer = styled(TableContainer)`
-  overflow-x: hidden;
+  overflow-x: auto;
   overflow-y: auto;
   padding-right: 10px;
 
@@ -105,6 +114,10 @@ const $TableContainer = styled(TableContainer)`
   }
 `;
 
+const $Slide = styled(Slide)`
+  backdrop-filter: blur(3px);
+`;
+
 export const PushHistoryPopup = (): JSX.Element => {
   const { isOpen, onClose, onToggle } = useDisclosure();
   const ref = useRef<HTMLDivElement>();
@@ -139,7 +152,7 @@ export const PushHistoryPopup = (): JSX.Element => {
           <RepeatClockIcon width={22} height={22} />
         </Tooltip>
       </Trigger>
-      <Slide direction="right" in={isOpen} style={{ zIndex: 2 }}>
+      <$Slide direction="right" in={isOpen} style={{ zIndex: 2 }}>
         {/* @ts-ignore */}
         <Container ref={ref}>
           <Stack
@@ -149,15 +162,14 @@ export const PushHistoryPopup = (): JSX.Element => {
             justify="space-between"
             align="baseline"
           >
-            <Heading color="gray.300" size="md">
+            <Heading color="gray.300" size="md" ml={2}>
               History
               <Tooltip label="Data stored in your browser">
                 <QuestionOutlineIcon w={4} ml="8px" mb="2px" />
               </Tooltip>
             </Heading>
-            <div style={{ width: "1px" }} />
             <Button
-              ml={2}
+              mr={4}
               colorScheme="blackAlpha"
               variant="outline"
               height="23px"
@@ -224,7 +236,7 @@ export const PushHistoryPopup = (): JSX.Element => {
             </Table>
           </$TableContainer>
         </Container>
-      </Slide>
+      </$Slide>
     </>
   );
 };

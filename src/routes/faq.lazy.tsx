@@ -1,9 +1,16 @@
 import { createLazyFileRoute } from "@tanstack/react-router";
+import { PushHistoryPopup } from "components/push-history-popup";
+import { Faq } from "pages/faq";
 
 export const Route = createLazyFileRoute("/faq")({
-  component: Faq,
+  component: Component,
 });
 
-function Faq() {
-  return <div>faq</div>;
+function Component() {
+  return (
+    <>
+      <Faq />
+      <PushHistoryPopup />
+    </>
+  );
 }

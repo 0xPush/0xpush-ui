@@ -41,7 +41,7 @@ const $Box = styled(Box)`
   row-gap: 16px;
 `;
 
-export const Points = (): JSX.Element => {
+export const Faq = (): JSX.Element => {
   const { colorMode } = useColorMode();
   const bgColor = { light: "white", dark: "whiteAlpha.100" };
 

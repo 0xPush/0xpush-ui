@@ -15,7 +15,7 @@ import {
 } from "@chakra-ui/react";
 import { HamburgerIcon } from "@chakra-ui/icons";
 import { HeaderWalletConnect } from "./header-wallet-connect";
-import { FaTelegram, FaTwitter } from "react-icons/fa";
+import { FaRegStar, FaTelegram, FaTwitter } from "react-icons/fa";
 import { useNavigate } from "@tanstack/react-router";
 
 interface Props {
@@ -60,6 +60,7 @@ export const HeaderDrawer = ({ className }: Props): JSX.Element => {
                   navigate({ to: "/points" });
                   onClose();
                 }}
+                rightIcon={<FaRegStar />}
               >
                 Points
               </Button>
