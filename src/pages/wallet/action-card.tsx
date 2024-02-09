@@ -50,12 +50,13 @@ interface ActionCardProps {
   onClick?: () => void;
   label: string;
   active?: boolean;
+  className?: string;
 }
 
 export const ActionCard = forwardRef<
   HTMLDivElement | undefined,
   ActionCardProps
->(function ActionCard({ children, onClick, active, label }, ref) {
+>(function ActionCard({ children, onClick, active, label, className }, ref) {
   const { colorMode } = useColorMode();
   const bgColor = { light: "white", dark: "whiteAlpha.100" };
 
@@ -69,6 +70,7 @@ export const ActionCard = forwardRef<
       boxShadow="md"
       onClick={onClick}
       active={active ? 1 : 0}
+      className={className}
     >
       <Label>{label}</Label>
       <Content>{children}</Content>

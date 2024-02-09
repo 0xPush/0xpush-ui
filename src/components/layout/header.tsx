@@ -151,7 +151,10 @@ export const Header = () => {
         <Actions>
           {!isMobile && (
             <>
-              <Link onClick={() => navigate({ to: "/points" })}>
+              <Link
+                className="onboard-points"
+                onClick={() => navigate({ to: "/points" })}
+              >
                 <Button
                   variant="outline"
                   mr={0}
@@ -175,7 +178,9 @@ export const Header = () => {
             </>
           )}
           <ColorMode />
-          {!isMobile && <$HeaderWalletConnect />}
+          {!isMobile && (
+            <$HeaderWalletConnect className="onboard-wallet-connect" />
+          )}
           {isMobile && <HeaderDrawer />}
         </Actions>
       </Container>

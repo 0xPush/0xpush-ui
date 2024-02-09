@@ -4,9 +4,12 @@ import {
   Heading,
   Input,
   Stack,
+  Switch,
   Tag,
   Tooltip,
   useColorMode,
+  Text,
+  Checkbox,
 } from "@chakra-ui/react";
 import styled from "@emotion/styled";
 import { useWeb3ModalProvider } from "@web3modal/ethers/react";
@@ -63,6 +66,7 @@ export const SetupCustomization = ({
       .then((preset) => {
         setFromName(preset.fromName || "");
         setToName(preset.toName || "");
+        setOnboarding(preset.onboarding);
       })
       .catch((e) => {
         console.log(e);
@@ -71,6 +75,7 @@ export const SetupCustomization = ({
 
   const [fromName, setFromName] = useState("");
   const [toName, setToName] = useState("");
+  const [onboarding, setOnboarding] = useState(false);
 
   const [isSending, setIsSending] = useState(false);
 
@@ -79,7 +84,13 @@ export const SetupCustomization = ({
 
     try {
       const signer = await ethersProvider.getSigner();
-      const tx = await writePushPreset(signer, to, fromName, toName);
+      const tx = await writePushPreset(
+        signer,
+        to,
+        fromName,
+        toName,
+        onboarding
+      );
       const receipt = await tx.wait();
 
       console.log(receipt);
@@ -129,6 +140,25 @@ export const SetupCustomization = ({
         disabled={isSending}
         maxLength={60}
       />
+      <Stack mt={2} mb={5} direction="row" align="center">
+        <Checkbox
+          disabled={isSending}
+          checked={onboarding}
+          borderColor="gray.300"
+          colorScheme="purple"
+          onChange={({ target: { checked } }) => setOnboarding(checked)}
+        />
+        <Text fontSize="14px">
+          Onboarding{" "}
+          <Tooltip
+            label={
+              "Run step-by-step onboarding to crypto and Blast ecosystem on push open"
+            }
+          >
+            <QuestionOutlineIcon ml="4px" fill="gray" color="gray" />
+          </Tooltip>
+        </Text>
+      </Stack>
 
       <Stack mt={3} justify="center">
         <Button

@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import {
   Button,
   Fade,
@@ -12,6 +12,7 @@ import styled from "@emotion/styled";
 import { AiOutlineSend, AiOutlineSwap } from "react-icons/ai";
 import { IoWalletOutline } from "react-icons/io5";
 import { FaCoins, FaGamepad, FaShoppingBag } from "react-icons/fa";
+import Joyride, { Step } from "react-joyride";
 
 import { usePushWalletContext } from "../../providers/push-wallet-provider";
 import { moveBg } from "../../components/moveBg";
@@ -23,6 +24,7 @@ import { Earn } from "./cards/earn";
 import { Send } from "./cards/send";
 import { readPushPreset } from "../../lib/storage-contract";
 import { PushPreset } from "../../types/preset";
+import { onboardingSteps } from "./onboarding-steps";
 
 const Container = styled.div`
   margin-top: 2vh;
@@ -54,11 +56,17 @@ export const WalletContent = () => {
   const { wallet, totalUsdAmount } = usePushWalletContext();
   const [action, setAction] = useState<Action>(null);
 
-  const [{ fromName, toName }, setPreset] = useState<PushPreset>({
+  const [{ fromName, toName, onboarding }, setPreset] = useState<PushPreset>({
     fromName: null,
     toName: null,
     fromAddress: null,
+    onboarding: false,
   });
+
+  const isOnboardingCompleted = useMemo(
+    () => PushHistory.isOnboardingCompleted(wallet.privateKey),
+    [wallet.privateKey]
+  );
 
   const {
     isOpen: showWalletActions,
@@ -66,18 +74,13 @@ export const WalletContent = () => {
     onClose: closeWalletActions,
   } = useDisclosure({ defaultIsOpen: false });
 
-  const sendRef = useRef<HTMLDivElement>();
-  const swapRef = useRef();
-  const earnRef = useRef();
-  const walletRef = useRef();
-
   useEffect(() => {
     readPushPreset(wallet.address, wallet.provider!)
       .then(setPreset)
       .catch((e) => {
         console.log(e);
       });
-  }, [wallet.address]);
+  }, [wallet.address, wallet.provider]);
 
   useEffect(() => {
     if (!wallet) {
@@ -101,6 +104,26 @@ export const WalletContent = () => {
 
   return (
     <Container>
+      <Joyride
+        continuous
+        steps={onboardingSteps}
+        run={onboarding && !isOnboardingCompleted}
+        callback={({ action }) => {
+          if (action === "reset" || action === "stop") {
+            PushHistory.setOnboardingCompleted(wallet.privateKey);
+          }
+        }}
+        showProgress
+        showSkipButton
+        showCloseButton
+        locale={{
+          back: "Back",
+          close: "Close",
+          last: "Last",
+          next: "Next",
+          skip: "Skip",
+        }}
+      />
       <Fade in={true}>
         <Stack justify="center" align="center" mb={8}>
           {toName && (
@@ -111,7 +134,9 @@ export const WalletContent = () => {
           <$Heading textAlign="center" size="lg">
             You received{" "}
             <Tooltip label="4% for ETH and 5% for stablecoins APR yield">
-              <Highlight>${totalUsdAmount}</Highlight>
+              <Highlight className="onboard-highlight">
+                ${totalUsdAmount}
+              </Highlight>
             </Tooltip>{" "}
             {fromName && `from ${fromName}`}
           </$Heading>
@@ -119,13 +144,13 @@ export const WalletContent = () => {
       </Fade>
       <Fade in={true}>
         <Stack justify="center" align="center" mb={6}>
-          <Balance />
+          <Balance className="onboard-balance" />
         </Stack>
       </Fade>
       <Stack align="center">
-        <Stack width={370} direction="row" spacing={4} mb={2}>
+        <Stack className="x" width={370} direction="row" spacing={4} mb={2}>
           <ActionCard
-            ref={sendRef}
+            className="onboard-send"
             onClick={() => handleActionClick("send")}
             active={action === "send"}
             label="Send"
@@ -133,7 +158,7 @@ export const WalletContent = () => {
             <Icon width="32px" height="32px" as={AiOutlineSend} />
           </ActionCard>
           <ActionCard
-            ref={swapRef}
+            className="onboard-swap"
             onClick={() => handleActionClick("swap")}
             active={action === "swap"}
             label="Swap"
@@ -141,7 +166,12 @@ export const WalletContent = () => {
             <Icon width="32px" height="32px" as={AiOutlineSwap} />
           </ActionCard>
         </Stack>
-        <Stack width={370} direction="row" spacing={4}>
+        <Stack
+          className="onboard-ecosystem"
+          width={370}
+          direction="row"
+          spacing={4}
+        >
           <ActionCard
             onClick={() => handleActionClick("earn")}
             active={action === "earn"}
@@ -174,8 +204,7 @@ export const WalletContent = () => {
       </Stack>
       <Stack align="center" my={3}>
         <Button
-          // @ts-ignore
-          ref={walletRef}
+          className="onboard-wallet-actions"
           variant="outline"
           colorScheme="pink"
           size="sm"

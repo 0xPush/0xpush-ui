@@ -2,6 +2,7 @@ export interface HistoryItem {
   secret: string;
   type: "created" | "viewed";
   date?: Date | unknown;
+  onboardingCompleted?: boolean;
 }
 
 const KEY = "push-history";
@@ -40,6 +41,29 @@ export class PushHistory {
     } catch (e) {
       // console.log(e);
     }
+  }
+
+  public static setOnboardingCompleted(secret: string): void {
+    try {
+      const items = this.getHistory().map((item) =>
+        item.secret === secret ? { ...item, onboardingCompleted: true } : item
+      );
+
+      localStorage.setItem(KEY, JSON.stringify(items));
+    } catch (e) {
+      // console.log(e);
+    }
+  }
+
+  public static isOnboardingCompleted(secret: string): boolean {
+    try {
+      const item = this.getHistory().find((item) => item.secret === secret);
+
+      return item ? !!item.onboardingCompleted : false;
+    } catch (e) {
+      // console.log(e);
+    }
+    return false;
   }
 
   public static clear(): void {

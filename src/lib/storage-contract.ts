@@ -155,12 +155,23 @@ export const readPushPreset = async (
   toAddress: string,
   provider: ContractRunner
 ): Promise<PushPreset> => {
-  const data = await getPushStorageContract(provider).read(toAddress);
+  const rawPreset = await getPushStorageContract(provider).read(toAddress);
+
+  let onboarding = false;
+  try {
+    const data = JSON.parse(rawPreset["3"]);
+    if (data.onboarding === true) {
+      onboarding = true;
+    }
+  } catch (error) {
+    //
+  }
 
   return {
-    fromAddress: data["0"] || null,
-    fromName: data["1"] || null,
-    toName: data["2"] || null,
+    fromAddress: rawPreset["0"] || null,
+    fromName: rawPreset["1"] || null,
+    toName: rawPreset["2"] || null,
+    onboarding,
   };
 };
 
@@ -168,7 +179,10 @@ export const writePushPreset = async (
   signer: JsonRpcSigner,
   to: string,
   fromName: string,
-  toName: string
+  toName: string,
+  onboarding: boolean
 ) => {
-  return await getPushStorageContract(signer).write(to, fromName, toName, "");
+  const data = onboarding ? JSON.stringify({ onboarding: true }) : "";
+
+  return await getPushStorageContract(signer).write(to, fromName, toName, data);
 };
