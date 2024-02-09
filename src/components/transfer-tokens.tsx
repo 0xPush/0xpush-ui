@@ -160,23 +160,20 @@ export const TransferTokens = ({
   };
 
   const setMax = () => {
-    if (fromConnectedWallet) {
-      let value = connectedWalletBalance - transferEstimateFee;
-      if (value <= 0) {
-        value = 0n;
-      }
-      setAmount(connectedWalletBalance);
-      setInput(formatEther(connectedWalletBalance));
-    } else {
-      // from push
-      let value = ethBalance - transferEstimateFee;
-      if (value <= 0) {
-        value = 0n;
-      }
+    let value = 0n;
 
-      setAmount(value);
-      setInput(formatEther(value));
+    if (fromConnectedWallet) {
+      value = connectedWalletBalance - transferEstimateFee;
+    } else {
+      value = ethBalance - transferEstimateFee;
     }
+
+    if (value <= 0) {
+      value = 0n;
+    }
+
+    setAmount(value);
+    setInput(formatEther(value));
   };
 
   const getLabel = () => {

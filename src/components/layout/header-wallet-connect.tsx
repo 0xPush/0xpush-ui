@@ -1,14 +1,9 @@
-import { LinkIcon } from "@chakra-ui/icons";
-import { Button, useColorMode, useMediaQuery } from "@chakra-ui/react";
+import { Button, useMediaQuery } from "@chakra-ui/react";
 import styled from "@emotion/styled";
-import {
-  useWeb3Modal,
-  useWeb3ModalAccount,
-  useWeb3ModalProvider,
-  useWeb3ModalState,
-} from "@web3modal/ethers/react";
+import { useWeb3Modal, useWeb3ModalAccount } from "@web3modal/ethers/react";
 import { blastTestnet } from "../../providers/web3-modal-provider";
 import { shortString } from "../../lib/string";
+import { FaWallet } from "react-icons/fa";
 
 const Container = styled.div`
   display: flex;
@@ -33,7 +28,7 @@ export const HeaderWalletConnect = ({
       {!isConnected && (
         <Button
           flex={isMobile ? 1 : undefined}
-          rightIcon={<LinkIcon />}
+          rightIcon={<FaWallet fill="gray" />}
           variant="outline"
           onClick={() => open()}
         >
@@ -43,7 +38,7 @@ export const HeaderWalletConnect = ({
       {isConnected && chainId !== blastTestnet.chainId && (
         <Button
           flex={isMobile ? 1 : undefined}
-          rightIcon={<LinkIcon />}
+          rightIcon={<FaWallet />}
           variant="outline"
           onClick={() => open({ view: "Networks" })}
         >

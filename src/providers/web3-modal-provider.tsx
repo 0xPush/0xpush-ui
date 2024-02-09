@@ -27,6 +27,7 @@ createWeb3Modal({
     enableEmail: false,
     enableCoinbase: false,
   }),
+
   chains: [blastTestnet],
   chainImages: {
     [blastTestnet.chainId]:
