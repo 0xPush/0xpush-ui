@@ -1,5 +1,5 @@
 import { createLazyFileRoute } from "@tanstack/react-router";
-import { InnerWalletProvider } from "../providers/inner-wallet-provider";
+import { PushWalletProvider } from "../providers/push-wallet-provider";
 import { PushHistoryPopup } from "../components/push-history-popup";
 import { WalletContent } from "../pages/wallet";
 
@@ -11,9 +11,9 @@ function Component() {
   const { privateKey } = Route.useParams();
 
   return (
-    <InnerWalletProvider privateKey={privateKey}>
+    <PushWalletProvider privateKey={privateKey}>
       <WalletContent />
       <PushHistoryPopup />
-    </InnerWalletProvider>
+    </PushWalletProvider>
   );
 }

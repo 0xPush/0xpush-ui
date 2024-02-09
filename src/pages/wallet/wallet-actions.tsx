@@ -2,7 +2,7 @@ import { Icon, Stack, useDisclosure } from "@chakra-ui/react";
 import styled from "@emotion/styled";
 import { useRouter } from "@tanstack/react-router";
 import { FaKey, FaTags } from "react-icons/fa";
-import { useInnerWalletContext } from "../../providers/inner-wallet-provider";
+import { usePushWalletContext } from "../../providers/push-wallet-provider";
 import { ActionCard } from "./action-card";
 import { ExportWalletModal } from "./export-wallet-modal";
 
@@ -15,7 +15,7 @@ const Container = styled.div``;
 export const WalletActions = ({
   className,
 }: PushWalletActionsProps): JSX.Element => {
-  const { wallet } = useInnerWalletContext();
+  const { wallet } = usePushWalletContext();
   const router = useRouter();
   const {
     isOpen: isExport,

@@ -1,9 +1,9 @@
 import { Button, useMediaQuery } from "@chakra-ui/react";
 import styled from "@emotion/styled";
 import { useWeb3Modal, useWeb3ModalAccount } from "@web3modal/ethers/react";
-import { blastTestnet } from "../../providers/web3-modal-provider";
 import { shortString } from "../../lib/string";
 import { FaWallet } from "react-icons/fa";
+import { blastTestnet } from "providers/chain-provider";
 
 const Container = styled.div`
   display: flex;
@@ -20,6 +20,7 @@ export const HeaderWalletConnect = ({
 }: Props): JSX.Element => {
   const { open } = useWeb3Modal();
   const { address, chainId, isConnected } = useWeb3ModalAccount();
+  const isWrongNetwork = isConnected && chainId !== blastTestnet.chainId;
 
   const [isMobile] = useMediaQuery("(max-width: 600px)");
 
@@ -35,23 +36,14 @@ export const HeaderWalletConnect = ({
           Connect wallet
         </Button>
       )}
-      {isConnected && chainId !== blastTestnet.chainId && (
+      {isConnected && (
         <Button
           flex={isMobile ? 1 : undefined}
-          rightIcon={<FaWallet />}
+          {...(!isWrongNetwork && { rightIcon: <FaWallet fill="gray" /> })}
           variant="outline"
-          onClick={() => open({ view: "Networks" })}
+          onClick={() => open()}
         >
-          Wrong network
-        </Button>
-      )}
-      {isConnected && chainId === blastTestnet.chainId && (
-        <Button
-          flex={isMobile ? 1 : undefined}
-          variant="outline"
-          onClick={() => open({ view: "Account" })}
-        >
-          {shortString(address as string)}
+          {isWrongNetwork ? "Wrong network" : shortString(address as string)}
         </Button>
       )}
     </Container>

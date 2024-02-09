@@ -55,7 +55,7 @@ const Container = styled.div`
   top: 40%;
   transform: translateY(-50%);
   width: min(600px, 90%);
-  height: 40vh;
+  height: calc(max(40dvh, 500px));
   border-top-left-radius: 8px;
   border-bottom-left-radius: 8px;
   background-color: #1f1f1f;
@@ -125,7 +125,7 @@ export const PushHistoryPopup = (): JSX.Element => {
   const [history, setHistory] = useState<HistoryItem[]>([]);
 
   const { colorMode } = useColorMode();
-  const bgColor = { light: "#ffffff", dark: "#3f3f3f" };
+  const bgColor = { light: "#ffffff", dark: "#101409" };
 
   const openLink = (privateKey: string) => {
     const hostname = window?.location.origin;

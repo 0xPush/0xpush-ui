@@ -3,7 +3,7 @@ import { Box, Tooltip, useColorMode } from "@chakra-ui/react";
 import styled from "@emotion/styled";
 
 import { forwardRef, useState } from "react";
-import { useInnerWalletContext } from "../../providers/inner-wallet-provider";
+import { usePushWalletContext } from "../../providers/push-wallet-provider";
 
 import { formatUnits } from "ethers";
 import EtherLogo from "../../assets/eth-logo.svg?react";
@@ -78,7 +78,7 @@ export const Balance = forwardRef<
   HTMLDivElement | undefined,
   BalanceDisplayProps
 >(function BalanceDisplay({ className }, ref) {
-  const { wallet, ethBalance, totalUsdAmount } = useInnerWalletContext();
+  const { wallet, ethBalance, totalUsdAmount } = usePushWalletContext();
 
   //   wallet.provider?.getBalance()
 

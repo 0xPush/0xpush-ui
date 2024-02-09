@@ -1,5 +1,5 @@
 import styled from "@emotion/styled";
-import { useInnerWalletContext } from "../providers/inner-wallet-provider";
+import { usePushWalletContext } from "../providers/push-wallet-provider";
 import {
   Fade,
   Heading,
@@ -41,7 +41,7 @@ interface Props {
 }
 
 export const Deposit = ({ className }: Props): JSX.Element => {
-  const { wallet } = useInnerWalletContext();
+  const { wallet } = usePushWalletContext();
   const { colorMode } = useColorMode();
   const { isOpen, onOpen, onClose } = useDisclosure();
   const toast = useToast();

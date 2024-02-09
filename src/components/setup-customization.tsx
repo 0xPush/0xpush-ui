@@ -17,7 +17,7 @@ import {
 } from "ethers";
 import { useEffect, useMemo, useState } from "react";
 import { readPushPreset, writePushPreset } from "../lib/storage-contract";
-import { useInnerWalletContext } from "../providers/inner-wallet-provider";
+import { usePushWalletContext } from "../providers/push-wallet-provider";
 
 const FormLabel = styled.div`
   display: flex;
@@ -46,7 +46,7 @@ export const SetupCustomization = ({
   onSuccess,
   className,
 }: Props) => {
-  const { updateBalance } = useInnerWalletContext();
+  const { updateBalance, wallet } = usePushWalletContext();
   const { walletProvider } = useWeb3ModalProvider();
 
   const { colorMode } = useColorMode();
@@ -59,7 +59,7 @@ export const SetupCustomization = ({
   );
 
   useEffect(() => {
-    readPushPreset(to)
+    readPushPreset(to, wallet.provider!)
       .then((preset) => {
         setFromName(preset.fromName || "");
         setToName(preset.toName || "");
@@ -67,7 +67,7 @@ export const SetupCustomization = ({
       .catch((e) => {
         console.log(e);
       });
-  }, [to]);
+  }, [to, wallet.provider]);
 
   const [fromName, setFromName] = useState("");
   const [toName, setToName] = useState("");

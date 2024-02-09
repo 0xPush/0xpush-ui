@@ -13,7 +13,7 @@ import { AiOutlineSend, AiOutlineSwap } from "react-icons/ai";
 import { IoWalletOutline } from "react-icons/io5";
 import { FaCoins, FaGamepad, FaShoppingBag } from "react-icons/fa";
 
-import { useInnerWalletContext } from "../../providers/inner-wallet-provider";
+import { usePushWalletContext } from "../../providers/push-wallet-provider";
 import { moveBg } from "../../components/moveBg";
 import { PushHistory } from "../../lib/history";
 import { ActionCard } from "./action-card";
@@ -51,7 +51,7 @@ const Highlight = styled.span`
 type Action = "send" | "swap" | "earn" | "games" | "markets" | null;
 
 export const WalletContent = () => {
-  const { wallet, totalUsdAmount, updateBalance } = useInnerWalletContext();
+  const { wallet, totalUsdAmount } = usePushWalletContext();
   const [action, setAction] = useState<Action>(null);
 
   const [{ fromName, toName }, setPreset] = useState<PushPreset>({
@@ -72,7 +72,7 @@ export const WalletContent = () => {
   const walletRef = useRef();
 
   useEffect(() => {
-    readPushPreset(wallet.address)
+    readPushPreset(wallet.address, wallet.provider!)
       .then(setPreset)
       .catch((e) => {
         console.log(e);
@@ -111,9 +111,9 @@ export const WalletContent = () => {
           <$Heading textAlign="center" size="lg">
             You received{" "}
             <Tooltip label="4% for ETH and 5% for stablecoins APR yield">
-              <Highlight>{totalUsdAmount}</Highlight>
+              <Highlight>${totalUsdAmount}</Highlight>
             </Tooltip>{" "}
-            USD {fromName && `from ${fromName}`}
+            {fromName && `from ${fromName}`}
           </$Heading>
         </Stack>
       </Fade>

@@ -10,8 +10,10 @@ import {
 } from "react";
 import { usePrice } from "./price-provider";
 import { shortString } from "lib/string";
+import { useChainContext } from "./chain-provider";
+import { useInterval } from "hooks/use-interval";
 
-interface InnerWalletContextValue {
+interface PushWalletContextValue {
   wallet: Wallet;
   privateKey: string;
   ethBalance: bigint;
@@ -20,13 +22,11 @@ interface InnerWalletContextValue {
   updateBalance: () => void;
 }
 
-// @ts-ignore
-export const InnerWalletContext = createContext<InnerWalletContextValue>();
-export const useInnerWalletContext = () => useContext(InnerWalletContext);
+// @ts-expect-error
+export const PushWalletContext = createContext<PushWalletContextValue>();
+export const usePushWalletContext = () => useContext(PushWalletContext);
 
-const ethersProvider = new ethers.JsonRpcProvider("https://sepolia.blast.io");
-
-export const InnerWalletProvider = ({
+export const PushWalletProvider = ({
   privateKey,
   children,
 }: {
@@ -34,10 +34,11 @@ export const InnerWalletProvider = ({
   children: ReactNode;
 }) => {
   const { ethPriceUsd } = usePrice();
+  const { ethersProvider } = useChainContext();
 
   const wallet = useMemo(
     () => new ethers.Wallet(privateKey, ethersProvider),
-    [privateKey]
+    [privateKey, ethersProvider]
   );
 
   const [ethBalance, setEthBalance] = useState<bigint>(0n);
@@ -53,6 +54,8 @@ export const InnerWalletProvider = ({
       .then((data) => setEthBalance(data));
   }, [wallet.address, wallet.provider]);
 
+  useInterval(updateBalance, 5000);
+
   const updateEstimateFee = useCallback(async () => {
     const gasPrice = (await ethersProvider.getFeeData()).maxFeePerGas!;
 
@@ -62,9 +65,9 @@ export const InnerWalletProvider = ({
       value: 0,
     });
 
-    const estimateFee = estimateGas * gasPrice * 1000n;
+    const estimateFee = estimateGas * gasPrice * 2000n;
     setEstimateFee(estimateFee);
-  }, [wallet]);
+  }, [wallet, ethersProvider]);
 
   useEffect(() => {
     if (wallet) {
@@ -80,7 +83,7 @@ export const InnerWalletProvider = ({
   }, [updateBalance, updateEstimateFee, wallet]);
 
   const value = useMemo(
-    (): InnerWalletContextValue => ({
+    (): PushWalletContextValue => ({
       wallet,
       privateKey,
       ethBalance,
@@ -92,8 +95,8 @@ export const InnerWalletProvider = ({
   );
 
   return (
-    <InnerWalletContext.Provider value={value}>
+    <PushWalletContext.Provider value={value}>
       {children}
-    </InnerWalletContext.Provider>
+    </PushWalletContext.Provider>
   );
 };

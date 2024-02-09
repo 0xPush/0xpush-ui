@@ -1,5 +1,5 @@
-import { Contract, JsonRpcProvider, JsonRpcSigner } from "ethers";
-import { blastTestnet } from "../providers/web3-modal-provider";
+import { Contract, ContractRunner, JsonRpcSigner } from "ethers";
+import { blastTestnet } from "providers/chain-provider";
 import { PushPreset } from "../types/preset";
 
 const abi = [
@@ -147,17 +147,15 @@ const CONTRACT_ADDRESS = {
   [blastTestnet.chainId]: "0xA903E994ac8c7B233f52c7CC02A94d80e524eF31",
 };
 
-const ethersProvider = new JsonRpcProvider("https://sepolia.blast.io");
-
-const contract = new Contract(
-  CONTRACT_ADDRESS[blastTestnet.chainId],
-  abi,
-  ethersProvider
-);
-
 export const readPushPreset = async (
-  toAddress: string
+  toAddress: string,
+  provider: ContractRunner
 ): Promise<PushPreset> => {
+  const contract = new Contract(
+    CONTRACT_ADDRESS[blastTestnet.chainId],
+    abi,
+    provider
+  );
   const data = await contract.read(toAddress);
 
   return {

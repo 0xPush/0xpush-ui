@@ -17,7 +17,7 @@ import {
 } from "ethers";
 import { useEffect, useState } from "react";
 import { ETHER_TOKEN } from "../types/token";
-import { useInnerWalletContext } from "../providers/inner-wallet-provider";
+import { usePushWalletContext } from "../providers/push-wallet-provider";
 import { usePrice } from "../providers/price-provider";
 import { TokenSelect } from "./token-select";
 import {
@@ -81,7 +81,7 @@ export const TransferTokens = ({
   fromConnectedWallet = true,
 }: Props) => {
   const { wallet, ethBalance, updateBalance, transferEstimateFee } =
-    useInnerWalletContext();
+    usePushWalletContext();
   const { isConnected } = useWeb3ModalAccount();
   const { walletProvider } = useWeb3ModalProvider();
 

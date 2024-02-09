@@ -19,7 +19,7 @@ import {
 import styled from "@emotion/styled";
 import { forwardRef } from "react";
 import { copyTextToClipboard } from "../../lib/copy";
-import { useInnerWalletContext } from "../../providers/inner-wallet-provider";
+import { usePushWalletContext } from "../../providers/push-wallet-provider";
 
 const KeyRow = styled.div`
   display: flex;
@@ -57,7 +57,7 @@ export const ExportWalletModal = forwardRef<
   HTMLDivElement | undefined,
   ExportWalletProps
 >(function ExportWallet({ isOpen, onClose }, ref) {
-  const { privateKey, wallet } = useInnerWalletContext();
+  const { privateKey, wallet } = usePushWalletContext();
   const { isOpen: showSecret, onToggle: toggleSecret } = useDisclosure();
   const toast = useToast();
 

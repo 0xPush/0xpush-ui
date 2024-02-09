@@ -5,8 +5,8 @@ import {
   useWeb3ModalAccount,
   useWeb3ModalProvider,
 } from "@web3modal/ethers/react";
+import { blastTestnet } from "providers/chain-provider";
 import React, { ReactNode } from "react";
-import { blastTestnet } from "../../providers/web3-modal-provider";
 
 const Container = styled.div`
   position: relative;
@@ -57,8 +57,7 @@ export const ConnectWalletBlur = ({
   children,
 }: ConnectWalletBlurProps): JSX.Element => {
   const { open } = useWeb3Modal();
-  const { address, chainId, isConnected } = useWeb3ModalAccount();
-  const { walletProvider } = useWeb3ModalProvider();
+  const { chainId, isConnected } = useWeb3ModalAccount();
 
   return (
     <Container className={className}>
