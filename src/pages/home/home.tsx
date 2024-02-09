@@ -38,6 +38,7 @@ const TypewriterContainer = styled.span`
   .Typewriter__cursor {
     opacity: 0;
     font-size: 20px;
+    visibility: hidden;
   }
 
   .Typewriter__wrapper {

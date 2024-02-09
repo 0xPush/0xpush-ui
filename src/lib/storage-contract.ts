@@ -147,16 +147,15 @@ const CONTRACT_ADDRESS = {
   [blastTestnet.chainId]: "0xA903E994ac8c7B233f52c7CC02A94d80e524eF31",
 };
 
+export const getPushStorageContract = (provider: ContractRunner): Contract => {
+  return new Contract(CONTRACT_ADDRESS[blastTestnet.chainId], abi, provider);
+};
+
 export const readPushPreset = async (
   toAddress: string,
   provider: ContractRunner
 ): Promise<PushPreset> => {
-  const contract = new Contract(
-    CONTRACT_ADDRESS[blastTestnet.chainId],
-    abi,
-    provider
-  );
-  const data = await contract.read(toAddress);
+  const data = await getPushStorageContract(provider).read(toAddress);
 
   return {
     fromAddress: data["0"] || null,
@@ -171,11 +170,5 @@ export const writePushPreset = async (
   fromName: string,
   toName: string
 ) => {
-  const contract = new Contract(
-    CONTRACT_ADDRESS[blastTestnet.chainId],
-    abi,
-    signer
-  );
-
-  return await contract.write(to, fromName, toName, "");
+  return await getPushStorageContract(signer).write(to, fromName, toName, "");
 };

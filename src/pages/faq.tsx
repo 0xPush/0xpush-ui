@@ -2,10 +2,9 @@ import {
   Box,
   Divider,
   Heading,
-  ListItem,
+  Link,
   Stack,
   Text,
-  UnorderedList,
   useColorMode,
 } from "@chakra-ui/react";
 import styled from "@emotion/styled";
@@ -88,8 +87,20 @@ export const Faq = (): JSX.Element => {
             If you haven't saved the link, try to find it in your browser
             history.
             <br />
+            We don't have access to private keys.
+          </Text>
+          <Divider />
+          <Heading size="sm">Contract addresses?</Heading>
+          <Text>
+            Testnet:{" "}
+            <Link
+              href="https://testnet.blastscan.io/address/0xA903E994ac8c7B233f52c7CC02A94d80e524eF31"
+              target="_blank"
+            >
+              0xA903E994ac8c7B233f52c7CC02A94d80e524eF31
+            </Link>
             <br />
-            We do not have access to private keys.
+            Mainnet: coming soon
           </Text>
         </$Box>
       </Stack>

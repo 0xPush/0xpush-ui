@@ -64,7 +64,7 @@ export const Points = (): JSX.Element => {
         >
           <Heading size="sm">How to earn points?</Heading>
           <Text>
-            Share pushes. Use customizations.
+            Share pushes. Use customizations. Do quests.
             <br />
             The program is designed to be sybil-resistant - rewarding real users
             and real activity.
@@ -77,6 +77,8 @@ export const Points = (): JSX.Element => {
           <Divider />
           <Heading size="sm">When will the points be distributed?</Heading>
           <Text>
+            Distribution will start some time after the launch in Blast mainnet.{" "}
+            <br />
             We will inform you about this in the announcements. <br />
             The previous activity will be taken.
           </Text>
