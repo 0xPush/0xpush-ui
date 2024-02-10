@@ -49,6 +49,7 @@ export const PushWalletProvider = ({
   ).toFixed(2);
 
   const updateBalance = useCallback(() => {
+    console.log("upd push balance");
     wallet.provider
       ?.getBalance(wallet.address)
       .then((data) => setEthBalance(data));

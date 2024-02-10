@@ -67,6 +67,7 @@ export const SetupCustomization = ({
         setFromName(preset.fromName || "");
         setToName(preset.toName || "");
         setOnboarding(preset.onboarding);
+        setFireworks(preset.fireworks);
       })
       .catch((e) => {
         console.log(e);
@@ -76,6 +77,7 @@ export const SetupCustomization = ({
   const [fromName, setFromName] = useState("");
   const [toName, setToName] = useState("");
   const [onboarding, setOnboarding] = useState(false);
+  const [fireworks, setFireworks] = useState(false);
 
   const [isSending, setIsSending] = useState(false);
 
@@ -89,7 +91,8 @@ export const SetupCustomization = ({
         to,
         fromName,
         toName,
-        onboarding
+        onboarding,
+        fireworks
       );
       const receipt = await tx.wait();
 
@@ -140,10 +143,10 @@ export const SetupCustomization = ({
         disabled={isSending}
         maxLength={60}
       />
-      <Stack mt={2} mb={5} direction="row" align="center">
+      <Stack my={2} direction="row" align="center">
         <Checkbox
           disabled={isSending}
-          checked={onboarding}
+          isChecked={onboarding}
           borderColor="gray.300"
           colorScheme="purple"
           onChange={({ target: { checked } }) => setOnboarding(checked)}
@@ -155,9 +158,19 @@ export const SetupCustomization = ({
               "Run step-by-step onboarding to crypto and Blast ecosystem on push open"
             }
           >
-            <QuestionOutlineIcon ml="4px" fill="gray" color="gray" />
+            <QuestionOutlineIcon ml="4px" mb="2px" fill="gray" color="gray" />
           </Tooltip>
         </Text>
+      </Stack>
+      <Stack mb={5} direction="row" align="center">
+        <Checkbox
+          disabled={isSending}
+          isChecked={fireworks}
+          borderColor="gray.300"
+          colorScheme="purple"
+          onChange={({ target: { checked } }) => setFireworks(checked)}
+        />
+        <Text fontSize="14px">Fireworks</Text>
       </Stack>
 
       <Stack mt={3} justify="center">

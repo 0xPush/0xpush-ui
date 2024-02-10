@@ -12,6 +12,7 @@ const AppContainer = styled.div`
   min-height: 100dvh;
   display: flex;
   flex-flow: column nowrap;
+  overflow-x: hidden;
 `;
 
 const manager = createLocalStorageManager("color-theme");

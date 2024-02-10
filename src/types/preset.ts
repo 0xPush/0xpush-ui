@@ -3,4 +3,5 @@ export interface PushPreset {
   toName: string | null;
   fromAddress: string | null;
   onboarding: boolean;
+  fireworks: boolean;
 }

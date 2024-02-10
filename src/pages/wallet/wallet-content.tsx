@@ -12,17 +12,19 @@ import styled from "@emotion/styled";
 import { AiOutlineSend, AiOutlineSwap } from "react-icons/ai";
 import { IoWalletOutline } from "react-icons/io5";
 import { FaCoins, FaGamepad, FaShoppingBag } from "react-icons/fa";
-import Joyride, { Step } from "react-joyride";
+import Joyride from "react-joyride";
+import { Fireworks } from "@fireworks-js/react";
+import type { FireworksHandlers } from "@fireworks-js/react";
 
-import { usePushWalletContext } from "../../providers/push-wallet-provider";
-import { moveBg } from "../../components/moveBg";
-import { PushHistory } from "../../lib/history";
+import { usePushWalletContext } from "providers/push-wallet-provider";
+import { moveBg } from "components/moveBg";
+import { PushHistory } from "lib/history";
 import { ActionCard } from "./action-card";
 import { WalletActions } from "./wallet-actions";
-import { Balance } from "../../components/balance/balance";
+import { Balance } from "components/balance/balance";
 import { Earn } from "./cards/earn";
 import { Send } from "./cards/send";
-import { readPushPreset } from "../../lib/storage-contract";
+import { readPushPreset } from "lib/storage-contract";
 import { PushPreset } from "../../types/preset";
 import { onboardingSteps } from "./onboarding-steps";
 
@@ -30,6 +32,11 @@ const Container = styled.div`
   margin-top: 2vh;
   display: flex;
   flex: 1;
+  flex-flow: column nowrap;
+`;
+
+const Column = styled.div`
+  display: flex;
   flex-flow: column nowrap;
   z-index: 1;
 `;
@@ -56,12 +63,22 @@ export const WalletContent = () => {
   const { wallet, totalUsdAmount } = usePushWalletContext();
   const [action, setAction] = useState<Action>(null);
 
-  const [{ fromName, toName, onboarding }, setPreset] = useState<PushPreset>({
-    fromName: null,
-    toName: null,
-    fromAddress: null,
-    onboarding: false,
-  });
+  const ref = useRef<FireworksHandlers>(null);
+
+  useEffect(() => {
+    setTimeout(() => {
+      ref.current?.updateOptions({ intensity: 1 });
+    }, 6000);
+  }, []);
+
+  const [{ fromName, toName, onboarding, fireworks }, setPreset] =
+    useState<PushPreset>({
+      fromName: null,
+      toName: null,
+      fromAddress: null,
+      onboarding: false,
+      fireworks: false,
+    });
 
   const isOnboardingCompleted = useMemo(
     () => PushHistory.isOnboardingCompleted(wallet.privateKey),
@@ -115,7 +132,6 @@ export const WalletContent = () => {
         }}
         showProgress
         showSkipButton
-        showCloseButton
         locale={{
           back: "Back",
           close: "Close",
@@ -123,104 +139,124 @@ export const WalletContent = () => {
           next: "Next",
           skip: "Skip",
         }}
+        disableOverlay
       />
-      <Fade in={true}>
-        <Stack justify="center" align="center" mb={8}>
-          {toName && (
-            <$Heading mb={3} textAlign="center" size="lg">
-              Hey, {toName}
-            </$Heading>
-          )}
-          <$Heading textAlign="center" size="lg">
-            You received{" "}
-            <Tooltip label="4% for ETH and 5% for stablecoins APR yield">
-              <Highlight className="onboard-highlight">
-                ${totalUsdAmount}
-              </Highlight>
-            </Tooltip>{" "}
-            {fromName && `from ${fromName}`}
-          </$Heading>
-        </Stack>
-      </Fade>
-      <Fade in={true}>
-        <Stack justify="center" align="center" mb={6}>
-          <Balance className="onboard-balance" />
-        </Stack>
-      </Fade>
-      <Stack align="center">
-        <Stack className="x" width={370} direction="row" spacing={4} mb={2}>
-          <ActionCard
-            className="onboard-send"
-            onClick={() => handleActionClick("send")}
-            active={action === "send"}
-            label="Send"
-          >
-            <Icon width="32px" height="32px" as={AiOutlineSend} />
-          </ActionCard>
-          <ActionCard
-            className="onboard-swap"
-            onClick={() => handleActionClick("swap")}
-            active={action === "swap"}
-            label="Swap"
-          >
-            <Icon width="32px" height="32px" as={AiOutlineSwap} />
-          </ActionCard>
-        </Stack>
-        <Stack
-          className="onboard-ecosystem"
-          width={370}
-          direction="row"
-          spacing={4}
-        >
-          <ActionCard
-            onClick={() => handleActionClick("earn")}
-            active={action === "earn"}
-            label="Earn"
-          >
-            <Icon width="28px" height="28px" as={FaCoins} />
-          </ActionCard>
-          <ActionCard
-            onClick={() => handleActionClick("games")}
-            active={action === "games"}
-            label="Games"
-          >
-            <Icon width="30px" height="30px" as={FaGamepad} />
-          </ActionCard>
-          <ActionCard
-            onClick={() => handleActionClick("markets")}
-            active={action === "markets"}
-            label="Markets"
-          >
-            <Icon width="28px" height="28px" as={FaShoppingBag} />
-          </ActionCard>
-        </Stack>
-      </Stack>
-      <Stack align="center" mt={7} mb={3}>
-        {action === "earn" && <Earn />}
-        {action === "send" && <Send />}
-        {action === "swap" && <p>Swaps are coming soon 👀</p>}
-        {/* {action === "games" && <Games />}
-        {action === "markets" && <Markets />} */}
-      </Stack>
-      <Stack align="center" my={3}>
-        <Button
-          className="onboard-wallet-actions"
-          variant="outline"
-          colorScheme="pink"
-          size="sm"
-          onClick={() => {
-            toggleWalletActions();
-            setAction(null);
+      {fireworks && (
+        <Fireworks
+          ref={ref}
+          options={{
+            opacity: 0.5,
+            hue: { min: 230, max: 360 },
+            mouse: { click: true },
           }}
-          mb={3}
-        >
-          Wallet
-          <Icon ml={2} width="16px" height="16px" as={IoWalletOutline} />
-        </Button>
-        <Fade in={showWalletActions} unmountOnExit={true}>
-          <WalletActions />
+          style={{
+            top: 0,
+            left: 0,
+            width: "100%",
+            height: "100%",
+            position: "absolute",
+          }}
+        />
+      )}
+      <Column>
+        <Fade in={true}>
+          <Stack justify="center" align="center" mb={8}>
+            {toName && (
+              <$Heading mb={3} textAlign="center" size="lg">
+                Hey, {toName}
+              </$Heading>
+            )}
+            <$Heading textAlign="center" size="lg">
+              You received{" "}
+              <Tooltip label="4% for ETH and 5% for stablecoins APR yield">
+                <Highlight className="onboard-highlight">
+                  ${totalUsdAmount}
+                </Highlight>
+              </Tooltip>{" "}
+              {fromName && `from ${fromName}`}
+            </$Heading>
+          </Stack>
         </Fade>
-      </Stack>
+        <Fade in={true}>
+          <Stack justify="center" align="center" mb={6}>
+            <Balance className="onboard-balance" />
+          </Stack>
+        </Fade>
+        <Stack align="center">
+          <Stack className="x" width={370} direction="row" spacing={4} mb={2}>
+            <ActionCard
+              className="onboard-send"
+              onClick={() => handleActionClick("send")}
+              active={action === "send"}
+              label="Send"
+            >
+              <Icon width="32px" height="32px" as={AiOutlineSend} />
+            </ActionCard>
+            <ActionCard
+              className="onboard-swap"
+              onClick={() => handleActionClick("swap")}
+              active={action === "swap"}
+              label="Swap"
+            >
+              <Icon width="32px" height="32px" as={AiOutlineSwap} />
+            </ActionCard>
+          </Stack>
+          <Stack
+            className="onboard-ecosystem"
+            width={370}
+            direction="row"
+            spacing={4}
+          >
+            <ActionCard
+              onClick={() => handleActionClick("earn")}
+              active={action === "earn"}
+              label="Earn"
+            >
+              <Icon width="28px" height="28px" as={FaCoins} />
+            </ActionCard>
+            <ActionCard
+              onClick={() => handleActionClick("games")}
+              active={action === "games"}
+              label="Games"
+            >
+              <Icon width="30px" height="30px" as={FaGamepad} />
+            </ActionCard>
+            <ActionCard
+              onClick={() => handleActionClick("markets")}
+              active={action === "markets"}
+              label="Markets"
+            >
+              <Icon width="28px" height="28px" as={FaShoppingBag} />
+            </ActionCard>
+          </Stack>
+        </Stack>
+        <Stack align="center" mt={7} mb={3}>
+          {action === "earn" && <Earn />}
+          {action === "send" && <Send />}
+          {action === "swap" && <p>Swaps are coming soon 👀</p>}
+          {/* {action === "games" && <Games />}
+        {action === "markets" && <Markets />} */}
+        </Stack>
+        <Stack align="center" my={3}>
+          <Button
+            className="onboard-wallet-actions"
+            variant="outline"
+            colorScheme="pink"
+            size="sm"
+            onClick={() => {
+              toggleWalletActions();
+              setAction(null);
+            }}
+            mb={3}
+          >
+            Wallet
+            <Icon ml={2} width="16px" height="16px" as={IoWalletOutline} />
+          </Button>
+          <Fade in={showWalletActions} unmountOnExit={true}>
+            <WalletActions />
+          </Fade>
+        </Stack>
+      </Column>
     </Container>
   );
 };
