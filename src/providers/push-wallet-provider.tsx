@@ -81,7 +81,8 @@ export const PushWalletProvider = ({
     return () => {
       document.title = "BlastPush";
     };
-  }, [updateBalance, updateEstimateFee, wallet]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [wallet.address]);
 
   const value = useMemo(
     (): PushWalletContextValue => ({
