@@ -159,6 +159,7 @@ export const readPushPreset = async (
 
   let onboarding = false;
   let fireworks = false;
+  let message = "";
   try {
     const data = JSON.parse(rawPreset["3"]);
     if (data.onboarding === true) {
@@ -166,6 +167,10 @@ export const readPushPreset = async (
     }
     if (data.fireworks === true) {
       fireworks = true;
+    }
+
+    if (typeof data?.message === "string") {
+      message = data.message;
     }
   } catch (error) {
     //
@@ -177,6 +182,7 @@ export const readPushPreset = async (
     toName: rawPreset["2"] || null,
     onboarding,
     fireworks,
+    message,
   };
 };
 
@@ -186,10 +192,13 @@ export const writePushPreset = async (
   fromName: string,
   toName: string,
   onboarding: boolean,
-  fireworks: boolean
+  fireworks: boolean,
+  message: string
 ) => {
   const data =
-    onboarding || fireworks ? JSON.stringify({ onboarding, fireworks }) : "";
+    onboarding || fireworks || message
+      ? JSON.stringify({ onboarding, fireworks, message })
+      : "";
 
   return await getPushStorageContract(signer).write(to, fromName, toName, data);
 };

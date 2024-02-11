@@ -4,12 +4,12 @@ import {
   Heading,
   Input,
   Stack,
-  Switch,
   Tag,
   Tooltip,
   useColorMode,
   Text,
   Checkbox,
+  Textarea,
 } from "@chakra-ui/react";
 import styled from "@emotion/styled";
 import { useWeb3ModalProvider } from "@web3modal/ethers/react";
@@ -66,6 +66,7 @@ export const SetupCustomization = ({
       .then((preset) => {
         setFromName(preset.fromName || "");
         setToName(preset.toName || "");
+        setMessage(preset.message || "");
         setOnboarding(preset.onboarding);
         setFireworks(preset.fireworks);
       })
@@ -76,6 +77,7 @@ export const SetupCustomization = ({
 
   const [fromName, setFromName] = useState("");
   const [toName, setToName] = useState("");
+  const [message, setMessage] = useState("");
   const [onboarding, setOnboarding] = useState(false);
   const [fireworks, setFireworks] = useState(false);
 
@@ -92,7 +94,8 @@ export const SetupCustomization = ({
         fromName,
         toName,
         onboarding,
-        fireworks
+        fireworks,
+        message
       );
       const receipt = await tx.wait();
 
@@ -143,6 +146,15 @@ export const SetupCustomization = ({
         disabled={isSending}
         maxLength={60}
       />
+      <FormLabel>Message</FormLabel>
+      <Textarea
+        mb={2}
+        value={message}
+        onChange={({ target: { value } }) => setMessage(value)}
+        disabled={isSending}
+        maxLength={240}
+        placeholder="Enter message (optional)"
+      />
       <Stack my={2} direction="row" align="center">
         <Checkbox
           disabled={isSending}
@@ -176,7 +188,9 @@ export const SetupCustomization = ({
       <Stack mt={3} justify="center">
         <Button
           onClick={handleSend}
-          isDisabled={!fromName || !toName}
+          isDisabled={
+            !fromName && !toName && !message && !onboarding && !fireworks
+          }
           colorScheme="purple"
           isLoading={isSending}
           loadingText="Wait..."

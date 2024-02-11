@@ -7,10 +7,11 @@ import {
   Stack,
   Tooltip,
   useDisclosure,
+  Text,
 } from "@chakra-ui/react";
 import styled from "@emotion/styled";
 import { AiOutlineSend, AiOutlineSwap } from "react-icons/ai";
-import { IoWalletOutline } from "react-icons/io5";
+import { IoPeople, IoWalletOutline } from "react-icons/io5";
 import { FaCoins, FaGamepad, FaShoppingBag } from "react-icons/fa";
 import Joyride from "react-joyride";
 import { Fireworks } from "@fireworks-js/react";
@@ -27,6 +28,8 @@ import { Send } from "./cards/send";
 import { readPushPreset } from "lib/storage-contract";
 import { PushPreset } from "../../types/preset";
 import { onboardingSteps } from "./onboarding-steps";
+import { Games } from "./cards/games";
+import { Social } from "./cards/social";
 
 const Container = styled.div`
   margin-top: 2vh;
@@ -71,13 +74,14 @@ export const WalletContent = () => {
     }, 6000);
   }, []);
 
-  const [{ fromName, toName, onboarding, fireworks }, setPreset] =
+  const [{ fromName, toName, onboarding, fireworks, message }, setPreset] =
     useState<PushPreset>({
       fromName: null,
       toName: null,
       fromAddress: null,
       onboarding: false,
       fireworks: false,
+      message: null,
     });
 
   const isOnboardingCompleted = useMemo(
@@ -175,6 +179,11 @@ export const WalletContent = () => {
               </Tooltip>{" "}
               {fromName && `from ${fromName}`}
             </$Heading>
+            {message && (
+              <Stack mt={2} maxWidth="500px">
+                <Text textAlign="center">{message}</Text>
+              </Stack>
+            )}
           </Stack>
         </Fade>
         <Fade in={true}>
@@ -224,9 +233,9 @@ export const WalletContent = () => {
             <ActionCard
               onClick={() => handleActionClick("markets")}
               active={action === "markets"}
-              label="Markets"
+              label="Social"
             >
-              <Icon width="28px" height="28px" as={FaShoppingBag} />
+              <Icon width="28px" height="28px" as={IoPeople} />
             </ActionCard>
           </Stack>
         </Stack>
@@ -234,8 +243,8 @@ export const WalletContent = () => {
           {action === "earn" && <Earn />}
           {action === "send" && <Send />}
           {action === "swap" && <p>Swaps are coming soon 👀</p>}
-          {/* {action === "games" && <Games />}
-        {action === "markets" && <Markets />} */}
+          {action === "games" && <Games />}
+          {action === "markets" && <Social />}
         </Stack>
         <Stack align="center" my={3}>
           <Button

@@ -108,7 +108,7 @@ export const Balance = forwardRef<
       boxShadow="md"
     >
       {/* <NftModal nft={nft!} isOpen={nftIsOpen} onClose={onNftClose} /> */}
-      <Tooltip label="Blast L2 provides 4% APR yield on ETH">
+      <Tooltip label="4% APR yield">
         <BalanceItem key={0}>
           <Row>
             <EtherLogo width={28} height={28} />

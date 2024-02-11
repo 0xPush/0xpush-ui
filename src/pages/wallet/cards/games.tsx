@@ -1,18 +1,10 @@
+import { Button, Heading, Stack, useColorMode } from "@chakra-ui/react";
 import styled from "@emotion/styled";
-import {
-  Button,
-  Heading,
-  Stack,
-  Tag,
-  Tooltip,
-  useColorMode,
-} from "@chakra-ui/react";
 
-import MonoswapLogo from "assets/projects/monoswap.png";
-import EasyxLogo from "assets/projects/easyx.png";
-import BlastLogo from "assets/projects/blast.png";
+import BurgerCitiesLogo from "assets/projects/burger-cities.ico";
+import CtyptoValleysLogo from "assets/projects/crypto-valleys.ico";
+import XhuntLogo from "assets/projects/xhunt.png";
 
-import { QuestionOutlineIcon } from "@chakra-ui/icons";
 import { Column, Item, LogoContainer, Row } from "./list-components";
 
 interface EarnProps {
@@ -27,42 +19,35 @@ const Image = styled.img`
   -webkit-user-drag: none;
 `;
 
-export const Earn = ({ className }: EarnProps): JSX.Element => {
+export const Games = ({ className }: EarnProps): JSX.Element => {
   const { colorMode } = useColorMode();
   const bgColor = { light: "white", dark: "whiteAlpha.100" };
 
   return (
     <Container className={className}>
-      <Stack mt={2} mb={6} align="center">
-        <Tag px={3} py={1.5} colorScheme="purple" borderRadius="xl">
+      <Stack mt={2} align="center" />
+      {/* <Tag px={3} py={1.5} colorScheme="purple" borderRadius="xl">
           Provide funds and earn
-        </Tag>
-      </Stack>
+        </Tag> */}
+      {/* </Stack> */}
       {/* Monoswap */}
       <Item bg={bgColor[colorMode]} borderRadius="lg" boxShadow="md">
         <Row>
           <LogoContainer>
-            <Image src={MonoswapLogo} />
+            <Image src={XhuntLogo} />
           </LogoContainer>
           <Column>
             <Row>
-              <Heading fontSize="md">Monoswap</Heading>
-              <Tooltip
-                label={
-                  "You may provide liquidity to a trading pool to earn a share of trading fees"
-                }
-              >
-                <QuestionOutlineIcon ml="6px" />
-              </Tooltip>
+              <Heading fontSize="md">xHUNT</Heading>
             </Row>
-            <Tag colorScheme="purple" mt={1} size="sm">
+            {/* <Tag colorScheme="purple" mt={1} size="sm">
               DEX
-            </Tag>
+            </Tag> */}
           </Column>
         </Row>
         <Row>
           <a
-            href="https://www.monoswap.io/"
+            href="https://www.xhunt.tech/"
             target="_blank"
             rel="noreferrer noopener"
           >
@@ -76,20 +61,17 @@ export const Earn = ({ className }: EarnProps): JSX.Element => {
       <Item bg={bgColor[colorMode]} borderRadius="lg" boxShadow="md">
         <Row>
           <LogoContainer>
-            <Image src={EasyxLogo} />
+            <Image src={CtyptoValleysLogo} />
           </LogoContainer>
           <Column>
             <Row>
-              <Heading fontSize="md">EasyX</Heading>
+              <Heading fontSize="md">Crypto Valleys</Heading>
             </Row>
-            <Tag colorScheme="purple" mt={1} size="sm">
-              PERP DEX
-            </Tag>
           </Column>
         </Row>
         <Row>
           <a
-            href="https://easyx.trade/"
+            href="https://cryptovalleys.io/"
             target="_blank"
             rel="noreferrer noopener"
           >
@@ -103,20 +85,17 @@ export const Earn = ({ className }: EarnProps): JSX.Element => {
       <Item bg={bgColor[colorMode]} borderRadius="lg" boxShadow="md">
         <Row>
           <LogoContainer>
-            <Image src={BlastLogo} />
+            <Image src={BurgerCitiesLogo} />
           </LogoContainer>
           <Column>
             <Row>
-              <Heading fontSize="md">Blast Off</Heading>
+              <Heading fontSize="md">Burger Cities</Heading>
             </Row>
-            <Tag colorScheme="purple" mt={1} size="sm">
-              LAUNCHPAD
-            </Tag>
           </Column>
         </Row>
         <Row>
           <a
-            href="https://blastoff.zone/"
+            href="https://burgercities.org/"
             target="_blank"
             rel="noreferrer noopener"
           >
