@@ -78,7 +78,7 @@ export const ExportWalletModal = forwardRef<
         <ModalHeader fontSize="md">Export wallet</ModalHeader>
         <ModalCloseButton />
         <ModalBody pb={4}>
-          <span>You can use the funds in another wallet, such as </span>
+          <span>You can use the assets in another wallet, such as </span>
           <Link
             href="https://metamask.io/"
             target="_blank"

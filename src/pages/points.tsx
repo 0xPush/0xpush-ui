@@ -70,15 +70,22 @@ export const Points = (): JSX.Element => {
             and real activity.
           </Text>
           <Divider />
-          <Heading size="sm">Can I send without customization?</Heading>
-          <Text>No. On-chain activity is needed to earn points.</Text>
+          <Heading size="sm">
+            Can I send earn points without customizing my pushes?
+          </Heading>
+          <Text>
+            Earning points without customization is not possible as it requires
+            on-chain activity.
+          </Text>
           <Divider />
           <Heading size="sm">When will the points be distributed?</Heading>
           <Text>
             Distribution will start some time after the mainnet launch.
             <br />
-            We will inform you about this in the announcements. <br />
-            The previous activity can be accounted for.
+            We will announce it on our official X and Telegram pages, so stay
+            tuned.
+            <br />
+            Your activity during the testnet phase will be accounted for.
           </Text>
           <Divider />
           <Heading size="sm">What is the utility of the points?</Heading>

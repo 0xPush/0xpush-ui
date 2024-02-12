@@ -26,9 +26,6 @@ export const Games = ({ className }: EarnProps): JSX.Element => {
   return (
     <Container className={className}>
       <Stack mt={2} align="center" />
-      {/* <Tag px={3} py={1.5} colorScheme="purple" borderRadius="xl">
-          Provide funds and earn
-        </Tag> */}
       {/* </Stack> */}
       {/* Monoswap */}
       <Item bg={bgColor[colorMode]} borderRadius="lg" boxShadow="md">

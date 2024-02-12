@@ -167,7 +167,7 @@ export const SetupCustomization = ({
           Onboarding{" "}
           <Tooltip
             label={
-              "Run step-by-step onboarding to crypto and Blast ecosystem on push open"
+              "Run step-by-step onboarding to crypto and Blast ecosystem when the push is opened"
             }
           >
             <QuestionOutlineIcon ml="4px" mb="2px" fill="gray" color="gray" />

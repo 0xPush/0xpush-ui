@@ -10,19 +10,19 @@ export const onboardingSteps: Step[] = [
         <Link color="red" href="https://blast.io" target="_blank">
           Blast Network.
         </Link>{" "}
-        This page is a lightweight wallet. You can claim your funds and make
-        deep dive to the Blast ecosystem. Keep the link to this page a secret!"
+        This page is a lightweight wallet. You can claim your funds and make a
+        deep dive into the Blast ecosystem. Keep this page's link a secret!
       </div>
     ),
   },
   {
     target: ".onboard-balance",
     content:
-      "This is your assets. Manage them however you want. In Blast network this funds has 4% for ETH and 5% APR for stablecoins yield. Blast is not about inflation!",
+      "These are your assets. You can manage them however you want. In Blast network these funds have 4% for ETH and 5% APR for stablecoins yield. Blast is not about inflation!",
   },
   {
     target: ".onboard-send",
-    content: "Here you can send funds funds to any address",
+    content: "Here you can send funds to any address",
   },
   {
     target: ".onboard-swap",
@@ -30,11 +30,12 @@ export const onboardingSteps: Step[] = [
   },
   {
     target: ".onboard-ecosystem",
-    content: "These are projects of the Blast ecosystem. Just try to use them.",
+    content:
+      "These ar the projects of the Blast ecosystem. You can try them out if you like so!",
   },
   {
     target: ".onboard-wallet-actions",
-    content: "Here you can deposit Push wallet or export it",
+    content: "Here you can make a deposit to your Push wallet or export it",
   },
   {
     target: ".onboard-wallet-connect",
@@ -43,6 +44,7 @@ export const onboardingSteps: Step[] = [
   },
   {
     target: ".onboard-points",
-    content: "Learn about the future reward point system. Good luck!",
+    content:
+      "Here you can learn about the future reward point system. Good luck!",
   },
 ];

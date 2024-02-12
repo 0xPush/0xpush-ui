@@ -35,7 +35,7 @@ export const Earn = ({ className }: EarnProps): JSX.Element => {
     <Container className={className}>
       <Stack mt={2} mb={6} align="center">
         <Tag px={3} py={1.5} colorScheme="purple" borderRadius="xl">
-          Provide funds and earn
+          Provide crypto and earn
         </Tag>
       </Stack>
       {/* Monoswap */}

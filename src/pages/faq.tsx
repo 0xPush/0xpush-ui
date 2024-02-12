@@ -70,21 +70,22 @@ export const Faq = (): JSX.Element => {
             The recipient will be able to claim crypto via the link.
           </Text>
           <Divider />
-          <Heading size="sm">It is secure?</Heading>
+          <Heading size="sm">Is it secure?</Heading>
           <Text>
-            A Push link is access to funds. Share it only with the recipient of
-            the funds. The hash of the link contains a private key. This
-            application is a thin client, the private key is not stored anywhere
-            in any form (except browser), and is used only on the client side.
+            A Push link gives access to assets. Share it only with the
+            recipient. The hash of the link contains a private key. This
+            application is a thin client and the private key is not stored
+            anywhere in any form (except your browser), and is used only on the
+            client side.
             <br />
             <br />
             Customization data is stored on-chain and applied only by public
             key.
           </Text>
           <Divider />
-          <Heading size="sm">I lost the Push link. What to do?</Heading>
+          <Heading size="sm">I have lost the Push link. What do I do?</Heading>
           <Text>
-            If you haven't saved the link, try to find it in your browser
+            If you haven't saved the link, try look it up in your browser
             history.
             <br />
             We don't have access to private keys.
