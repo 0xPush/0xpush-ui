@@ -49,7 +49,7 @@ export const Points = (): JSX.Element => {
     <Container>
       <Stack justify="center" align="center" mb={10}>
         <HeadingBlock>
-          <$Heading textAlign="center">Points season coming soon</$Heading>
+          <$Heading textAlign="center">Points are coming soon 🚀</$Heading>
         </HeadingBlock>
       </Stack>
       <Stack justify="center" align="center">
@@ -70,17 +70,15 @@ export const Points = (): JSX.Element => {
             and real activity.
           </Text>
           <Divider />
-          <Heading size="sm">
-            Are pushes considered without customization?
-          </Heading>
+          <Heading size="sm">Can I send without customization?</Heading>
           <Text>No. On-chain activity is needed to earn points.</Text>
           <Divider />
           <Heading size="sm">When will the points be distributed?</Heading>
           <Text>
-            Distribution will start some time after the launch in Blast mainnet.{" "}
+            Distribution will start some time after the mainnet launch.
             <br />
             We will inform you about this in the announcements. <br />
-            The previous activity will be taken.
+            The previous activity can be accounted for.
           </Text>
           <Divider />
           <Heading size="sm">What is the utility of the points?</Heading>

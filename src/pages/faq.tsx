@@ -102,6 +102,14 @@ export const Faq = (): JSX.Element => {
             <br />
             Mainnet: coming soon
           </Text>
+          <Divider />
+          <Heading size="sm">
+            Can I send USDT, USDC, NFT or other tokens?
+          </Heading>
+          <Text>
+            All known tokens will be added after the mainnet launch. Don't
+            forget to send some ether to pay for gas.
+          </Text>
         </$Box>
       </Stack>
     </Container>

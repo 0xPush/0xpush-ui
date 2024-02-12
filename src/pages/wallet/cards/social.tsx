@@ -3,6 +3,7 @@ import styled from "@emotion/styled";
 
 import AtticcLogo from "assets/projects/atticc.png";
 import Upto3Logo from "assets/projects/upto3.ico";
+import BlastScoreLogo from "assets/projects/blastscore.png";
 
 import { Column, Item, LogoContainer, Row } from "./list-components";
 
@@ -28,17 +29,17 @@ export const Social = ({ className }: EarnProps): JSX.Element => {
       <Item bg={bgColor[colorMode]} borderRadius="lg" boxShadow="md">
         <Row>
           <LogoContainer>
-            <Image src={AtticcLogo} />
+            <Image src={BlastScoreLogo} />
           </LogoContainer>
           <Column>
             <Row>
-              <Heading fontSize="md">Atticc</Heading>
+              <Heading fontSize="md">BlastScore</Heading>
             </Row>
           </Column>
         </Row>
         <Row>
           <a
-            href="https://atticc.xyz/"
+            href="https://blastscore.io/"
             target="_blank"
             rel="noreferrer noopener"
           >
@@ -62,6 +63,29 @@ export const Social = ({ className }: EarnProps): JSX.Element => {
         <Row>
           <a
             href="https://www.upto3.xyz/"
+            target="_blank"
+            rel="noreferrer noopener"
+          >
+            <Button size="sm" variant="solid">
+              Visit
+            </Button>
+          </a>
+        </Row>
+      </Item>
+      <Item bg={bgColor[colorMode]} borderRadius="lg" boxShadow="md">
+        <Row>
+          <LogoContainer>
+            <Image src={AtticcLogo} />
+          </LogoContainer>
+          <Column>
+            <Row>
+              <Heading fontSize="md">Atticc</Heading>
+            </Row>
+          </Column>
+        </Row>
+        <Row>
+          <a
+            href="https://atticc.xyz/"
             target="_blank"
             rel="noreferrer noopener"
           >
