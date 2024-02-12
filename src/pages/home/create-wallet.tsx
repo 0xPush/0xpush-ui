@@ -37,7 +37,7 @@ export const CreateWallet = ({ className }: Props): JSX.Element => {
         size="lg"
         onClick={handleCreate}
       >
-        Create push
+        Create Push
       </Button>
     </Container>
   );

@@ -1,8 +1,10 @@
 import {
   Box,
   Divider,
+  Fade,
   Heading,
   ListItem,
+  Slide,
   Stack,
   Text,
   UnorderedList,
@@ -47,59 +49,61 @@ export const Points = (): JSX.Element => {
 
   return (
     <Container>
-      <Stack justify="center" align="center" mb={10}>
-        <HeadingBlock>
-          <$Heading textAlign="center">Points are coming soon 🚀</$Heading>
-        </HeadingBlock>
-      </Stack>
-      <Stack justify="center" align="center">
-        <$Box
-          flex={1}
-          bg={bgColor[colorMode]}
-          width="100%"
-          maxWidth="700px"
-          borderRadius="lg"
-          boxShadow="sm"
-          p={5}
-        >
-          <Heading size="sm">How to earn points?</Heading>
-          <Text>
-            Share pushes. Use customizations. Do quests.
-            <br />
-            The program is designed to be sybil-resistant - rewarding real users
-            and real activity.
-          </Text>
-          <Divider />
-          <Heading size="sm">
-            Can I send earn points without customizing my pushes?
-          </Heading>
-          <Text>
-            Earning points without customization is not possible as it requires
-            on-chain activity.
-          </Text>
-          <Divider />
-          <Heading size="sm">When will the points be distributed?</Heading>
-          <Text>
-            Distribution will start some time after the mainnet launch.
-            <br />
-            We will announce it on our official X and Telegram pages, so stay
-            tuned.
-            <br />
-            Your activity during the testnet phase will be accounted for.
-          </Text>
-          <Divider />
-          <Heading size="sm">What is the utility of the points?</Heading>
-          <UnorderedList>
-            <ListItem>Access to new features</ListItem>
-            <ListItem>Claiming a share of the users gas fee</ListItem>
-            <ListItem>Early adopters NFTs</ListItem>
-            <ListItem>Blast dev-points distribution</ListItem>
-            <ListItem>Token distribution</ListItem>
-          </UnorderedList>
+      <Fade in={true}>
+        <Stack justify="center" align="center" mb={10}>
+          <HeadingBlock>
+            <$Heading textAlign="center">Points are coming soon 🚀</$Heading>
+          </HeadingBlock>
+        </Stack>
+        <Stack justify="center" align="center">
+          <$Box
+            flex={1}
+            bg={bgColor[colorMode]}
+            width="100%"
+            maxWidth="700px"
+            borderRadius="lg"
+            boxShadow="sm"
+            p={5}
+          >
+            <Heading size="sm">How to earn points?</Heading>
+            <Text>
+              Share pushes. Use customizations. Do quests.
+              <br />
+              The program is designed to be sybil-resistant - rewarding real
+              users and real activity.
+            </Text>
+            <Divider />
+            <Heading size="sm">
+              Can I send earn points without customizing my pushes?
+            </Heading>
+            <Text>
+              Earning points without customization is not possible as it
+              requires on-chain activity.
+            </Text>
+            <Divider />
+            <Heading size="sm">When will the points be distributed?</Heading>
+            <Text>
+              Distribution will start some time after the mainnet launch.
+              <br />
+              We will announce it on our official X and Telegram pages, so stay
+              tuned.
+              <br />
+              Your activity during the testnet phase will be accounted for.
+            </Text>
+            <Divider />
+            <Heading size="sm">What is the utility of the points?</Heading>
+            <UnorderedList>
+              <ListItem>Access to new features</ListItem>
+              <ListItem>Claiming a share of the users gas fee</ListItem>
+              <ListItem>Early adopters NFTs</ListItem>
+              <ListItem>Blast dev-points distribution</ListItem>
+              <ListItem>Token distribution</ListItem>
+            </UnorderedList>
 
-          <Text mt={4}>Criteria and rules can be changed</Text>
-        </$Box>
-      </Stack>
+            <Text mt={4}>Criteria and rules can be changed</Text>
+          </$Box>
+        </Stack>
+      </Fade>
     </Container>
   );
 };

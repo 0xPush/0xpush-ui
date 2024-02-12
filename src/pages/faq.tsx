@@ -1,6 +1,7 @@
 import {
   Box,
   Divider,
+  Fade,
   Heading,
   Link,
   Stack,
@@ -46,73 +47,78 @@ export const Faq = (): JSX.Element => {
 
   return (
     <Container>
-      <Stack justify="center" align="center" mb={10}>
-        <HeadingBlock>
-          <$Heading textAlign="center">Frequently Asked Questions</$Heading>
-        </HeadingBlock>
-      </Stack>
-      <Stack justify="center" align="center">
-        <$Box
-          flex={1}
-          bg={bgColor[colorMode]}
-          width="100%"
-          maxWidth="700px"
-          borderRadius="lg"
-          boxShadow="sm"
-          p={5}
-        >
-          <Heading size="sm">How it works?</Heading>
-          <Text>
-            Create a new Push (with or without the specified settings), send ETH
-            to it's address. Then just share the Push link with the recipient.
-            <br />
-            <br />
-            The recipient will be able to claim crypto via the link.
-          </Text>
-          <Divider />
-          <Heading size="sm">Is it secure?</Heading>
-          <Text>
-            A Push link gives access to assets. Share it only with the
-            recipient. The hash of the link contains a private key. This
-            application is a thin client and the private key is not stored
-            anywhere in any form (except your browser), and is used only on the
-            client side.
-            <br />
-            <br />
-            Customization data is stored on-chain and applied only by public
-            key.
-          </Text>
-          <Divider />
-          <Heading size="sm">I have lost the Push link. What do I do?</Heading>
-          <Text>
-            If you haven't saved the link, try look it up in your browser
-            history.
-            <br />
-            We don't have access to private keys.
-          </Text>
-          <Divider />
-          <Heading size="sm">Contract addresses?</Heading>
-          <Text>
-            Testnet:{" "}
-            <Link
-              href="https://testnet.blastscan.io/address/0xA903E994ac8c7B233f52c7CC02A94d80e524eF31"
-              target="_blank"
-            >
-              0xA903E994ac8c7B233f52c7CC02A94d80e524eF31
-            </Link>
-            <br />
-            Mainnet: coming soon
-          </Text>
-          <Divider />
-          <Heading size="sm">
-            Can I send USDT, USDC, NFT or other tokens?
-          </Heading>
-          <Text>
-            All known tokens will be added after the mainnet launch. Don't
-            forget to send some ether to pay for gas.
-          </Text>
-        </$Box>
-      </Stack>
+      <Fade in={true}>
+        <Stack justify="center" align="center" mb={10}>
+          <HeadingBlock>
+            <$Heading textAlign="center">Frequently Asked Questions</$Heading>
+          </HeadingBlock>
+        </Stack>
+        <Stack justify="center" align="center">
+          <$Box
+            flex={1}
+            bg={bgColor[colorMode]}
+            width="100%"
+            maxWidth="700px"
+            borderRadius="lg"
+            boxShadow="sm"
+            p={5}
+          >
+            <Heading size="sm">How it works?</Heading>
+            <Text>
+              Create a new Push (with or without the specified settings), send
+              ETH to it's address. Then just share the Push link with the
+              recipient.
+              <br />
+              <br />
+              The recipient will be able to claim crypto via the link.
+            </Text>
+            <Divider />
+            <Heading size="sm">Is it secure?</Heading>
+            <Text>
+              A Push link gives access to assets. Share it only with the
+              recipient. The hash of the link contains a private key. This
+              application is a thin client and the private key is not stored
+              anywhere in any form (except your browser), and is used only on
+              the client side.
+              <br />
+              <br />
+              Customization data is stored on-chain and applied only by public
+              key.
+            </Text>
+            <Divider />
+            <Heading size="sm">
+              I have lost the Push link. What do I do?
+            </Heading>
+            <Text>
+              If you haven't saved the link, try look it up in your browser
+              history.
+              <br />
+              We don't have access to private keys.
+            </Text>
+            <Divider />
+            <Heading size="sm">Contract addresses?</Heading>
+            <Text>
+              Testnet:{" "}
+              <Link
+                href="https://testnet.blastscan.io/address/0xA903E994ac8c7B233f52c7CC02A94d80e524eF31"
+                target="_blank"
+              >
+                0xA903E994ac8c7B233f52c7CC02A94d80e524eF31
+              </Link>
+              <br />
+              Mainnet: coming soon
+            </Text>
+            <Divider />
+            <Heading size="sm">
+              Can I send USDT, USDC, NFT or other tokens?
+            </Heading>
+            <Text>
+              All known tokens will be added after the mainnet launch. Don't
+              forget to send some ether to pay for gas.
+            </Text>
+          </$Box>
+        </Stack>
+      </Fade>
     </Container>
   );
 };

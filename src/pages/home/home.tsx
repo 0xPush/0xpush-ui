@@ -1,9 +1,10 @@
-import React from "react";
 import styled from "@emotion/styled";
 import { moveBg } from "../../components/moveBg";
-import { Fade, Heading, Stack } from "@chakra-ui/react";
+import { Button, Fade, Heading, Link, Stack } from "@chakra-ui/react";
 import Typewriter from "typewriter-effect";
 import { CreateWallet } from "./create-wallet";
+import { HomeCards } from "./home-cards";
+import { FaTelegram, FaTwitter } from "react-icons/fa";
 
 const Container = styled.div`
   display: flex;
@@ -89,6 +90,33 @@ export const Home = ({ className }: Props): JSX.Element => {
           <CreateWallet />
         </Fade>
       </Stack>
+      <Stack my={20} justify="center" align="center">
+        <Fade in={true}>
+          <HomeCards />
+        </Fade>
+      </Stack>
+      <Fade in={true}>
+        <Stack spacing="12px" direction="row" justify="center" align="center">
+          <Button
+            leftIcon={<FaTwitter />}
+            as={Link}
+            href="https://twitter.com/blast_push"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            Twitter
+          </Button>
+          <Button
+            leftIcon={<FaTelegram />}
+            as={Link}
+            href="https://t.me/blastpush"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            Telegram
+          </Button>
+        </Stack>
+      </Fade>
     </Container>
   );
 };
