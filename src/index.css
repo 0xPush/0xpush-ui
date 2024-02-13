@@ -16,6 +16,12 @@
   src: url("/fonts/geom-semibold.otf") format("opentype");
 }
 
+@font-face {
+  font-family: Aeroblades;
+  font-weight: 600;
+  src: url("/fonts/aeroblades.otf") format("opentype");
+}
+
 /* @font-face {
   font-family: Geomgraphic;
   font-weight: 600;

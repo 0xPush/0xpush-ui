@@ -21,6 +21,7 @@ import { useEffect } from "react";
 import { HeaderWalletConnect } from "./header-wallet-connect";
 import { useNavigate } from "@tanstack/react-router";
 import { HeaderDrawer } from "./header-drawer";
+import { moveBg } from "components/moveBg";
 
 const Container = styled.header<{ bg: string }>`
   display: flex;
@@ -51,16 +52,22 @@ const Logo = styled.div`
 `;
 
 const LogoImageWrapper = styled.div`
-  width: 130px;
   transition: all 0.2s;
   position: relative;
 `;
 
-const LogoLabel = styled.h4`
-  font-family: Geomgraphic;
-  font-weight: 500;
-  font-size: 20px;
-  line-height: 24px;
+const LogoLabel = styled.h4<{ isDark?: boolean }>`
+  font-family: Aeroblades;
+  font-size: 24px;
+  line-height: 30px;
+  letter-spacing: -1px;
+  padding: 0 5px;
+  color: ${(p) => (p.isDark ? "yellow" : "#4a2650")};
+`;
+
+const LogoLabel2 = styled(LogoLabel)`
+  transform: translateX(-17px);
+  ${moveBg};
 `;
 
 const Actions = styled.div`
@@ -111,12 +118,15 @@ export const Header = () => {
             <Menu>
               <MenuButton as="div">
                 <Stack direction="row">
-                  <LogoLabel>BlastPush</LogoLabel>
+                  <LogoLabel isDark={colorMode === "dark"}>blast</LogoLabel>
+                  <LogoLabel2>push</LogoLabel2>
                   {!isMobile && (
                     <ChevronDownIcon
                       width="24px"
                       height="24px"
                       color="gray.500"
+                      ml={-4}
+                      mt={0.5}
                     />
                   )}
                 </Stack>

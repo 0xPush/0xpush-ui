@@ -4,7 +4,7 @@ import { Button, Fade, Heading, Link, Stack } from "@chakra-ui/react";
 import Typewriter from "typewriter-effect";
 import { CreateWallet } from "./create-wallet";
 import { HomeCards } from "./home-cards";
-import { FaTelegram, FaTwitter } from "react-icons/fa";
+import { FaDiscord, FaTelegram, FaTwitter } from "react-icons/fa";
 
 const Container = styled.div`
   display: flex;
@@ -114,6 +114,15 @@ export const Home = ({ className }: Props): JSX.Element => {
             rel="noopener noreferrer"
           >
             Telegram
+          </Button>
+          <Button
+            leftIcon={<FaDiscord />}
+            as={Link}
+            href="https://discord.gg/aKnJWmTSTw"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            Discord
           </Button>
         </Stack>
       </Fade>
