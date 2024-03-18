@@ -3,7 +3,7 @@ import styled from "@emotion/styled";
 import { useWeb3Modal, useWeb3ModalAccount } from "@web3modal/ethers/react";
 import { shortString } from "../../lib/string";
 import { FaWallet } from "react-icons/fa";
-import { blastTestnet } from "providers/chain-provider";
+import { blastMainnet, blastTestnet } from "providers/chain-provider";
 
 const Container = styled.div`
   display: flex;
@@ -20,7 +20,7 @@ export const HeaderWalletConnect = ({
 }: Props): JSX.Element => {
   const { open } = useWeb3Modal();
   const { address, chainId, isConnected } = useWeb3ModalAccount();
-  const isWrongNetwork = isConnected && chainId !== blastTestnet.chainId;
+  const isWrongNetwork = isConnected && chainId !== blastMainnet.chainId;
 
   const [isMobile] = useMediaQuery("(max-width: 600px)");
 

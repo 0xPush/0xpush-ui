@@ -1,12 +1,8 @@
 import { Button } from "@chakra-ui/react";
 import styled from "@emotion/styled";
-import {
-  useWeb3Modal,
-  useWeb3ModalAccount,
-  useWeb3ModalProvider,
-} from "@web3modal/ethers/react";
-import { blastTestnet } from "providers/chain-provider";
-import React, { ReactNode } from "react";
+import { useWeb3Modal, useWeb3ModalAccount } from "@web3modal/ethers/react";
+import { blastMainnet, blastTestnet } from "providers/chain-provider";
+import { ReactNode } from "react";
 
 const Container = styled.div`
   position: relative;
@@ -67,7 +63,7 @@ export const ConnectWalletBlur = ({
         </Content>
       )}
       {!isConnected && <Blur />}
-      {isConnected && chainId !== blastTestnet.chainId && (
+      {isConnected && chainId !== blastMainnet.chainId && (
         <>
           <Blur />
           <Content>

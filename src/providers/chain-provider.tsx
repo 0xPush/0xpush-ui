@@ -11,8 +11,17 @@ export const blastTestnet = {
   rpcUrl: "https://sepolia.blast.io",
 };
 
+export const blastMainnet = {
+  chainId: 81457,
+  name: "Blast",
+  currency: "ETH",
+  explorerUrl: "https://blastscan.io",
+  rpcUrl: "https://rpc.blast.io",
+};
+
 export const CHAINS: Partial<Record<ChainType, typeof blastTestnet>> = {
   testnet: blastTestnet,
+  mainnet: blastMainnet,
 };
 
 export const getEthersProvider = (chain: ChainType) => {
@@ -30,7 +39,7 @@ const ChainContext = createContext<ChainContextValue>();
 export const useChainContext = () => useContext(ChainContext);
 
 export const ChainContextProvider = ({ children }: { children: ReactNode }) => {
-  const [chainType, setChainType] = useState<ChainType>("testnet");
+  const [chainType, setChainType] = useState<ChainType>("mainnet");
 
   return (
     <ChainContext.Provider

@@ -1,5 +1,5 @@
 import { createWeb3Modal, defaultConfig } from "@web3modal/ethers/react";
-import { blastTestnet } from "./chain-provider";
+import { blastMainnet, blastTestnet } from "./chain-provider";
 
 const walletConnectProjectId = "7874a82faa6eab4fe78dc5902b7955d1";
 
@@ -12,16 +12,18 @@ const metadata = {
 };
 
 createWeb3Modal({
-  defaultChain: blastTestnet,
+  defaultChain: blastMainnet,
   ethersConfig: defaultConfig({
     metadata,
     enableEmail: false,
     enableCoinbase: false,
   }),
 
-  chains: [blastTestnet],
+  chains: [blastMainnet],
   chainImages: {
     [blastTestnet.chainId]:
+      "https://assets-global.website-files.com/65a6baa1a3f8ed336f415cb4/65a6cee39aadb0fa7418aa77_Blast%20Logo%20Icon%20Yellow.svg",
+    [blastMainnet.chainId]:
       "https://assets-global.website-files.com/65a6baa1a3f8ed336f415cb4/65a6cee39aadb0fa7418aa77_Blast%20Logo%20Icon%20Yellow.svg",
   },
   projectId: walletConnectProjectId,
