@@ -1,14 +1,14 @@
-# Blastpush: Front-End
+# 0xPush: Front-End
 
 An open source repository for front-end app.
 
 ## 🔗 Apps
 
-- Web: [blastpush.xyz](https://blastpush.xyz)
+- Web: [0xPush.xyz](https://0xpush.xyz)
 
 ## 🤝 Contribute
 
-- Fork Blastpush onto your own GitHub
+- Fork 0xPush onto your own GitHub
 - Clone it and make sure you're on the `dev` branch.
 - Create a new branch named `[initials]/[feature]` off of `dev`. Example `mr-x/added-cool-feature`.
 
