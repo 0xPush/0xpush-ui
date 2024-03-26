@@ -46,8 +46,8 @@ export const HomeCards = ({ className }: Props): JSX.Element => {
             2. Share
           </Heading>
           <Text mt={3} textAlign="center">
-            Copy and send URL or QR of Push and send it to receiver. Keep this
-            link a secret!
+            Copy URL or QR of Push and send it to receiver. Keep this link a
+            secret!
           </Text>
         </Stack>
       </Card>

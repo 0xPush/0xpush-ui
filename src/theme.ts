@@ -39,8 +39,8 @@ export const theme = extendTheme({
   colors,
   config,
   fonts: {
-    heading: `Geomgraphic, sans-serif`,
-    body: `Chakra Petch, sans-serif`,
+    heading: `Sora, sans-serif`,
+    body: `Inter, sans-serif`,
   },
   styles: {
     global: (props: StyleFunctionProps) => ({

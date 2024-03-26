@@ -1,27 +1,18 @@
 import { JsonRpcProvider } from "ethers";
 import { ReactNode, createContext, useContext, useState } from "react";
 
-export type ChainType = "testnet" | "mainnet";
+export type ChainType = "opSepolia";
 
-export const blastTestnet = {
-  chainId: 168587773,
-  name: "Blast Sepolia",
+export const opSepolia = {
+  chainId: 11155420,
+  name: "OP Sepolia",
   currency: "ETH",
-  explorerUrl: "https://testnet.blastscan.io",
-  rpcUrl: "https://sepolia.blast.io",
+  explorerUrl: "https://sepolia-optimistic.etherscan.io",
+  rpcUrl: "https://sepolia.optimism.io",
 };
 
-export const blastMainnet = {
-  chainId: 81457,
-  name: "Blast",
-  currency: "ETH",
-  explorerUrl: "https://blastscan.io",
-  rpcUrl: "https://rpc.blast.io",
-};
-
-export const CHAINS: Partial<Record<ChainType, typeof blastTestnet>> = {
-  testnet: blastTestnet,
-  mainnet: blastMainnet,
+export const CHAINS: Partial<Record<ChainType, typeof opSepolia>> = {
+  opSepolia,
 };
 
 export const getEthersProvider = (chain: ChainType) => {
@@ -39,7 +30,7 @@ const ChainContext = createContext<ChainContextValue>();
 export const useChainContext = () => useContext(ChainContext);
 
 export const ChainContextProvider = ({ children }: { children: ReactNode }) => {
-  const [chainType, setChainType] = useState<ChainType>("mainnet");
+  const [chainType, setChainType] = useState<ChainType>("opSepolia");
 
   return (
     <ChainContext.Provider

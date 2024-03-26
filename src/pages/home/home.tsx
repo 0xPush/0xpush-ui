@@ -56,11 +56,7 @@ const TypewriterContainer = styled.span`
   }
 `;
 
-interface Props {
-  className?: string;
-}
-
-export const Home = ({ className }: Props): JSX.Element => {
+export const Home = (): JSX.Element => {
   return (
     <Container>
       <Stack justify="center" align="center" mb={10}>
@@ -79,11 +75,21 @@ export const Home = ({ className }: Props): JSX.Element => {
               />
             </$Heading>
           </TypewriterContainer>
-          <$Heading textAlign="center">&nbsp;in Blast L2</$Heading>
+          <$Heading textAlign="center">&nbsp;in</$Heading>
+          <TypewriterContainer>
+            <$Heading>
+              <Typewriter
+                options={{
+                  strings: ["Optimism", "Base"],
+                  autoStart: true,
+                  loop: true,
+                  // @ts-expect-error
+                  pauseFor: 6000,
+                }}
+              />
+            </$Heading>
+          </TypewriterContainer>
         </HeadingBlock>
-        <$Heading mb={5} textAlign="center">
-          with native yield
-        </$Heading>
       </Stack>
       <Stack justify="center" align="center">
         <Fade in={true}>
@@ -109,7 +115,8 @@ export const Home = ({ className }: Props): JSX.Element => {
           <Button
             leftIcon={<FaTelegram />}
             as={Link}
-            href="https://t.me/blastpush"
+            // TODO: replace
+            href="https://t.me/0xpush"
             target="_blank"
             rel="noopener noreferrer"
           >

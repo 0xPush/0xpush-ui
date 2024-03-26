@@ -5,9 +5,9 @@ const walletConnectProjectId = "7874a82faa6eab4fe78dc5902b7955d1";
 
 // 3. Create modal
 const metadata = {
-  name: "Blastpush.xyz",
-  description: "Blastpush.xyz",
-  url: "https://blastpush.xyz", // origin must match your domain & subdomain
+  name: "0xPush.xyz",
+  description: "0xPush.xyz",
+  url: "https://0xpush.xyz", // origin must match your domain & subdomain
   icons: ["https://avatars.mywebsite.com/"],
 };
 

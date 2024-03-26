@@ -75,11 +75,11 @@ export const PushWalletProvider = ({
       updateBalance();
       updateEstimateFee();
 
-      document.title = `${shortString(wallet.address)} | BlastPush`;
+      document.title = `${shortString(wallet.address)} | 0xPush`;
     }
 
     return () => {
-      document.title = "BlastPush";
+      document.title = "0xPush";
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [wallet.address]);

@@ -57,17 +57,12 @@ const LogoImageWrapper = styled.div`
 `;
 
 const LogoLabel = styled.h4<{ isDark?: boolean }>`
-  font-family: Aeroblades;
-  font-size: 24px;
+  font-weight: 600;
+  font-size: 20px;
   line-height: 30px;
   letter-spacing: -1px;
   padding: 0 5px;
   color: ${(p) => (p.isDark ? "yellow" : "#4a2650")};
-`;
-
-const LogoLabel2 = styled(LogoLabel)`
-  transform: translateX(-17px);
-  ${moveBg};
 `;
 
 const Actions = styled.div`
@@ -118,14 +113,13 @@ export const Header = () => {
             <Menu>
               <MenuButton as="div">
                 <Stack direction="row">
-                  <LogoLabel isDark={colorMode === "dark"}>blast</LogoLabel>
-                  <LogoLabel2>push</LogoLabel2>
+                  <LogoLabel isDark={colorMode === "dark"}>0xPush</LogoLabel>
                   {!isMobile && (
                     <ChevronDownIcon
                       width="24px"
                       height="24px"
                       color="gray.500"
-                      ml={-4}
+                      ml={-2}
                       mt={0.5}
                     />
                   )}
@@ -140,14 +134,16 @@ export const Header = () => {
                     <MenuItem>FAQ</MenuItem>
                   </a>
                   <a
-                    href={"https://twitter.com/blast_push"}
+                    // TODO: replace
+                    href={"https://twitter.com/0xpush"}
                     target="_blank"
                     rel="noreferrer noopener"
                   >
                     <MenuItem>Twitter</MenuItem>
                   </a>
                   <a
-                    href={"https://t.me/blastpush"}
+                    // TODO: replace
+                    href={"https://t.me/0xpush"}
                     target="_blank"
                     rel="noreferrer noopener"
                   >

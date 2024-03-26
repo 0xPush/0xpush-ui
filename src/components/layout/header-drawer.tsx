@@ -1,8 +1,6 @@
-import React from "react";
-import styled from "@emotion/styled";
+import { HamburgerIcon } from "@chakra-ui/icons";
 import {
   Button,
-  Divider,
   Drawer,
   DrawerBody,
   DrawerCloseButton,
@@ -13,10 +11,9 @@ import {
   Stack,
   useDisclosure,
 } from "@chakra-ui/react";
-import { HamburgerIcon } from "@chakra-ui/icons";
-import { HeaderWalletConnect } from "./header-wallet-connect";
-import { FaRegStar, FaTelegram, FaTwitter } from "react-icons/fa";
 import { useNavigate } from "@tanstack/react-router";
+import { FaRegStar, FaTelegram, FaTwitter } from "react-icons/fa";
+import { HeaderWalletConnect } from "./header-wallet-connect";
 
 interface Props {
   className?: string;
@@ -40,7 +37,7 @@ export const HeaderDrawer = ({ className }: Props): JSX.Element => {
         <DrawerOverlay />
         <DrawerContent>
           <DrawerCloseButton />
-          <DrawerHeader borderBottomWidth="1px">BlastPush</DrawerHeader>
+          <DrawerHeader borderBottomWidth="1px">0xPush</DrawerHeader>
 
           <DrawerBody>
             <Stack my={3}>
@@ -85,7 +82,8 @@ export const HeaderDrawer = ({ className }: Props): JSX.Element => {
               </Button>
               <Button
                 onClick={() => {
-                  window.open("https://t.me/blastpush", "_blank");
+                  // TODO: replace
+                  window.open("https://t.me/0xpush", "_blank");
                   onClose();
                 }}
                 leftIcon={<FaTelegram />}
