@@ -12,7 +12,6 @@ import {
   Textarea,
 } from "@chakra-ui/react";
 import styled from "@emotion/styled";
-import { useWeb3ModalProvider } from "@web3modal/ethers/react";
 import {
   BrowserProvider,
   TransactionReceipt,
@@ -21,6 +20,7 @@ import {
 import { useEffect, useMemo, useState } from "react";
 import { readPushPreset, writePushPreset } from "../lib/storage-contract";
 import { usePushWalletContext } from "../providers/push-wallet-provider";
+import { useAccount, useClient } from "wagmi";
 
 const FormLabel = styled.div`
   display: flex;
@@ -49,31 +49,33 @@ export const SetupCustomization = ({
   onSuccess,
   className,
 }: Props) => {
-  const { updateBalance, wallet } = usePushWalletContext();
-  const { walletProvider } = useWeb3ModalProvider();
+  // const { updateBalance, wallet } = usePushWalletContext();
+  const client = useClient();
+
+  console.log(client);
 
   const { colorMode } = useColorMode();
   const tagBgColor = { light: "gray.100", dark: "whiteAlpha.100" };
   const tagTextColor = { light: "gray.500", dark: "whiteAlpha.500" };
 
-  const ethersProvider = useMemo(
-    () => new BrowserProvider(walletProvider!),
-    [walletProvider]
-  );
+  // const ethersProvider = useMemo(
+  //   () => new BrowserProvider(walletProvider!),
+  //   [walletProvider]
+  // );
 
-  useEffect(() => {
-    readPushPreset(to, wallet.provider!)
-      .then((preset) => {
-        setFromName(preset.fromName || "");
-        setToName(preset.toName || "");
-        setMessage(preset.message || "");
-        setOnboarding(preset.onboarding);
-        setFireworks(preset.fireworks);
-      })
-      .catch((e) => {
-        console.log(e);
-      });
-  }, [to, wallet.provider]);
+  // useEffect(() => {
+  //   readPushPreset(to, wallet.provider!)
+  //     .then((preset) => {
+  //       setFromName(preset.fromName || "");
+  //       setToName(preset.toName || "");
+  //       setMessage(preset.message || "");
+  //       setOnboarding(preset.onboarding);
+  //       setFireworks(preset.fireworks);
+  //     })
+  //     .catch((e) => {
+  //       console.log(e);
+  //     });
+  // }, [to, wallet.provider]);
 
   const [fromName, setFromName] = useState("");
   const [toName, setToName] = useState("");
@@ -84,30 +86,27 @@ export const SetupCustomization = ({
   const [isSending, setIsSending] = useState(false);
 
   const handleSend = async () => {
-    setIsSending(true);
-
-    try {
-      const signer = await ethersProvider.getSigner();
-      const tx = await writePushPreset(
-        signer,
-        to,
-        fromName,
-        toName,
-        onboarding,
-        fireworks,
-        message
-      );
-      const receipt = await tx.wait();
-
-      console.log(receipt);
-      updateBalance();
-      onSuccess?.(tx, receipt!);
-    } catch (e) {
-      console.error(e);
-      onError?.(e as Error);
-    }
-
-    setIsSending(false);
+    // setIsSending(true);
+    // try {
+    //   const signer = await ethersProvider.getSigner();
+    //   const tx = await writePushPreset(
+    //     signer,
+    //     to,
+    //     fromName,
+    //     toName,
+    //     onboarding,
+    //     fireworks,
+    //     message
+    //   );
+    //   const receipt = await tx.wait();
+    //   console.log(receipt);
+    //   updateBalance();
+    //   onSuccess?.(tx, receipt!);
+    // } catch (e) {
+    //   console.error(e);
+    //   onError?.(e as Error);
+    // }
+    // setIsSending(false);
   };
 
   return (

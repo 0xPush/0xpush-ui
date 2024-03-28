@@ -1,7 +1,6 @@
 import { Button } from "@chakra-ui/react";
 import styled from "@emotion/styled";
-import { useWeb3Modal, useWeb3ModalAccount } from "@web3modal/ethers/react";
-import { blastMainnet, blastTestnet } from "providers/chain-provider";
+import { useWeb3Modal } from "@web3modal/wagmi/react";
 import { ReactNode } from "react";
 
 const Container = styled.div`
@@ -53,7 +52,7 @@ export const ConnectWalletBlur = ({
   children,
 }: ConnectWalletBlurProps): JSX.Element => {
   const { open } = useWeb3Modal();
-  const { chainId, isConnected } = useWeb3ModalAccount();
+  const {} = useWeb3ModalState();
 
   return (
     <Container className={className}>
@@ -63,7 +62,7 @@ export const ConnectWalletBlur = ({
         </Content>
       )}
       {!isConnected && <Blur />}
-      {isConnected && chainId !== blastMainnet.chainId && (
+      {isConnected && (
         <>
           <Blur />
           <Content>

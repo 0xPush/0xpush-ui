@@ -20,10 +20,6 @@ import { ETHER_TOKEN } from "../types/token";
 import { usePushWalletContext } from "../providers/push-wallet-provider";
 import { usePrice } from "../providers/price-provider";
 import { TokenSelect } from "./token-select";
-import {
-  useWeb3ModalAccount,
-  useWeb3ModalProvider,
-} from "@web3modal/ethers/react";
 
 const $InputGroup = styled(InputGroup)`
   z-index: 1;

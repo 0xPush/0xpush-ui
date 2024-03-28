@@ -1,7 +1,6 @@
 import { Box, Input, Stack, useColorMode, useToast } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
 import styled from "@emotion/styled";
-import { useWeb3ModalAccount } from "@web3modal/ethers/react";
 import { TransferTokens } from "../../../components/transfer-tokens";
 import { formatEther } from "ethers";
 

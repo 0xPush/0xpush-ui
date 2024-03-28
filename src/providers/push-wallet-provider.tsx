@@ -1,4 +1,3 @@
-import { Wallet, ethers, formatEther } from "ethers";
 import {
   ReactNode,
   createContext,
@@ -12,6 +11,11 @@ import { usePrice } from "./price-provider";
 import { shortString } from "lib/string";
 import { useChainContext } from "./chain-provider";
 import { useInterval } from "hooks/use-interval";
+import { useClient, usePublicClient } from "wagmi";
+import { Address, createWalletClient, http } from "viem";
+import { privateKeyToAccount } from "viem/accounts";
+import { config } from "./web3-modal-init";
+import { mainnet } from "viem/chains";
 
 interface PushWalletContextValue {
   wallet: Wallet;
@@ -34,12 +38,16 @@ export const PushWalletProvider = ({
   children: ReactNode;
 }) => {
   const { ethPriceUsd } = usePrice();
-  const { ethersProvider } = useChainContext();
 
-  const wallet = useMemo(
-    () => new ethers.Wallet(privateKey, ethersProvider),
-    [privateKey, ethersProvider]
-  );
+  const bowserClient = useClient();
+
+  const account = privateKeyToAccount(privateKey as Address);
+
+  const client = createWalletClient({
+    account,
+    transport: http(),
+    chain: mainnet,
+  });
 
   const [ethBalance, setEthBalance] = useState<bigint>(0n);
   const [estimateFee, setEstimateFee] = useState<bigint>(0n);

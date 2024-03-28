@@ -1,9 +1,9 @@
 import { Button, useMediaQuery } from "@chakra-ui/react";
 import styled from "@emotion/styled";
-import { useWeb3Modal, useWeb3ModalAccount } from "@web3modal/ethers/react";
 import { shortString } from "../../lib/string";
 import { FaWallet } from "react-icons/fa";
-import { blastMainnet, blastTestnet } from "providers/chain-provider";
+import { useAccount } from "wagmi";
+import { useWeb3Modal } from "@web3modal/wagmi/react";
 
 const Container = styled.div`
   display: flex;
@@ -19,8 +19,8 @@ export const HeaderWalletConnect = ({
   onClick,
 }: Props): JSX.Element => {
   const { open } = useWeb3Modal();
-  const { address, chainId, isConnected } = useWeb3ModalAccount();
-  const isWrongNetwork = isConnected && chainId !== blastMainnet.chainId;
+  const { address, chainId, isConnected } = useAccount();
+  const isWrongNetwork = false;
 
   const [isMobile] = useMediaQuery("(max-width: 600px)");
 

@@ -1,31 +1,51 @@
-import { createWeb3Modal, defaultConfig } from "@web3modal/ethers/react";
-import { blastMainnet, blastTestnet } from "./chain-provider";
+import { createWeb3Modal } from "@web3modal/wagmi/react";
+import { defaultWagmiConfig } from "@web3modal/wagmi/react/config";
+import { ReactNode } from "react";
 
-const walletConnectProjectId = "7874a82faa6eab4fe78dc5902b7955d1";
+import { WagmiProvider } from "wagmi";
+import {
+  optimism,
+  optimismSepolia,
+  base,
+  baseSepolia,
+  mode,
+  modeTestnet,
+} from "wagmi/chains";
+
+// WalletConnect project ID
+const projectId = "7874a82faa6eab4fe78dc5902b7955d1";
 
 // 3. Create modal
 const metadata = {
   name: "0xPush.xyz",
   description: "0xPush.xyz",
   url: "https://0xpush.xyz", // origin must match your domain & subdomain
-  icons: ["https://avatars.mywebsite.com/"],
+  icons: [],
 };
 
-createWeb3Modal({
-  defaultChain: blastMainnet,
-  ethersConfig: defaultConfig({
-    metadata,
-    enableEmail: false,
-    enableCoinbase: false,
-  }),
+const chains = [
+  optimism,
+  optimismSepolia,
+  base,
+  baseSepolia,
+  mode,
+  modeTestnet,
+] as const;
 
-  chains: [blastMainnet],
-  chainImages: {
-    [blastTestnet.chainId]:
-      "https://assets-global.website-files.com/65a6baa1a3f8ed336f415cb4/65a6cee39aadb0fa7418aa77_Blast%20Logo%20Icon%20Yellow.svg",
-    [blastMainnet.chainId]:
-      "https://assets-global.website-files.com/65a6baa1a3f8ed336f415cb4/65a6cee39aadb0fa7418aa77_Blast%20Logo%20Icon%20Yellow.svg",
-  },
-  projectId: walletConnectProjectId,
-  enableAnalytics: false, // Optional - defaults to your Cloud configuration
+export const config = defaultWagmiConfig({
+  projectId,
+  chains,
+  metadata,
 });
+
+// 3. Create modal
+createWeb3Modal({
+  wagmiConfig: config,
+  projectId,
+  enableAnalytics: true, // Optional - defaults to your Cloud configuration
+  enableOnramp: true, // Optional - false as default
+});
+
+export function Web3ModalProvider({ children }: { children: ReactNode }) {
+  return <WagmiProvider config={config}>{children}</WagmiProvider>;
+}

@@ -6,7 +6,7 @@ import { Header } from "../components/layout/header";
 import { PriceProvider } from "../providers/price-provider";
 import { theme } from "../theme";
 import "providers/web3-modal-init";
-import { ChainContextProvider } from "providers/chain-provider";
+import { Web3ModalProvider } from "providers/web3-modal-init";
 
 const AppContainer = styled.div`
   min-height: 100dvh;
@@ -26,7 +26,7 @@ export const Route = createRootRoute({
         defaultOptions: { isClosable: true, position: "bottom-right" },
       }}
     >
-      <ChainContextProvider>
+      <Web3ModalProvider>
         <PriceProvider>
           <AppContainer>
             <Header />
@@ -35,7 +35,7 @@ export const Route = createRootRoute({
             </Content>
           </AppContainer>
         </PriceProvider>
-      </ChainContextProvider>
+      </Web3ModalProvider>
     </ChakraProvider>
   ),
 });

@@ -1,154 +1,111 @@
 import { Contract, ContractRunner, JsonRpcSigner } from "ethers";
-import { blastTestnet } from "providers/chain-provider";
 import { PushPreset } from "../types/preset";
 
 const abi = [
   {
-    anonymous: false,
-    inputs: [
+    "anonymous": false,
+    "inputs": [
       {
-        components: [
+        "components": [
           {
-            internalType: "address",
-            name: "from",
-            type: "address",
+            "internalType": "address",
+            "name": "creator",
+            "type": "address"
           },
           {
-            internalType: "string",
-            name: "from_name",
-            type: "string",
-          },
-          {
-            internalType: "string",
-            name: "to",
-            type: "string",
-          },
-          {
-            internalType: "string",
-            name: "data",
-            type: "string",
-          },
+            "internalType": "string",
+            "name": "data",
+            "type": "string"
+          }
         ],
-        indexed: false,
-        internalType: "struct PushStorage.Push",
-        name: "",
-        type: "tuple",
-      },
+        "indexed": false,
+        "internalType": "struct PushStorage.Push",
+        "name": "",
+        "type": "tuple"
+      }
     ],
-    name: "Created",
-    type: "event",
+    "name": "Created",
+    "type": "event"
   },
   {
-    inputs: [
+    "inputs": [
       {
-        internalType: "address",
-        name: "",
-        type: "address",
-      },
+        "internalType": "address",
+        "name": "",
+        "type": "address"
+      }
     ],
-    name: "pushes",
-    outputs: [
+    "name": "pushes",
+    "outputs": [
       {
-        internalType: "address",
-        name: "from",
-        type: "address",
+        "internalType": "address",
+        "name": "creator",
+        "type": "address"
       },
       {
-        internalType: "string",
-        name: "from_name",
-        type: "string",
-      },
-      {
-        internalType: "string",
-        name: "to",
-        type: "string",
-      },
-      {
-        internalType: "string",
-        name: "data",
-        type: "string",
-      },
+        "internalType": "string",
+        "name": "data",
+        "type": "string"
+      }
     ],
-    stateMutability: "view",
-    type: "function",
+    "stateMutability": "view",
+    "type": "function"
   },
   {
-    inputs: [
+    "inputs": [
       {
-        internalType: "address",
-        name: "_address",
-        type: "address",
-      },
+        "internalType": "address",
+        "name": "_address",
+        "type": "address"
+      }
     ],
-    name: "read",
-    outputs: [
+    "name": "read",
+    "outputs": [
       {
-        components: [
+        "components": [
           {
-            internalType: "address",
-            name: "from",
-            type: "address",
+            "internalType": "address",
+            "name": "creator",
+            "type": "address"
           },
           {
-            internalType: "string",
-            name: "from_name",
-            type: "string",
-          },
-          {
-            internalType: "string",
-            name: "to",
-            type: "string",
-          },
-          {
-            internalType: "string",
-            name: "data",
-            type: "string",
-          },
+            "internalType": "string",
+            "name": "data",
+            "type": "string"
+          }
         ],
-        internalType: "struct PushStorage.Push",
-        name: "",
-        type: "tuple",
-      },
+        "internalType": "struct PushStorage.Push",
+        "name": "",
+        "type": "tuple"
+      }
     ],
-    stateMutability: "view",
-    type: "function",
+    "stateMutability": "view",
+    "type": "function"
   },
   {
-    inputs: [
+    "inputs": [
       {
-        internalType: "address",
-        name: "_address",
-        type: "address",
+        "internalType": "address",
+        "name": "_address",
+        "type": "address"
       },
       {
-        internalType: "string",
-        name: "_from",
-        type: "string",
-      },
-      {
-        internalType: "string",
-        name: "_to",
-        type: "string",
-      },
-      {
-        internalType: "string",
-        name: "data",
-        type: "string",
-      },
+        "internalType": "string",
+        "name": "_data",
+        "type": "string"
+      }
     ],
-    name: "write",
-    outputs: [],
-    stateMutability: "nonpayable",
-    type: "function",
-  },
-];
+    "name": "write",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  }
+]
 
-const CONTRACT_ADDRESS = {
-  [blastTestnet.chainId]: "0xA903E994ac8c7B233f52c7CC02A94d80e524eF31",
-};
+const CONTRACT_ADDRESS = "0x0f36EA243A33A4Ede08CDEaB94F46530Fb13d480";
 
 export const getPushStorageContract = (provider: ContractRunner): Contract => {
-  return new Contract(CONTRACT_ADDRESS[blastTestnet.chainId], abi, provider);
+  return new Contract(CONTRACT_ADDRESS, abi, provider);
 };
 
 export const readPushPreset = async (

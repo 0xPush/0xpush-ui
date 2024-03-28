@@ -16,12 +16,12 @@ import styled from "@emotion/styled";
 import { ChevronDownIcon, MoonIcon, SunIcon } from "@chakra-ui/icons";
 import { FaRegStar } from "react-icons/fa";
 
-import { useWeb3ModalTheme } from "@web3modal/ethers/react";
 import { useEffect } from "react";
 import { HeaderWalletConnect } from "./header-wallet-connect";
 import { useNavigate } from "@tanstack/react-router";
 import { HeaderDrawer } from "./header-drawer";
 import { moveBg } from "components/moveBg";
+import { useWeb3ModalTheme } from "@web3modal/wagmi/react";
 
 const Container = styled.header<{ bg: string }>`
   display: flex;
