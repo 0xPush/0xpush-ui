@@ -1,51 +1,17 @@
-import {
-  Button,
-  InputGroup,
-  NumberInput,
-  NumberInputField,
-  Stack,
-  Text,
-} from "@chakra-ui/react";
+import { Button, Stack, Text } from "@chakra-ui/react";
 import styled from "@emotion/styled";
 import {
-  BrowserProvider,
   TransactionReceipt,
-  TransactionRequest,
   TransactionResponse,
   formatEther,
   parseUnits,
 } from "ethers";
-import { useEffect, useState } from "react";
-import { ETHER_TOKEN } from "../types/token";
-import { usePushWalletContext } from "../providers/push-wallet-provider";
-import { usePrice } from "../providers/price-provider";
-import { TokenSelect } from "./token-select";
+import { useState } from "react";
 import { useAccount, useClient } from "wagmi";
-
-const $InputGroup = styled(InputGroup)`
-  z-index: 1;
-`;
-
-const $NumberInput = styled(NumberInput)`
-  flex: 1;
-  margin-right: 10px;
-` as typeof NumberInput;
-
-const $TokenSelect = styled(TokenSelect)`
-  flex: 1;
-  max-width: 80px;
-`;
-
-const MaxContainer = styled.div`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  position: absolute;
-  top: 50%;
-  right: 0;
-  transform: translateY(-50%) scale(0.8);
-  z-index: 1;
-`;
+import { usePrice } from "../providers/price-provider";
+import { usePushWalletContext } from "../providers/push-wallet-provider";
+import { ETHER_TOKEN } from "../types/token";
+import { TokenSelector } from "./token-selector/token-selector";
 
 const FormLabel = styled.div`
   display: flex;
@@ -77,12 +43,7 @@ export const TransferTokens = ({
   label = "Send",
   fromConnectedWallet = true,
 }: Props) => {
-  const {
-    account: wallet,
-    ethBalance,
-    updateBalance,
-    transferEstimateFee,
-  } = usePushWalletContext();
+  const { account, ethBalance } = usePushWalletContext();
   const { isConnected } = useAccount();
   const client = useClient();
 
@@ -112,43 +73,26 @@ export const TransferTokens = ({
   const [isSending, setIsSending] = useState(false);
   const usdAmount = (parseFloat(formatEther(amount)) * ethPriceUsd).toFixed(2);
 
-  const setMax = () => {
-    let value = 0n;
+  // const getLabel = () => {
+  //   if (fromConnectedWallet && amount > connectedWalletBalance) {
+  //     return "Insufficient";
+  //   }
 
-    if (fromConnectedWallet) {
-      value = connectedWalletBalance - transferEstimateFee;
-    } else {
-      value = ethBalance - transferEstimateFee;
-    }
+  //   if (!fromConnectedWallet && amount > ethBalance) {
+  //     return "Insufficient";
+  //   }
 
-    if (value <= 0) {
-      value = 0n;
-    }
-
-    setAmount(value);
-    setInput(formatEther(value));
-  };
-
-  const getLabel = () => {
-    if (fromConnectedWallet && amount > connectedWalletBalance) {
-      return "Insufficient";
-    }
-
-    if (!fromConnectedWallet && amount > ethBalance) {
-      return "Insufficient";
-    }
-
-    return label;
-  };
+  //   return label;
+  // };
 
   const isDisabled = () => {
     if (fromConnectedWallet && amount > connectedWalletBalance) {
       return true;
     }
 
-    if (!fromConnectedWallet && amount > ethBalance) {
-      return true;
-    }
+    // if (!fromConnectedWallet && amount > ethBalance) {
+    //   return true;
+    // }
 
     return disabled || !to || amount === 0n;
   };
@@ -156,25 +100,9 @@ export const TransferTokens = ({
   return (
     <div className={className}>
       <FormLabel>You pay</FormLabel>
-      <$InputGroup mb={2}>
-        <$NumberInput
-          onChange={(valueString: string) => {
-            setInput(valueString);
-            setAmount(parseUnits(valueString));
-          }}
-          value={input}
-          min={0}
-          step={0.01}
-        >
-          <NumberInputField />
-          <MaxContainer>
-            <Button onClick={setMax} size="sm" variant="ghost">
-              max
-            </Button>
-          </MaxContainer>
-        </$NumberInput>
-        <$TokenSelect onChange={setToken} />
-      </$InputGroup>
+
+      <TokenSelector />
+
       <Text textAlign="center" mt={2} fontSize="sm" color="gray">
         {usdAmount} USD
       </Text>
@@ -187,7 +115,7 @@ export const TransferTokens = ({
           loadingText="Wait..."
           type="submit"
         >
-          {getLabel()} {token?.ticker}
+          {/* {getLabel()} {token?.ticker} */}
         </Button>
       </Stack>
     </div>

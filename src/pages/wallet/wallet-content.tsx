@@ -173,11 +173,9 @@ export const WalletContent = () => {
             )}
             <$Heading textAlign="center" size="lg">
               You received{" "}
-              <Tooltip label="4% for ETH and 5% for stablecoins APR yield">
-                <Highlight className="onboard-highlight">
-                  ${totalUsdAmount}
-                </Highlight>
-              </Tooltip>{" "}
+              <Highlight className="onboard-highlight">
+                ${totalUsdAmount}
+              </Highlight>
               {fromName && `from ${fromName}`}
             </$Heading>
             {message && (

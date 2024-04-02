@@ -112,27 +112,25 @@ export const Balance = forwardRef<
       boxShadow="md"
     >
       {/* <NftModal nft={nft!} isOpen={nftIsOpen} onClose={onNftClose} /> */}
-      <Tooltip label="4% APR yield">
-        <BalanceItem key={0}>
-          <Row>
-            <EtherLogo width={28} height={28} />
-            <Column>
-              <CoinName>Ethereum</CoinName>
-              <CoinAmount>
-                {ethBalance?.formatted} {ethBalance?.symbol}
-              </CoinAmount>
-            </Column>
-          </Row>
-          <UsdAmountWrapper>
-            {/* <Tooltip>
+      <BalanceItem key={0}>
+        <Row>
+          <EtherLogo width={28} height={28} />
+          <Column>
+            <CoinName>Ethereum</CoinName>
+            <CoinAmount>
+              {ethBalance?.formatted} {ethBalance?.symbol}
+            </CoinAmount>
+          </Column>
+        </Row>
+        <UsdAmountWrapper>
+          {/* <Tooltip>
             <AiOutlineThunderbolt height="40px" width="40px" fill="red" />
           </Tooltip> */}
-            <UsdAmount dark={colorMode === "dark"}>
-              ${totalUsdAmount} USD
-            </UsdAmount>
-          </UsdAmountWrapper>
-        </BalanceItem>
-      </Tooltip>
+          <UsdAmount dark={colorMode === "dark"}>
+            ${totalUsdAmount} USD
+          </UsdAmount>
+        </UsdAmountWrapper>
+      </BalanceItem>
       {/* {showMore && tokens.length > 0 && <Divider my={0} py={0} />} */}
       {/* {tokens.length > 0 && (
         <Collapse in={showMore}>
