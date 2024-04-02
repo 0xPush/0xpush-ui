@@ -78,7 +78,11 @@ export const Balance = forwardRef<
   HTMLDivElement | undefined,
   BalanceDisplayProps
 >(function BalanceDisplay({ className }, ref) {
-  const { wallet, ethBalance, totalUsdAmount } = usePushWalletContext();
+  const {
+    account: wallet,
+    ethBalance,
+    totalUsdAmount,
+  } = usePushWalletContext();
 
   //   wallet.provider?.getBalance()
 
@@ -115,10 +119,7 @@ export const Balance = forwardRef<
             <Column>
               <CoinName>Ethereum</CoinName>
               <CoinAmount>
-                {parseFloat(formatUnits(ethBalance, 18)).toLocaleString("en", {
-                  minimumFractionDigits: 4,
-                })}{" "}
-                ETH
+                {ethBalance?.formatted} {ethBalance?.symbol}
               </CoinAmount>
             </Column>
           </Row>

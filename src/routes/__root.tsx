@@ -5,8 +5,7 @@ import { Content } from "../components/layout/content";
 import { Header } from "../components/layout/header";
 import { PriceProvider } from "../providers/price-provider";
 import { theme } from "../theme";
-import "providers/web3-modal-init";
-import { Web3ModalProvider } from "providers/web3-modal-init";
+import { WagmiWeb3Provider } from "providers/wagmi-web3-provider";
 
 const AppContainer = styled.div`
   min-height: 100dvh;
@@ -26,7 +25,7 @@ export const Route = createRootRoute({
         defaultOptions: { isClosable: true, position: "bottom-right" },
       }}
     >
-      <Web3ModalProvider>
+      <WagmiWeb3Provider>
         <PriceProvider>
           <AppContainer>
             <Header />
@@ -35,7 +34,7 @@ export const Route = createRootRoute({
             </Content>
           </AppContainer>
         </PriceProvider>
-      </Web3ModalProvider>
+      </WagmiWeb3Provider>
     </ChakraProvider>
   ),
 });

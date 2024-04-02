@@ -15,7 +15,7 @@ const Container = styled.div``;
 export const WalletActions = ({
   className,
 }: PushWalletActionsProps): JSX.Element => {
-  const { wallet } = usePushWalletContext();
+  const { account: wallet } = usePushWalletContext();
   const router = useRouter();
   const {
     isOpen: isExport,

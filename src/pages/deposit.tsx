@@ -41,7 +41,7 @@ interface Props {
 }
 
 export const Deposit = ({ className }: Props): JSX.Element => {
-  const { wallet } = usePushWalletContext();
+  const { account: wallet } = usePushWalletContext();
   const { colorMode } = useColorMode();
   const { isOpen, onOpen, onClose } = useDisclosure();
   const toast = useToast();

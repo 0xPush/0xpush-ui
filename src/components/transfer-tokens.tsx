@@ -20,6 +20,7 @@ import { ETHER_TOKEN } from "../types/token";
 import { usePushWalletContext } from "../providers/push-wallet-provider";
 import { usePrice } from "../providers/price-provider";
 import { TokenSelect } from "./token-select";
+import { useAccount, useClient } from "wagmi";
 
 const $InputGroup = styled(InputGroup)`
   z-index: 1;
@@ -76,10 +77,14 @@ export const TransferTokens = ({
   label = "Send",
   fromConnectedWallet = true,
 }: Props) => {
-  const { wallet, ethBalance, updateBalance, transferEstimateFee } =
-    usePushWalletContext();
-  const { isConnected } = useWeb3ModalAccount();
-  const { walletProvider } = useWeb3ModalProvider();
+  const {
+    account: wallet,
+    ethBalance,
+    updateBalance,
+    transferEstimateFee,
+  } = usePushWalletContext();
+  const { isConnected } = useAccount();
+  const client = useClient();
 
   const { ethPriceUsd } = usePrice();
 
@@ -90,70 +95,22 @@ export const TransferTokens = ({
   const [connectedWalletBalance, setConnectedWalletBalanceBalance] =
     useState(0n);
 
-  useEffect(() => {
-    // Update balance
-    const fn = async () => {
-      const ethersProvider = new BrowserProvider(walletProvider!);
-      const signer = await ethersProvider.getSigner();
-      const balance = await ethersProvider.getBalance(signer.address);
-      setConnectedWalletBalanceBalance(balance);
-    };
+  // useEffect(() => {
+  //   // Update balance
+  //   const fn = async () => {
+  //     const ethersProvider = new BrowserProvider(walletProvider!);
+  //     const signer = await ethersProvider.getSigner();
+  //     const balance = await ethersProvider.getBalance(signer.address);
+  //     setConnectedWalletBalanceBalance(balance);
+  //   };
 
-    if (isConnected && fromConnectedWallet) {
-      fn();
-    }
-  }, [isConnected, fromConnectedWallet, walletProvider]);
+  //   if (isConnected && fromConnectedWallet) {
+  //     fn();
+  //   }
+  // }, [isConnected, fromConnectedWallet, walletProvider]);
 
   const [isSending, setIsSending] = useState(false);
   const usdAmount = (parseFloat(formatEther(amount)) * ethPriceUsd).toFixed(2);
-
-  const handleSend = async () => {
-    setIsSending(true);
-
-    if (fromConnectedWallet) {
-      const ethersProvider = new BrowserProvider(walletProvider!);
-      const signer = await ethersProvider.getSigner();
-
-      try {
-        const tx = await signer.sendTransaction({
-          to,
-          value: amount,
-        });
-
-        const receipt = await tx.wait();
-
-        console.log(receipt);
-        updateBalance();
-        onSuccess?.(tx, receipt!);
-      } catch (e) {
-        console.error(e);
-        onError?.(e as Error);
-      }
-    } else {
-      // send from push
-
-      try {
-        const transaction: TransactionRequest = {
-          to,
-          value: amount,
-          // gasLimit: estimateGas,
-          // gasPrice: gasPrice,
-        };
-
-        const tx = await wallet.sendTransaction(transaction);
-        const receipt = await tx.wait();
-
-        console.log(receipt);
-        updateBalance();
-        onSuccess?.(tx, receipt!);
-      } catch (e) {
-        console.error(e);
-        onError?.(e as Error);
-      }
-    }
-
-    setIsSending(false);
-  };
 
   const setMax = () => {
     let value = 0n;
@@ -223,7 +180,7 @@ export const TransferTokens = ({
       </Text>
       <Stack mt={3} justify="center">
         <Button
-          onClick={handleSend}
+          // onClick={handleSend}
           isDisabled={isDisabled()}
           colorScheme="purple"
           isLoading={isSending}

@@ -63,7 +63,7 @@ const Highlight = styled.span`
 type Action = "send" | "swap" | "earn" | "games" | "markets" | null;
 
 export const WalletContent = () => {
-  const { wallet, totalUsdAmount } = usePushWalletContext();
+  const { account, totalUsdAmount } = usePushWalletContext();
   const [action, setAction] = useState<Action>(null);
 
   const ref = useRef<FireworksHandlers>(null);
@@ -85,8 +85,8 @@ export const WalletContent = () => {
     });
 
   const isOnboardingCompleted = useMemo(
-    () => PushHistory.isOnboardingCompleted(wallet.privateKey),
-    [wallet.privateKey]
+    () => PushHistory.isOnboardingCompleted(account.source),
+    [account.source]
   );
 
   const {
@@ -95,24 +95,25 @@ export const WalletContent = () => {
     onClose: closeWalletActions,
   } = useDisclosure({ defaultIsOpen: false });
 
-  useEffect(() => {
-    readPushPreset(wallet.address, wallet.provider!)
-      .then(setPreset)
-      .catch((e) => {
-        console.log(e);
-      });
-  }, [wallet.address, wallet.provider]);
+  // TODO: read push preset
+  // useEffect(() => {
+  //   readPushPreset(wallet.address, wallet.provider!)
+  //     .then(setPreset)
+  //     .catch((e) => {
+  //       console.log(e);
+  //     });
+  // }, [wallet.address, wallet.provider]);
 
   useEffect(() => {
-    if (!wallet) {
+    if (!account) {
       return;
     }
     PushHistory.addToHistory({
-      secret: wallet.privateKey,
+      secret: account.source,
       type: "viewed",
       date: new Date(),
     });
-  }, [wallet]);
+  }, [account]);
 
   const handleActionClick = (newAction: Action) => {
     closeWalletActions();
@@ -131,7 +132,7 @@ export const WalletContent = () => {
         run={onboarding && !isOnboardingCompleted}
         callback={({ action }) => {
           if (action === "reset" || action === "stop") {
-            PushHistory.setOnboardingCompleted(wallet.privateKey);
+            PushHistory.setOnboardingCompleted(account.source);
           }
         }}
         showProgress

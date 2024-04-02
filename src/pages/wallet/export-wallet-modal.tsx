@@ -57,7 +57,7 @@ export const ExportWalletModal = forwardRef<
   HTMLDivElement | undefined,
   ExportWalletProps
 >(function ExportWallet({ isOpen, onClose }, ref) {
-  const { privateKey, wallet } = usePushWalletContext();
+  const { privateKey, account: wallet } = usePushWalletContext();
   const { isOpen: showSecret, onToggle: toggleSecret } = useDisclosure();
   const toast = useToast();
 

@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import styled from "@emotion/styled";
 import { TransferTokens } from "../../../components/transfer-tokens";
 import { formatEther } from "ethers";
+import { useAccount, useWalletClient } from "wagmi";
 
 const FormLabel = styled.div`
   display: flex;
@@ -16,7 +17,8 @@ const FormLabel = styled.div`
 `;
 
 export const Send = () => {
-  const { address } = useWeb3ModalAccount();
+  const { address } = useAccount();
+
   const [to, setTo] = useState("");
 
   const toast = useToast();

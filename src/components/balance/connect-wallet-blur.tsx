@@ -2,6 +2,7 @@ import { Button } from "@chakra-ui/react";
 import styled from "@emotion/styled";
 import { useWeb3Modal } from "@web3modal/wagmi/react";
 import { ReactNode } from "react";
+import { useAccount } from "wagmi";
 
 const Container = styled.div`
   position: relative;
@@ -52,7 +53,7 @@ export const ConnectWalletBlur = ({
   children,
 }: ConnectWalletBlurProps): JSX.Element => {
   const { open } = useWeb3Modal();
-  const {} = useWeb3ModalState();
+  const { isConnected } = useAccount();
 
   return (
     <Container className={className}>
@@ -62,7 +63,7 @@ export const ConnectWalletBlur = ({
         </Content>
       )}
       {!isConnected && <Blur />}
-      {isConnected && (
+      {/* {isConnected && (
         <>
           <Blur />
           <Content>
@@ -74,7 +75,7 @@ export const ConnectWalletBlur = ({
             </Button>
           </Content>
         </>
-      )}
+      )} */}
       {children}
     </Container>
   );

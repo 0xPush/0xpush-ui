@@ -1,26 +1,20 @@
 import { QuestionOutlineIcon } from "@chakra-ui/icons";
 import {
   Button,
+  Checkbox,
   Heading,
   Input,
   Stack,
   Tag,
+  Text,
+  Textarea,
   Tooltip,
   useColorMode,
-  Text,
-  Checkbox,
-  Textarea,
 } from "@chakra-ui/react";
 import styled from "@emotion/styled";
-import {
-  BrowserProvider,
-  TransactionReceipt,
-  TransactionResponse,
-} from "ethers";
-import { useEffect, useMemo, useState } from "react";
-import { readPushPreset, writePushPreset } from "../lib/storage-contract";
-import { usePushWalletContext } from "../providers/push-wallet-provider";
-import { useAccount, useClient } from "wagmi";
+import { TransactionReceipt, TransactionResponse } from "ethers";
+import { useState } from "react";
+import { useClient } from "wagmi";
 
 const FormLabel = styled.div`
   display: flex;

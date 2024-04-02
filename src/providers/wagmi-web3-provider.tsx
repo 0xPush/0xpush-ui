@@ -1,3 +1,4 @@
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { createWeb3Modal } from "@web3modal/wagmi/react";
 import { defaultWagmiConfig } from "@web3modal/wagmi/react/config";
 import { ReactNode } from "react";
@@ -11,6 +12,8 @@ import {
   mode,
   modeTestnet,
 } from "wagmi/chains";
+
+const queryClient = new QueryClient();
 
 // WalletConnect project ID
 const projectId = "7874a82faa6eab4fe78dc5902b7955d1";
@@ -46,6 +49,10 @@ createWeb3Modal({
   enableOnramp: true, // Optional - false as default
 });
 
-export function Web3ModalProvider({ children }: { children: ReactNode }) {
-  return <WagmiProvider config={config}>{children}</WagmiProvider>;
+export function WagmiWeb3Provider({ children }: { children: ReactNode }) {
+  return (
+    <WagmiProvider config={config}>
+      <QueryClientProvider client={queryClient}>{children}</QueryClientProvider>
+    </WagmiProvider>
+  );
 }
