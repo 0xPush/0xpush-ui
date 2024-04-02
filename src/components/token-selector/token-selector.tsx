@@ -1,7 +1,11 @@
-import { InputGroup, NumberInput } from "@chakra-ui/react";
 import styled from "@emotion/styled";
 import { useState } from "react";
 import { NumericalInput } from "../ui/numerical-input";
+import { useDisclosure } from "@chakra-ui/react";
+import { TokenListModal } from "./token-list-modal";
+import { TokenOption } from "./types";
+import { getDefaultToken } from "./utils";
+import { useClient } from "wagmi";
 
 const Container = styled.div`
   display: flex;
@@ -10,32 +14,13 @@ const Container = styled.div`
   gap: 8px;
 `;
 
-const $InputGroup = styled(InputGroup)`
-  z-index: 1;
-`;
-
-const $NumberInput = styled(NumberInput)`
-  flex: 1;
-  margin-right: 10px;
-` as typeof NumberInput;
-
-const MaxContainer = styled.div`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  position: absolute;
-  top: 50%;
-  right: 0;
-  transform: translateY(-50%) scale(0.8);
-  z-index: 1;
-`;
-
 const TokenButton = styled.div`
   width: auto;
   padding: 10px;
   background-color: #dbdbdb;
   border: 1px solid #cecece;
   border-radius: 16px;
+  user-select: none;
 `;
 
 interface Props {
@@ -44,15 +29,22 @@ interface Props {
 
 export const TokenSelector = ({ className }: Props): JSX.Element => {
   const setMax = () => {};
+  const client = useClient();
+
+  const { isOpen, onOpen, onClose } = useDisclosure();
 
   const [amount, setAmount] = useState("");
-  console.log(amount);
+  const [token, setToken] = useState<TokenOption>(
+    getDefaultToken(client!.chain.id)
+  );
+
+  console.log(token);
 
   return (
     <Container className={className}>
       <NumericalInput value={amount} onUserInput={setAmount} />
-
-      <TokenButton>Token</TokenButton>
+      <TokenButton onClick={onOpen}>{token?.token.symbol}</TokenButton>
+      <TokenListModal isOpen={isOpen} onClose={onClose} onSelect={setToken} />
     </Container>
   );
 };
