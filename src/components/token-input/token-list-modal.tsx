@@ -4,20 +4,22 @@ import {
   ModalHeader,
   ModalOverlay,
 } from "@chakra-ui/modal";
-import { Modal } from "@chakra-ui/react";
+import { Box, Input, Modal } from "@chakra-ui/react";
 import styled from "@emotion/styled";
-import { forwardRef } from "react";
+import { forwardRef, useState } from "react";
 import { usePushWalletContext } from "../../providers/push-wallet-provider";
 
 import tokenList from "./token-list.json";
 import { useClient } from "wagmi";
 import { TokenListItem, TokenOption } from "types/token";
+import { Address, Chain } from "viem";
 
 const List = styled.div`
   display: flex;
   flex-flow: column nowrap;
   gap: 5px;
   max-height: 60dvh;
+  min-height: 60dvh;
   overflow-y: auto;
   padding: 0 10px 0;
 `;
@@ -60,14 +62,14 @@ interface Props {
   className?: string;
   isOpen: boolean;
   onClose: () => void;
+  address: Address;
+  chain: Chain;
   onSelect?: (token: TokenOption) => void;
 }
 
 export const TokenListModal = forwardRef<HTMLDivElement | undefined, Props>(
-  function TokenListModal({ isOpen, onClose, onSelect }, ref) {
-    const { account } = usePushWalletContext();
-
-    const client = useClient();
+  function TokenListModal({ isOpen, address, chain, onClose, onSelect }, ref) {
+    const [search, setSearch] = useState("");
 
     const handleSelect = (token: TokenListItem) => {
       onSelect?.({
@@ -86,9 +88,22 @@ export const TokenListModal = forwardRef<HTMLDivElement | undefined, Props>(
         <ModalContent>
           <ModalHeader fontSize="md">Token list</ModalHeader>
           <ModalCloseButton />
+          <Box px={5} pb={2}>
+            <Input
+              placeholder="Enter token name or symbol"
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+              size="sm"
+            />
+          </Box>
           <List>
             {(tokenList as TokenListItem[])
-              .filter((t) => t.chainId === client?.chain.id)
+              .filter(
+                (t) =>
+                  t.chainId === chain.id &&
+                  (t.symbol.toLowerCase().includes(search.toLowerCase()) ||
+                    t.name.toLowerCase().includes(search.toLowerCase()))
+              )
               .map((token, idx) => (
                 <TokenRow
                   onClick={() => handleSelect(token)}

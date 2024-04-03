@@ -1,9 +1,11 @@
-import { useDisclosure } from "@chakra-ui/react";
+import { Button, useDisclosure } from "@chakra-ui/react";
 import styled from "@emotion/styled";
 import { NumericalInput } from "../ui/numerical-input";
 import { TokenButton } from "./token-button";
 import { TokenListModal } from "./token-list-modal";
 import { TokenOption } from "types/token";
+import { useTokenBalance } from "hooks/use-token-balance";
+import { Address, Chain, formatUnits, parseUnits } from "viem";
 
 const Container = styled.div`
   display: grid;
@@ -12,12 +14,18 @@ const Container = styled.div`
     "price action";
   grid-template-columns: 1fr auto;
   align-items: center;
-  gap: 8px;
+  column-gap: 8px;
+  row-gap: 4px;
 `;
 
 const Price = styled.div`
   font-size: 12px;
   color: gray;
+`;
+
+const Balance = styled.div`
+  display: flex;
+  justify-content: flex-end;
 `;
 
 interface Props {
@@ -26,6 +34,8 @@ interface Props {
   amount: string;
   onTokenChange: (token: TokenOption) => void;
   onAmountChange: (amount: string) => void;
+  address: Address;
+  chain: Chain;
 }
 
 export const TokenInput = ({
@@ -33,10 +43,13 @@ export const TokenInput = ({
   amount,
   onTokenChange,
   onAmountChange,
+  address,
+  chain,
   className,
 }: Props): JSX.Element => {
   const { isOpen, onOpen, onClose } = useDisclosure();
 
+  const balance = useTokenBalance(token, address, chain);
   const hasPrice = false;
 
   return (
@@ -48,12 +61,25 @@ export const TokenInput = ({
           maxDecimals={token.token.decimals}
         />
         <TokenButton onClick={onOpen} token={token} />
-        {hasPrice && <Price>10 USD</Price>}
+        <Price></Price>
+        <Balance>
+          <Button
+            variant="ghost"
+            size="xs"
+            onClick={() =>
+              onAmountChange(formatUnits(balance, token.token.decimals))
+            }
+          >
+            Max
+          </Button>
+        </Balance>
       </Container>
       <TokenListModal
         isOpen={isOpen}
         onClose={onClose}
         onSelect={onTokenChange}
+        address={address}
+        chain={chain}
       />
     </>
   );

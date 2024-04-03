@@ -35,6 +35,16 @@ const Container = styled.div`
   z-index: 1;
 `;
 
+const FormLabel = styled.div`
+  display: flex;
+  flex-flow: row nowrap;
+  justify-content: space-between;
+  align-items: center;
+  margin-right: 0;
+  margin-bottom: 6px;
+  font-size: 12px;
+`;
+
 const $Heading = styled(Heading)`
   font-size: 2.2rem !important;
   ${moveBg};
@@ -112,11 +122,14 @@ export const Deposit = ({ className }: Props): JSX.Element => {
                 borderRadius="lg"
                 boxShadow="md"
               >
+                <FormLabel>You pay</FormLabel>
                 <TokenInput
                   token={token}
                   onTokenChange={setToken}
                   amount={amount}
                   onAmountChange={setAmount}
+                  address={address!}
+                  chain={chain!}
                 />
                 <Button
                   w="100%"
