@@ -3,7 +3,7 @@ import styled from "@emotion/styled";
 import { NumericalInput } from "../ui/numerical-input";
 import { TokenButton } from "./token-button";
 import { TokenListModal } from "./token-list-modal";
-import { TokenOption } from "./types";
+import { TokenOption } from "types/token";
 
 const Container = styled.div`
   display: grid;

@@ -1,24 +1,19 @@
-// export interface BalanceItem {
-//   contract: string;
-//   amount: number;
-//   name: string;
-// }
-
-export interface Token {
-  id: number;
-  ticker: string;
+export type TokenListItem = {
+  chainId: number;
+  address: string;
   name: string;
-  icon: string | null;
-  contract: string | null;
-  amount?: number | null;
-  isEth: boolean;
+  symbol: string;
+  decimals: number;
+  logoURI: string;
+  extensions: {
+      opListId?: "default" | "extended";
+  };
 }
 
-export const ETHER_TOKEN: Token = {
-  id: 0,
-  name: "ETH",
-  ticker: "ETH",
-  contract: null,
-  icon: `https://assets.coingecko.com/coins/images/279/large/ethereum.png?1696501628`,
-  isEth: true,
-};
+export type TokenOption = {
+  token: TokenListItem;
+  quantity: number | null; // on balance
+  balanceUSD: number | null;
+  price: number | null;
+  isNative: boolean;
+}

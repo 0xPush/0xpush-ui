@@ -18,10 +18,14 @@ import { PublicKey } from "../components/public-key";
 import { QrModal } from "../components/qr-modal";
 import { copyTextToClipboard } from "../lib/copy";
 import { Balance, ConnectWalletBlur } from "components/balance";
-import { TransferTokens } from "../components/transfer-tokens";
-import { formatEther } from "ethers";
 import { SetupCustomization } from "../components/setup-customization";
 import { AiOutlineQrcode, AiOutlineLink } from "react-icons/ai";
+import { TokenInput, getDefaultToken } from "components/token-input";
+import { TokenOption } from "types/token";
+import { useState } from "react";
+import { useAccount } from "wagmi";
+import { parseUnits } from "viem";
+import { useTokenBalance } from "hooks/use-token-balance";
 
 const Container = styled.div`
   margin-top: 2vh;
@@ -41,6 +45,7 @@ interface Props {
 }
 
 export const Deposit = ({ className }: Props): JSX.Element => {
+  const { address, chain } = useAccount();
   const { account: wallet } = usePushWalletContext();
   const { colorMode } = useColorMode();
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -49,15 +54,28 @@ export const Deposit = ({ className }: Props): JSX.Element => {
 
   const router = useRouter();
 
+  const [amount, setAmount] = useState("");
+  const [token, setToken] = useState<TokenOption>(getDefaultToken(chain!));
+
+  const balance = useTokenBalance(token, address!, chain!);
+
   const fromPush = !!(router.state.location.search as any).fromPush;
   const hostname = window?.location.origin;
 
   const handleLinkCopy = () => {
-    copyTextToClipboard(`${hostname}/w/${wallet.privateKey}`);
+    copyTextToClipboard(`${hostname}/w/${wallet.source}`);
     toast({
       title: `Push link copied. Share it with the recipient!`,
       status: "info",
     });
+  };
+
+  const getDepositButtonLabel = () => {
+    if (balance < parseUnits(amount, token.token.decimals)) {
+      return `Insufficient ${token.token.symbol}`;
+    } else {
+      return `Deposit ${token.token.symbol}`;
+    }
   };
 
   return (
@@ -94,7 +112,27 @@ export const Deposit = ({ className }: Props): JSX.Element => {
                 borderRadius="lg"
                 boxShadow="md"
               >
-                <TransferTokens
+                <TokenInput
+                  token={token}
+                  onTokenChange={setToken}
+                  amount={amount}
+                  onAmountChange={setAmount}
+                />
+                <Button
+                  w="100%"
+                  mt={4}
+                  colorScheme="red"
+                  isLoading={false}
+                  loadingText="Wait..."
+                  type="submit"
+                  isDisabled={
+                    balance < parseUnits(amount, token.token.decimals) ||
+                    !amount
+                  }
+                >
+                  {getDepositButtonLabel()}
+                </Button>
+                {/* <TransferTokens
                   to={wallet.address}
                   onSuccess={(tx) => {
                     toast({
@@ -104,7 +142,7 @@ export const Deposit = ({ className }: Props): JSX.Element => {
                   }}
                   label="Deposit"
                   onError={(e) => toast({ title: e.message, status: "error" })}
-                />
+                /> */}
               </Box>
             </ConnectWalletBlur>
           </Fade>
@@ -146,7 +184,7 @@ export const Deposit = ({ className }: Props): JSX.Element => {
               rightIcon={<AiOutlineLink />}
               onClick={handleLinkCopy}
               variant="outline"
-              colorScheme="pink"
+              colorScheme="red"
             >
               {fromPush ? "Copy link" : "Share"}
             </Button>
@@ -155,7 +193,7 @@ export const Deposit = ({ className }: Props): JSX.Element => {
                 rightIcon={<AiOutlineQrcode />}
                 onClick={onOpen}
                 variant="outline"
-                colorScheme="pink"
+                colorScheme="red"
               >
                 Show
               </Button>
@@ -168,7 +206,7 @@ export const Deposit = ({ className }: Props): JSX.Element => {
               onClick={() =>
                 router.navigate({
                   to: `/w/$privateKey`,
-                  params: { privateKey: wallet.privateKey },
+                  params: { privateKey: wallet.source },
                 })
               }
               leftIcon={<ChevronLeftIcon />}
@@ -179,7 +217,7 @@ export const Deposit = ({ className }: Props): JSX.Element => {
           </Stack>
         )}
         <QrModal
-          qrValue={`${hostname}/w/${wallet.privateKey}`}
+          qrValue={`${hostname}/w/${wallet.source}`}
           title={"QR link to Push"}
           isOpen={isOpen}
           onClose={onClose}

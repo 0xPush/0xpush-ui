@@ -1,5 +1,5 @@
 import styled from "@emotion/styled";
-import { TokenOption } from "./types";
+import { TokenOption } from "types/token";
 import { ChevronDownIcon } from "@chakra-ui/icons";
 
 const Container = styled.div`

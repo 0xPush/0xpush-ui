@@ -46,7 +46,7 @@ export const SetupCustomization = ({
   // const { updateBalance, wallet } = usePushWalletContext();
   const client = useClient();
 
-  console.log(client);
+  // console.log(client);
 
   const { colorMode } = useColorMode();
   const tagBgColor = { light: "gray.100", dark: "whiteAlpha.100" };
@@ -184,7 +184,7 @@ export const SetupCustomization = ({
           isDisabled={
             !fromName && !toName && !message && !onboarding && !fireworks
           }
-          colorScheme="purple"
+          colorScheme="red"
           isLoading={isSending}
           loadingText="Wait..."
           type="submit"

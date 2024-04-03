@@ -1,10 +1,12 @@
 import { Box, Button, Stack, useColorMode, useToast } from "@chakra-ui/react";
 import styled from "@emotion/styled";
-import { TokenOption, getDefaultToken } from "components/token-input";
+import { getDefaultToken } from "components/token-input";
 import { TokenInput } from "components/token-input/token-select";
 import { StyledInput } from "components/ui/styled-input";
 import { formatEther } from "ethers";
+import { useTokenBalance } from "hooks/use-token-balance";
 import { useEffect, useState } from "react";
+import { TokenOption } from "types/token";
 import { useAccount, useClient } from "wagmi";
 
 const FormLabel = styled.div`
@@ -26,14 +28,15 @@ const AddressInput = styled(StyledInput)`
 export const Send = () => {
   const { address } = useAccount();
   const client = useClient();
+  const toast = useToast();
 
-  const [amount, setAmount] = useState("0.1");
+  const [amount, setAmount] = useState("");
   const [token, setToken] = useState<TokenOption>(
     getDefaultToken(client!.chain)
   );
   const [to, setTo] = useState("");
 
-  const toast = useToast();
+  const x = useTokenBalance(token, address!, client!.chain);
 
   useEffect(() => {
     if (address) {

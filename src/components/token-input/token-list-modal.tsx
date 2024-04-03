@@ -1,5 +1,4 @@
 import {
-  ModalBody,
   ModalCloseButton,
   ModalContent,
   ModalHeader,
@@ -12,7 +11,7 @@ import { usePushWalletContext } from "../../providers/push-wallet-provider";
 
 import tokenList from "./token-list.json";
 import { useClient } from "wagmi";
-import { TokenListItem, TokenOption } from "./types";
+import { TokenListItem, TokenOption } from "types/token";
 
 const List = styled.div`
   display: flex;
