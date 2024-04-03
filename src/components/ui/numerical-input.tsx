@@ -1,50 +1,11 @@
 import styled from "@emotion/styled";
 
 import React, { forwardRef } from "react";
+import { StyledInput } from "./styled-input";
 
 const escapeRegExp = (string: string): string => {
   return string.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"); // $& means the whole matched string
 };
-
-const StyledInput = styled.input<{
-  error?: boolean;
-  fontSize?: string;
-  align?: string;
-  disabled?: boolean;
-}>`
-  pointer-events: ${({ disabled }) => (disabled ? "none" : "auto")};
-  width: 0;
-  position: relative;
-  font-weight: 485;
-  outline: none;
-  border: none;
-  flex: 1 1 auto;
-  background-color: transparent;
-  font-size: 24px;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  padding: 0px;
-  -webkit-appearance: textfield;
-  text-align: ${(p) => p.align || "left"};
-
-  ::-webkit-search-decoration {
-    -webkit-appearance: none;
-  }
-
-  [type="number"] {
-    -moz-appearance: textfield;
-  }
-
-  ::-webkit-outer-spin-button,
-  ::-webkit-inner-spin-button {
-    -webkit-appearance: none;
-  }
-
-  ::placeholder {
-    color: gray;
-  }
-`;
 
 const inputRegex = RegExp(`^\\d*(?:\\\\[.])?\\d*$`); // match escaped "." characters via in a non-capturing group
 

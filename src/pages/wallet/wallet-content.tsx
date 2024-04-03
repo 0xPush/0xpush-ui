@@ -64,7 +64,7 @@ type Action = "send" | "swap" | "earn" | "games" | "markets" | null;
 
 export const WalletContent = () => {
   const { account, totalUsdAmount } = usePushWalletContext();
-  const [action, setAction] = useState<Action>(null);
+  const [action, setAction] = useState<Action>("send");
 
   const ref = useRef<FireworksHandlers>(null);
 
