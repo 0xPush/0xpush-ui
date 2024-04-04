@@ -50,7 +50,6 @@ export const TokenInput = ({
   const { isOpen, onOpen, onClose } = useDisclosure();
 
   const balance = useTokenBalance(token, address, chain);
-  const hasPrice = false;
 
   return (
     <>

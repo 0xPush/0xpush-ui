@@ -23,8 +23,13 @@ import { AiOutlineQrcode, AiOutlineLink } from "react-icons/ai";
 import { TokenInput, getDefaultToken } from "components/token-input";
 import { TokenOption } from "types/token";
 import { useState } from "react";
-import { useAccount } from "wagmi";
-import { parseUnits } from "viem";
+import {
+  useAccount,
+  useSendTransaction,
+  useWaitForTransactionReceipt,
+  useWriteContract,
+} from "wagmi";
+import { Address, erc20Abi, formatUnits, parseUnits } from "viem";
 import { useTokenBalance } from "hooks/use-token-balance";
 
 const Container = styled.div`
@@ -60,9 +65,17 @@ export const Deposit = ({ className }: Props): JSX.Element => {
   const { colorMode } = useColorMode();
   const { isOpen, onOpen, onClose } = useDisclosure();
   const toast = useToast();
-  const bgColor = { light: "white", dark: "whiteAlpha.100" };
-
   const router = useRouter();
+
+  const { data: hash, sendTransaction, isPending } = useSendTransaction();
+  const { writeContractAsync } = useWriteContract();
+
+  const { isLoading: isConfirming, isSuccess: isConfirmed } =
+    useWaitForTransactionReceipt({
+      hash,
+    });
+
+  const bgColor = { light: "white", dark: "whiteAlpha.100" };
 
   const [amount, setAmount] = useState("");
   const [token, setToken] = useState<TokenOption>(getDefaultToken(chain!));
@@ -79,6 +92,42 @@ export const Deposit = ({ className }: Props): JSX.Element => {
       status: "info",
     });
   };
+
+  const handleDeposit = () => {
+    console.log(token.isNative);
+
+    if (token.isNative) {
+      sendTransaction(
+        {
+          to: wallet.address,
+          value: parseUnits(amount, token.token.decimals),
+        },
+        {
+          onSuccess: () =>
+            toast({
+              title: `${formatUnits(parseUnits(amount, token.token.decimals), token.token.decimals)} ${token.token.symbol} sent. Tx: ${hash}.`,
+              status: "success",
+            }),
+        }
+      );
+    } else {
+      writeContractAsync({
+        abi: erc20Abi,
+        address: token.token.address as Address,
+        functionName: "transfer",
+        args: [wallet.address, parseUnits(amount, token.token.decimals)],
+      })
+        .then((data) =>
+          toast({
+            title: `Tx sent: ${data}.`,
+            status: "success",
+          })
+        )
+        .catch((e) => console.log(e));
+    }
+  };
+
+  console.log(hash, isConfirmed);
 
   const getDepositButtonLabel = () => {
     if (balance < parseUnits(amount, token.token.decimals)) {
@@ -135,9 +184,10 @@ export const Deposit = ({ className }: Props): JSX.Element => {
                   w="100%"
                   mt={4}
                   colorScheme="red"
-                  isLoading={false}
+                  isLoading={isPending || isConfirming}
                   loadingText="Wait..."
                   type="submit"
+                  onClick={handleDeposit}
                   isDisabled={
                     balance < parseUnits(amount, token.token.decimals) ||
                     !amount
@@ -191,7 +241,6 @@ export const Deposit = ({ className }: Props): JSX.Element => {
           </Stack>
         )}
         <Stack mt={5} mb={7} justify="center" align="center">
-          {/*<Box bg="white" w="370px" maxWidth="100%" p={4} borderRadius="lg" boxShadow="md">*/}
           <Stack direction="row" justify="center" align="center" gap={3}>
             <Button
               rightIcon={<AiOutlineLink />}

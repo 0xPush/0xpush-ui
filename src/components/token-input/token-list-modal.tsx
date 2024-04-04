@@ -6,13 +6,12 @@ import {
 } from "@chakra-ui/modal";
 import { Box, Input, Modal } from "@chakra-ui/react";
 import styled from "@emotion/styled";
-import { forwardRef, useState } from "react";
-import { usePushWalletContext } from "../../providers/push-wallet-provider";
+import { forwardRef, useMemo, useState } from "react";
 
 import tokenList from "./token-list.json";
-import { useClient } from "wagmi";
 import { TokenListItem, TokenOption } from "types/token";
 import { Address, Chain } from "viem";
+import { getDefaultNativeToken } from "./utils";
 
 const List = styled.div`
   display: flex;
@@ -71,10 +70,17 @@ export const TokenListModal = forwardRef<HTMLDivElement | undefined, Props>(
   function TokenListModal({ isOpen, address, chain, onClose, onSelect }, ref) {
     const [search, setSearch] = useState("");
 
+    // const defaultNativeToken = useMemo(
+    //   () => getDefaultNativeToken(chain),
+    //   [chain]
+    // );
+
     const handleSelect = (token: TokenListItem) => {
       onSelect?.({
         token,
-        isNative: token.extensions.opListId === "default",
+        isNative:
+          token.chainId === chain.id &&
+          token.symbol === chain.nativeCurrency.symbol,
         balanceUSD: null,
         price: null,
         quantity: null,
