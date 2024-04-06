@@ -94,8 +94,6 @@ export const Deposit = ({ className }: Props): JSX.Element => {
   };
 
   const handleDeposit = () => {
-    console.log(token.isNative);
-
     if (token.isNative) {
       sendTransaction(
         {
@@ -126,8 +124,6 @@ export const Deposit = ({ className }: Props): JSX.Element => {
         .catch((e) => console.log(e));
     }
   };
-
-  console.log(hash, isConfirmed);
 
   const getDepositButtonLabel = () => {
     if (balance < parseUnits(amount, token.token.decimals)) {

@@ -6,12 +6,12 @@ import {
 } from "@chakra-ui/modal";
 import { Box, Input, Modal } from "@chakra-ui/react";
 import styled from "@emotion/styled";
-import { forwardRef, useMemo, useState } from "react";
+import { forwardRef, useEffect, useMemo, useState } from "react";
 
-import tokenList from "./token-list.json";
-import { TokenListItem, TokenOption } from "types/token";
-import { Address, Chain } from "viem";
-import { getDefaultNativeToken } from "./utils";
+import { TokenOption } from "types/token";
+import { Address, Chain, formatUnits } from "viem";
+import { getTokenOptionList } from "./utils";
+import { useMulticallBalance } from "hooks/use-multicall-balance";
 
 const List = styled.div`
   display: flex;
@@ -35,6 +35,10 @@ const TokenRow = styled.div`
   &:hover {
     background-color: #dbdbdb;
   }
+`;
+
+const Balance = styled.div`
+  font-size: 12px;
 `;
 
 const Image = styled.img`
@@ -70,21 +74,27 @@ export const TokenListModal = forwardRef<HTMLDivElement | undefined, Props>(
   function TokenListModal({ isOpen, address, chain, onClose, onSelect }, ref) {
     const [search, setSearch] = useState("");
 
-    // const defaultNativeToken = useMemo(
-    //   () => getDefaultNativeToken(chain),
-    //   [chain]
-    // );
+    const [balances, setBalances] = useState<Record<Address, bigint>>({});
 
-    const handleSelect = (token: TokenListItem) => {
-      onSelect?.({
-        token,
-        isNative:
-          token.chainId === chain.id &&
-          token.symbol === chain.nativeCurrency.symbol,
-        balanceUSD: null,
-        price: null,
-        quantity: null,
-      });
+    const options = useMemo(() => getTokenOptionList(chain), [chain]);
+    const filteredOptions = useMemo(
+      () =>
+        options.filter(
+          (token) =>
+            token.token.symbol.toLowerCase().includes(search.toLowerCase()) ||
+            token.token.name.toLowerCase().includes(search.toLowerCase())
+        ),
+      [options, search]
+    );
+
+    const getBalance = useMulticallBalance(chain, address);
+
+    useEffect(() => {
+      getBalance().then((res) => setBalances(res));
+    }, [getBalance]);
+
+    const handleSelect = (token: TokenOption) => {
+      onSelect?.(token);
       onClose();
     };
 
@@ -103,25 +113,26 @@ export const TokenListModal = forwardRef<HTMLDivElement | undefined, Props>(
             />
           </Box>
           <List>
-            {(tokenList as TokenListItem[])
-              .filter(
-                (t) =>
-                  t.chainId === chain.id &&
-                  (t.symbol.toLowerCase().includes(search.toLowerCase()) ||
-                    t.name.toLowerCase().includes(search.toLowerCase()))
-              )
-              .map((token, idx) => (
+            {filteredOptions.map((token, idx) => {
+              const balance = balances[token.token.address as Address] ?? 0n;
+              const formattedBalance = formatUnits(
+                balance,
+                token.token.decimals
+              );
+              return (
                 <TokenRow
                   onClick={() => handleSelect(token)}
-                  key={token.address + idx}
+                  key={token.token.address + idx}
                 >
-                  <Image loading="lazy" src={token.logoURI} />
+                  <Image loading="lazy" src={token.token.logoURI} />
                   <Labels>
-                    <Symbol>{token.symbol}</Symbol>
-                    <Name>{token.name}</Name>
+                    <Symbol>{token.token.symbol}</Symbol>
+                    <Name>{token.token.name}</Name>
                   </Labels>
+                  {balance > 0n && <Balance>{formattedBalance}</Balance>}
                 </TokenRow>
-              ))}
+              );
+            })}
           </List>
         </ModalContent>
       </Modal>
