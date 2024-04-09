@@ -7,6 +7,8 @@ import { usePushWalletContext } from "../../providers/push-wallet-provider";
 
 import { formatUnits } from "ethers";
 import EtherLogo from "../../assets/eth-logo.svg?react";
+import { useMulticallBalance } from "hooks/use-multicall-balance";
+import { useAccount } from "wagmi";
 
 const $Box = styled(Box)`
   display: flex;
@@ -78,15 +80,11 @@ export const Balance = forwardRef<
   HTMLDivElement | undefined,
   BalanceDisplayProps
 >(function BalanceDisplay({ className }, ref) {
-  const {
-    account: wallet,
-    ethBalance,
-    totalUsdAmount,
-  } = usePushWalletContext();
+  const { account, ethBalance, totalUsdAmount } = usePushWalletContext();
 
-  //   wallet.provider?.getBalance()
+  const { chain } = useAccount();
+  const getBalances = useMulticallBalance(chain!, account?.address);
 
-  const [showMore, setShowMore] = useState(true);
   //   const [nft, setNft] = useState<NftItem>();
 
   //   const {

@@ -111,7 +111,7 @@ export const SetupCustomization = ({
           <QuestionOutlineIcon ml="6px" />
         </Tooltip>
       </Heading>
-      <Stack my={3} justify="center" align="center">
+      {/* <Stack my={3} justify="center" align="center">
         <Tag
           variant="solid"
           bg={tagBgColor[colorMode]}
@@ -119,7 +119,7 @@ export const SetupCustomization = ({
         >
           Apply customization to earn points
         </Tag>
-      </Stack>
+      </Stack> */}
 
       <FormLabel>Sender</FormLabel>
       <Input
@@ -153,7 +153,7 @@ export const SetupCustomization = ({
           disabled={isSending}
           isChecked={onboarding}
           borderColor="gray.300"
-          colorScheme="purple"
+          colorScheme="red"
           onChange={({ target: { checked } }) => setOnboarding(checked)}
         />
         <Text fontSize="14px">
@@ -172,7 +172,7 @@ export const SetupCustomization = ({
           disabled={isSending}
           isChecked={fireworks}
           borderColor="gray.300"
-          colorScheme="purple"
+          colorScheme="red"
           onChange={({ target: { checked } }) => setFireworks(checked)}
         />
         <Text fontSize="14px">Fireworks</Text>

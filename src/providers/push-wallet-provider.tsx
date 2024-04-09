@@ -4,15 +4,17 @@ import {
   useContext,
   useEffect,
   useMemo,
+  useState,
 } from "react";
-import { Address, PrivateKeyAccount, formatEther } from "viem";
+import { Address, Chain, PrivateKeyAccount, formatEther } from "viem";
 import { privateKeyToAccount } from "viem/accounts";
-import { useBalance } from "wagmi";
+import { useBalance, useConfig } from "wagmi";
 import { GetBalanceData } from "wagmi/query";
 import { usePrice } from "./price-provider";
 import { shortString } from "lib/string";
 
 interface PushWalletContextValue {
+  chain: Chain;
   account: PrivateKeyAccount;
   privateKey: string;
   ethBalance: GetBalanceData | undefined;
@@ -30,8 +32,10 @@ export const PushWalletProvider = ({
   privateKey: string;
   children: ReactNode;
 }) => {
-  const { ethPriceUsd } = usePrice();
+  const config = useConfig();
+  const [chain, setChain] = useState(config.chains[0]);
 
+  const { ethPriceUsd } = usePrice();
   const account = privateKeyToAccount(privateKey as Address);
 
   const { data: ethBalance } = useBalance(account);
@@ -52,12 +56,13 @@ export const PushWalletProvider = ({
 
   const value = useMemo(
     (): PushWalletContextValue => ({
+      chain,
       account,
       privateKey,
       ethBalance,
       totalUsdAmount,
     }),
-    [account, privateKey, ethBalance, totalUsdAmount]
+    [account, privateKey, ethBalance, totalUsdAmount, chain]
   );
 
   return (

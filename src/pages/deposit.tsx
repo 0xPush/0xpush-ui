@@ -78,7 +78,9 @@ export const Deposit = ({ className }: Props): JSX.Element => {
   const bgColor = { light: "white", dark: "whiteAlpha.100" };
 
   const [amount, setAmount] = useState("");
-  const [token, setToken] = useState<TokenOption>(getDefaultToken(chain!));
+  const [token, setToken] = useState<TokenOption>(getDefaultToken(chain));
+
+  console.log(token);
 
   const balance = useTokenBalance(token, address!, chain!);
 
