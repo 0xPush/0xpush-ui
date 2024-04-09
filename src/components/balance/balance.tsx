@@ -2,13 +2,14 @@ import { Box, Tooltip, useColorMode } from "@chakra-ui/react";
 
 import styled from "@emotion/styled";
 
-import { forwardRef, useState } from "react";
+import { forwardRef, useEffect, useState } from "react";
 import { usePushWalletContext } from "../../providers/push-wallet-provider";
 
 import { formatUnits } from "ethers";
 import EtherLogo from "../../assets/eth-logo.svg?react";
-import { useMulticallBalance } from "hooks/use-multicall-balance";
+import { useMulticallBalance, useTokens } from "hooks/use-multicall-balance";
 import { useAccount } from "wagmi";
+import { Address } from "viem";
 
 const $Box = styled(Box)`
   display: flex;
@@ -83,7 +84,9 @@ export const Balance = forwardRef<
   const { account, ethBalance, totalUsdAmount } = usePushWalletContext();
 
   const { chain } = useAccount();
-  const getBalances = useMulticallBalance(chain!, account?.address);
+  const tokens = useTokens(chain, account?.address as Address);
+
+  console.log(tokens);
 
   //   const [nft, setNft] = useState<NftItem>();
 
@@ -129,6 +132,25 @@ export const Balance = forwardRef<
           </UsdAmount>
         </UsdAmountWrapper>
       </BalanceItem>
+      {tokens.map(item => <BalanceItem key={item.token.address}>
+        <Row>
+          <EtherLogo width={28} height={28} />
+          <Column>
+            <CoinName>Ethereum</CoinName>
+            <CoinAmount>
+              {ethBalance?.formatted} {ethBalance?.symbol}
+            </CoinAmount>
+          </Column>
+        </Row>
+        <UsdAmountWrapper>
+          {/* <Tooltip>
+            <AiOutlineThunderbolt height="40px" width="40px" fill="red" />
+          </Tooltip> */}
+          <UsdAmount dark={colorMode === "dark"}>
+            ${totalUsdAmount} USD
+          </UsdAmount>
+        </UsdAmountWrapper>
+      </BalanceItem>)}
       {/* {showMore && tokens.length > 0 && <Divider my={0} py={0} />} */}
       {/* {tokens.length > 0 && (
         <Collapse in={showMore}>

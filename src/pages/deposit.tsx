@@ -80,8 +80,6 @@ export const Deposit = ({ className }: Props): JSX.Element => {
   const [amount, setAmount] = useState("");
   const [token, setToken] = useState<TokenOption>(getDefaultToken(chain));
 
-  console.log(token);
-
   const balance = useTokenBalance(token, address!, chain!);
 
   const fromPush = !!(router.state.location.search as any).fromPush;
