@@ -133,17 +133,15 @@ export const Header = () => {
                   <a onClick={() => navigate({ to: "/faq" })}>
                     <MenuItem>FAQ</MenuItem>
                   </a>
-                  <a
-                    // TODO: replace
+                  {/* <a
                     href={"https://twitter.com/0xpush"}
                     target="_blank"
                     rel="noreferrer noopener"
                   >
                     <MenuItem>Twitter</MenuItem>
-                  </a>
+                  </a> */}
                   <a
-                    // TODO: replace
-                    href={"https://t.me/0xpush"}
+                    href={"https://t.me/zeroxpush"}
                     target="_blank"
                     rel="noreferrer noopener"
                   >
@@ -157,7 +155,7 @@ export const Header = () => {
         <Actions>
           {!isMobile && (
             <>
-              <Link
+              {/* <Link
                 className="onboard-points"
                 onClick={() => navigate({ to: "/points" })}
               >
@@ -175,7 +173,7 @@ export const Header = () => {
                 >
                   Points
                 </Button>
-              </Link>
+              </Link> */}
               <Link onClick={() => navigate({ to: "/faq" })}>
                 <Button variant="outline" mr={3}>
                   FAQ

@@ -5,12 +5,7 @@ import { ReactNode } from "react";
 
 import { WagmiProvider } from "wagmi";
 import {
-  optimism,
-  optimismSepolia,
-  base,
-  baseSepolia,
-  mode,
-  modeTestnet,
+  scrollSepolia,
 } from "wagmi/chains";
 
 const queryClient = new QueryClient();
@@ -27,12 +22,7 @@ const metadata = {
 };
 
 const chains = [
-  optimism,
-  optimismSepolia,
-  base,
-  baseSepolia,
-  mode,
-  modeTestnet,
+  scrollSepolia
 ] as const;
 
 export const config = defaultWagmiConfig({

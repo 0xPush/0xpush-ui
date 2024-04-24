@@ -13,5 +13,8 @@ export const getTokenOptionList = (chain?: Chain): TokenOption[] =>
       price: null,
     }));
 
-export const getDefaultNativeToken = (chain?: Chain): TokenOption =>
-  getTokenOptionList(chain).find((t) => t.isNative)!;
+export const getDefaultNativeToken = (chain?: Chain): TokenOption => {
+  console.log(getTokenOptionList(chain));
+
+  return getTokenOptionList(chain).find((t) => t.isNative)!;
+};

@@ -66,7 +66,7 @@ export const Faq = (): JSX.Element => {
             <Heading size="sm">How it works?</Heading>
             <Text>
               Create a new Push (with or without the specified settings), send
-              ETH to it's address. Then just share the Push link with the
+              ETH or other assets to this address. Then just share the Push link with the
               recipient.
               <br />
               <br />
@@ -98,12 +98,12 @@ export const Faq = (): JSX.Element => {
             <Divider />
             <Heading size="sm">Contract addresses?</Heading>
             <Text>
-              Testnet:{" "}
+              Scroll sepolia:{" "}
               <Link
-                href="https://testnet.blastscan.io/address/0xA903E994ac8c7B233f52c7CC02A94d80e524eF31"
+                href="https://sepolia.scrollscan.com/address/0x0f36EA243A33A4Ede08CDEaB94F46530Fb13d480"
                 target="_blank"
               >
-                0xA903E994ac8c7B233f52c7CC02A94d80e524eF31
+                0x0f36EA243A33A4Ede08CDEaB94F46530Fb13d480
               </Link>
               <br />
               Mainnet: coming soon
@@ -113,8 +113,7 @@ export const Faq = (): JSX.Element => {
               Can I send USDT, USDC, NFT or other tokens?
             </Heading>
             <Text>
-              All known tokens will be added after the mainnet launch. Don't
-              forget to send some ether to pay for gas.
+              All known tokens will be added soon.
             </Text>
           </$Box>
         </Stack>

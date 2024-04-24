@@ -239,11 +239,11 @@ export const WalletContent = () => {
           </Stack>
         </Stack>
         <Stack align="center" mt={7} mb={3}>
-          {action === "earn" && <Earn />}
+          {/* {action === "earn" && <Earn />} */}
           {action === "send" && <Send />}
           {action === "swap" && <p>Swaps are coming soon 👀</p>}
-          {action === "games" && <Games />}
-          {action === "markets" && <Social />}
+          {/* {action === "games" && <Games />} */}
+          {/* {action === "markets" && <Social />} */}
         </Stack>
         <Stack align="center" my={3}>
           <Button

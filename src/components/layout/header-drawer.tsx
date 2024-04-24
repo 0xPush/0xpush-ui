@@ -12,7 +12,7 @@ import {
   useDisclosure,
 } from "@chakra-ui/react";
 import { useNavigate } from "@tanstack/react-router";
-import { FaRegStar, FaTelegram, FaTwitter } from "react-icons/fa";
+import { FaTelegram } from "react-icons/fa";
 import { HeaderWalletConnect } from "./header-wallet-connect";
 
 interface Props {
@@ -52,7 +52,7 @@ export const HeaderDrawer = ({ className }: Props): JSX.Element => {
               >
                 Create Push
               </Button>
-              <Button
+              {/* <Button
                 onClick={() => {
                   navigate({ to: "/points" });
                   onClose();
@@ -60,7 +60,7 @@ export const HeaderDrawer = ({ className }: Props): JSX.Element => {
                 rightIcon={<FaRegStar />}
               >
                 Points
-              </Button>
+              </Button> */}
               <Button
                 onClick={() => {
                   navigate({ to: "/faq" });
@@ -71,15 +71,6 @@ export const HeaderDrawer = ({ className }: Props): JSX.Element => {
               </Button>
             </Stack>
             <Stack mt={6} spacing="12px">
-              <Button
-                onClick={() => {
-                  window.open("https://twitter.com/blast_push", "_blank");
-                  onClose();
-                }}
-                leftIcon={<FaTwitter />}
-              >
-                Twitter
-              </Button>
               <Button
                 onClick={() => {
                   // TODO: replace

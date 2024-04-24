@@ -75,20 +75,7 @@ export const Home = (): JSX.Element => {
               />
             </$Heading>
           </TypewriterContainer>
-          <$Heading textAlign="center">&nbsp;in</$Heading>
-          <TypewriterContainer>
-            <$Heading>
-              <Typewriter
-                options={{
-                  strings: ["Optimism", "Base"],
-                  autoStart: true,
-                  loop: true,
-                  // @ts-expect-error
-                  pauseFor: 6000,
-                }}
-              />
-            </$Heading>
-          </TypewriterContainer>
+          <$Heading textAlign="center">&nbsp;on Scroll</$Heading>
         </HeadingBlock>
       </Stack>
       <Stack justify="center" align="center">
@@ -103,7 +90,7 @@ export const Home = (): JSX.Element => {
       </Stack>
       <Fade in={true}>
         <Stack spacing="12px" direction="row" justify="center" align="center">
-          <Button
+          {/* <Button
             leftIcon={<FaTwitter />}
             as={Link}
             href="https://twitter.com/blast_push"
@@ -111,18 +98,17 @@ export const Home = (): JSX.Element => {
             rel="noopener noreferrer"
           >
             Twitter
-          </Button>
+          </Button> */}
           <Button
             leftIcon={<FaTelegram />}
             as={Link}
-            // TODO: replace
-            href="https://t.me/0xpush"
+            href="https://t.me/zeroxpush"
             target="_blank"
             rel="noopener noreferrer"
           >
             Telegram
           </Button>
-          <Button
+          {/* <Button
             leftIcon={<FaDiscord />}
             as={Link}
             href="https://discord.gg/aKnJWmTSTw"
@@ -130,7 +116,7 @@ export const Home = (): JSX.Element => {
             rel="noopener noreferrer"
           >
             Discord
-          </Button>
+          </Button> */}
         </Stack>
       </Fade>
     </Container>
