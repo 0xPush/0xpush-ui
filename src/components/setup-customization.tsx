@@ -5,16 +5,17 @@ import {
   Heading,
   Input,
   Stack,
-  Tag,
   Text,
   Textarea,
   Tooltip,
-  useColorMode,
+  useColorMode
 } from "@chakra-ui/react";
 import styled from "@emotion/styled";
 import { TransactionReceipt, TransactionResponse } from "ethers";
-import { useState } from "react";
-import { useClient } from "wagmi";
+import { CONTRACT_ABI, CONTRACT_ADDRESS, usePushPresetRead } from "lib/storage-contract";
+import { usePushWalletContext } from "providers/push-wallet-provider";
+import { useEffect, useState } from "react";
+import { useWriteContract } from "wagmi";
 
 const FormLabel = styled.div`
   display: flex;
@@ -43,33 +44,24 @@ export const SetupCustomization = ({
   onSuccess,
   className,
 }: Props) => {
-  // const { updateBalance, wallet } = usePushWalletContext();
-  const client = useClient();
+  const { account } = usePushWalletContext();
 
-  // console.log(client);
+  const currentPreset = usePushPresetRead(account.address)
+  const { writeContract, writeContractAsync } = useWriteContract();
+
+
 
   const { colorMode } = useColorMode();
   const tagBgColor = { light: "gray.100", dark: "whiteAlpha.100" };
   const tagTextColor = { light: "gray.500", dark: "whiteAlpha.500" };
 
-  // const ethersProvider = useMemo(
-  //   () => new BrowserProvider(walletProvider!),
-  //   [walletProvider]
-  // );
-
-  // useEffect(() => {
-  //   readPushPreset(to, wallet.provider!)
-  //     .then((preset) => {
-  //       setFromName(preset.fromName || "");
-  //       setToName(preset.toName || "");
-  //       setMessage(preset.message || "");
-  //       setOnboarding(preset.onboarding);
-  //       setFireworks(preset.fireworks);
-  //     })
-  //     .catch((e) => {
-  //       console.log(e);
-  //     });
-  // }, [to, wallet.provider]);
+  useEffect(() => {
+    setFromName(currentPreset.fromName);
+    setToName(currentPreset.toName);
+    setMessage(currentPreset.message);
+    setOnboarding(currentPreset.onboarding);
+    setFireworks(currentPreset.fireworks);
+  }, [currentPreset])
 
   const [fromName, setFromName] = useState("");
   const [toName, setToName] = useState("");
@@ -80,27 +72,21 @@ export const SetupCustomization = ({
   const [isSending, setIsSending] = useState(false);
 
   const handleSend = async () => {
-    // setIsSending(true);
-    // try {
-    //   const signer = await ethersProvider.getSigner();
-    //   const tx = await writePushPreset(
-    //     signer,
-    //     to,
-    //     fromName,
-    //     toName,
-    //     onboarding,
-    //     fireworks,
-    //     message
-    //   );
-    //   const receipt = await tx.wait();
-    //   console.log(receipt);
-    //   updateBalance();
-    //   onSuccess?.(tx, receipt!);
-    // } catch (e) {
-    //   console.error(e);
-    //   onError?.(e as Error);
-    // }
-    // setIsSending(false);
+    setIsSending(true);
+    try {
+      const res = await writeContractAsync({
+        abi: CONTRACT_ABI,
+        address: CONTRACT_ADDRESS,
+        functionName: "write",
+        args: [account.address, JSON.stringify({fireworks, onboarding, fromName, toName, message})],
+      })
+
+      console.log(res);
+    } catch (e) {
+      console.log(e);
+    }
+
+    setIsSending(false)
   };
 
   return (

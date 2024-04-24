@@ -1,35 +1,30 @@
-import { useEffect, useMemo, useRef, useState } from "react";
 import {
   Button,
   Fade,
   Heading,
   Icon,
   Stack,
-  Tooltip,
-  useDisclosure,
   Text,
+  useDisclosure
 } from "@chakra-ui/react";
 import styled from "@emotion/styled";
-import { AiOutlineSend, AiOutlineSwap } from "react-icons/ai";
-import { IoPeople, IoWalletOutline } from "react-icons/io5";
-import { FaCoins, FaGamepad, FaShoppingBag } from "react-icons/fa";
-import Joyride from "react-joyride";
-import { Fireworks } from "@fireworks-js/react";
 import type { FireworksHandlers } from "@fireworks-js/react";
+import { Fireworks } from "@fireworks-js/react";
+import { useEffect, useMemo, useRef, useState } from "react";
+import { AiOutlineSend, AiOutlineSwap } from "react-icons/ai";
+import { FaCoins, FaGamepad } from "react-icons/fa";
+import { IoPeople, IoWalletOutline } from "react-icons/io5";
+import Joyride from "react-joyride";
 
-import { usePushWalletContext } from "providers/push-wallet-provider";
+import { Balance } from "components/balance/balance";
 import { moveBg } from "components/moveBg";
 import { PushHistory } from "lib/history";
+import { usePushWalletContext } from "providers/push-wallet-provider";
 import { ActionCard } from "./action-card";
-import { WalletActions } from "./wallet-actions";
-import { Balance } from "components/balance/balance";
-import { Earn } from "./cards/earn";
 import { Send } from "./cards/send";
-import { readPushPreset } from "lib/storage-contract";
-import { PushPreset } from "../../types/preset";
 import { onboardingSteps } from "./onboarding-steps";
-import { Games } from "./cards/games";
-import { Social } from "./cards/social";
+import { WalletActions } from "./wallet-actions";
+import { usePushPresetRead } from "lib/storage-contract";
 
 const Container = styled.div`
   margin-top: 2vh;
@@ -48,11 +43,13 @@ const $Heading = styled(Heading)`
   ${moveBg}
 ` as typeof Heading;
 
-const Highlight = styled.span`
+const Highlight = styled.span<{withRightMargin?: boolean}>`
   border-radius: 16px;
   background-color: rgba(255, 128, 0, 0.15);
   padding: 4px 6px;
   cursor: pointer;
+
+  ${p => p.withRightMargin && "margin-right: 6px"};
 
   &:hover {
     padding: 6px 6px;
@@ -63,7 +60,7 @@ const Highlight = styled.span`
 type Action = "send" | "swap" | "earn" | "games" | "markets" | null;
 
 export const WalletContent = () => {
-  const { account, totalUsdAmount } = usePushWalletContext();
+  const { account, privateKey, totalUsdAmount } = usePushWalletContext();
   const [action, setAction] = useState<Action>("send");
 
   const ref = useRef<FireworksHandlers>(null);
@@ -74,19 +71,11 @@ export const WalletContent = () => {
     }, 6000);
   }, []);
 
-  const [{ fromName, toName, onboarding, fireworks, message }, setPreset] =
-    useState<PushPreset>({
-      fromName: null,
-      toName: null,
-      fromAddress: null,
-      onboarding: false,
-      fireworks: false,
-      message: null,
-    });
+  const {toName,fromName, message, fireworks, onboarding} = usePushPresetRead(account.address)
 
   const isOnboardingCompleted = useMemo(
-    () => PushHistory.isOnboardingCompleted(account.source),
-    [account.source]
+    () => PushHistory.isOnboardingCompleted(privateKey),
+    [privateKey]
   );
 
   const {
@@ -95,25 +84,16 @@ export const WalletContent = () => {
     onClose: closeWalletActions,
   } = useDisclosure({ defaultIsOpen: false });
 
-  // TODO: read push preset
-  // useEffect(() => {
-  //   readPushPreset(wallet.address, wallet.provider!)
-  //     .then(setPreset)
-  //     .catch((e) => {
-  //       console.log(e);
-  //     });
-  // }, [wallet.address, wallet.provider]);
-
   useEffect(() => {
     if (!account) {
       return;
     }
     PushHistory.addToHistory({
-      secret: account.source,
+      secret: privateKey,
       type: "viewed",
       date: new Date(),
     });
-  }, [account]);
+  }, [account, privateKey]);
 
   const handleActionClick = (newAction: Action) => {
     closeWalletActions();
@@ -132,7 +112,7 @@ export const WalletContent = () => {
         run={onboarding && !isOnboardingCompleted}
         callback={({ action }) => {
           if (action === "reset" || action === "stop") {
-            PushHistory.setOnboardingCompleted(account.source);
+            PushHistory.setOnboardingCompleted(privateKey);
           }
         }}
         showProgress
@@ -173,7 +153,7 @@ export const WalletContent = () => {
             )}
             <$Heading textAlign="center" size="lg">
               You received{" "}
-              <Highlight className="onboard-highlight">
+              <Highlight className="onboard-highlight" withRightMargin={!!fromName}>
                 ${totalUsdAmount}
               </Highlight>
               {fromName && `from ${fromName}`}

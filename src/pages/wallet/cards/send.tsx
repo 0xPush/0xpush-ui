@@ -5,6 +5,7 @@ import { TokenInput } from "components/token-input/token-select";
 import { StyledInput } from "components/ui/styled-input";
 import { formatEther } from "ethers";
 import { useTokenBalance } from "hooks/use-token-balance";
+import { usePushWalletContext } from "providers/push-wallet-provider";
 import { useEffect, useState } from "react";
 import { TokenOption } from "types/token";
 import { useAccount, useClient } from "wagmi";
@@ -27,6 +28,7 @@ const AddressInput = styled(StyledInput)`
 
 export const Send = () => {
   const { address } = useAccount();
+  const {chain, account} = usePushWalletContext();
   const client = useClient();
   const toast = useToast();
 
@@ -35,8 +37,6 @@ export const Send = () => {
     getDefaultToken(client!.chain)
   );
   const [to, setTo] = useState("");
-
-  const x = useTokenBalance(token, address!, client!.chain);
 
   useEffect(() => {
     if (address) {
@@ -60,6 +60,8 @@ export const Send = () => {
         <Box mb={4}>
           <FormLabel>You pay</FormLabel>
           <TokenInput
+            chain={chain}
+            address={account.address}
             token={token}
             amount={amount}
             onTokenChange={setToken}

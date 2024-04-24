@@ -9,6 +9,7 @@ export const Route = createLazyFileRoute("/w/$privateKey/deposit")({
 
 function Component() {
   const { privateKey } = Route.useParams();
+
   return (
     <PushWalletProvider privateKey={privateKey}>
       <Deposit />

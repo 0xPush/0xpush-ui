@@ -1,4 +1,4 @@
-import { Box, useColorMode } from "@chakra-ui/react";
+import { Box, Spinner, useColorMode } from "@chakra-ui/react";
 
 import styled from "@emotion/styled";
 
@@ -87,8 +87,6 @@ export const Balance = forwardRef<
 
   const tokens = useTokens(chain, account?.address as Address);
 
-  console.log(tokens);
-
   //   const [nft, setNft] = useState<NftItem>();
   //   const {
   //     isOpen: nftIsOpen,
@@ -114,6 +112,7 @@ export const Balance = forwardRef<
       borderRadius="lg"
       boxShadow="md"
     >
+      {tokens.length === 0 && <Box textAlign="center" minH={"100px"}><Spinner /></Box>}
       {/* <NftModal nft={nft!} isOpen={nftIsOpen} onClose={onNftClose} /> */}
       {tokens.map(({token, quantity}) => <BalanceItem key={token.address}>
         <Row>

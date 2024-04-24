@@ -5,7 +5,7 @@ import { TokenButton } from "./token-button";
 import { TokenListModal } from "./token-list-modal";
 import { TokenOption } from "types/token";
 import { useTokenBalance } from "hooks/use-token-balance";
-import { Address, Chain, formatUnits, parseUnits } from "viem";
+import { Address, Chain, formatUnits } from "viem";
 
 const Container = styled.div`
   display: grid;

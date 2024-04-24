@@ -15,7 +15,7 @@ const Container = styled.div``;
 export const WalletActions = ({
   className,
 }: PushWalletActionsProps): JSX.Element => {
-  const { account: wallet } = usePushWalletContext();
+  const { privateKey } = usePushWalletContext();
   const router = useRouter();
   const {
     isOpen: isExport,
@@ -31,7 +31,7 @@ export const WalletActions = ({
             onClick={() => {
               router.navigate({
                 to: "/w/$privateKey/deposit",
-                params: { privateKey: wallet.source },
+                params: { privateKey },
                 search: { fromPush: true },
               });
             }}

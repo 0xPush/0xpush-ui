@@ -61,7 +61,7 @@ interface Props {
 
 export const Deposit = ({ className }: Props): JSX.Element => {
   const { address, chain } = useAccount();
-  const { account: wallet } = usePushWalletContext();
+  const { account: wallet, privateKey } = usePushWalletContext();
   const { colorMode } = useColorMode();
   const { isOpen, onOpen, onClose } = useDisclosure();
   const toast = useToast();
@@ -86,7 +86,7 @@ export const Deposit = ({ className }: Props): JSX.Element => {
   const hostname = window?.location.origin;
 
   const handleLinkCopy = () => {
-    copyTextToClipboard(`${hostname}/w/${wallet.source}`);
+    copyTextToClipboard(`${hostname}/w/${privateKey}`);
     toast({
       title: `Push link copied. Share it with the recipient!`,
       status: "info",
@@ -191,17 +191,6 @@ export const Deposit = ({ className }: Props): JSX.Element => {
                 >
                   {getDepositButtonLabel()}
                 </Button>
-                {/* <TransferTokens
-                  to={wallet.address}
-                  onSuccess={(tx) => {
-                    toast({
-                      title: `${formatEther(tx.value)} ETH sent. Tx: ${tx.hash}.`,
-                      status: "success",
-                    });
-                  }}
-                  label="Deposit"
-                  onError={(e) => toast({ title: e.message, status: "error" })}
-                /> */}
               </Box>
             </ConnectWalletBlur>
           </Fade>
@@ -264,7 +253,7 @@ export const Deposit = ({ className }: Props): JSX.Element => {
               onClick={() =>
                 router.navigate({
                   to: `/w/$privateKey`,
-                  params: { privateKey: wallet.source },
+                  params: { privateKey },
                 })
               }
               leftIcon={<ChevronLeftIcon />}
@@ -275,7 +264,7 @@ export const Deposit = ({ className }: Props): JSX.Element => {
           </Stack>
         )}
         <QrModal
-          qrValue={`${hostname}/w/${wallet.source}`}
+          qrValue={`${hostname}/w/${privateKey}`}
           title={"QR link to Push"}
           isOpen={isOpen}
           onClose={onClose}
