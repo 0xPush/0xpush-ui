@@ -1,20 +1,22 @@
-import { Box, Tooltip, useColorMode } from "@chakra-ui/react";
+import { Box, useColorMode } from "@chakra-ui/react";
 
 import styled from "@emotion/styled";
 
-import { forwardRef, useEffect, useState } from "react";
+import { forwardRef } from "react";
 import { usePushWalletContext } from "../../providers/push-wallet-provider";
 
-import { formatUnits } from "ethers";
-import EtherLogo from "../../assets/eth-logo.svg?react";
-import { useMulticallBalance, useTokens } from "hooks/use-multicall-balance";
-import { useAccount } from "wagmi";
-import { Address } from "viem";
+import { useTokens } from "hooks/use-multicall-balance";
+import { Address, formatUnits } from "viem";
 
 const $Box = styled(Box)`
   display: flex;
   flex-flow: column nowrap;
   row-gap: 16px;
+`;
+
+const AssetLogo = styled.img`
+  width: 28px;
+  height: 28px;
 `;
 
 const BalanceItem = styled.div<{ nft?: boolean; first?: boolean }>`
@@ -81,20 +83,20 @@ export const Balance = forwardRef<
   HTMLDivElement | undefined,
   BalanceDisplayProps
 >(function BalanceDisplay({ className }, ref) {
-  const { account, ethBalance, totalUsdAmount } = usePushWalletContext();
+  const { chain, account, totalUsdAmount } = usePushWalletContext();
 
-  const { chain } = useAccount();
   const tokens = useTokens(chain, account?.address as Address);
 
   console.log(tokens);
 
   //   const [nft, setNft] = useState<NftItem>();
-
   //   const {
   //     isOpen: nftIsOpen,
   //     onClose: onNftClose,
   //     onOpen: openNft,
   //   } = useDisclosure();
+
+  
   const { colorMode } = useColorMode();
   const bgColor = { light: "white", dark: "whiteAlpha.100" };
 
@@ -113,13 +115,13 @@ export const Balance = forwardRef<
       boxShadow="md"
     >
       {/* <NftModal nft={nft!} isOpen={nftIsOpen} onClose={onNftClose} /> */}
-      <BalanceItem key={0}>
+      {tokens.map(({token, quantity}) => <BalanceItem key={token.address}>
         <Row>
-          <EtherLogo width={28} height={28} />
+          <AssetLogo src={token.logoURI} />
           <Column>
-            <CoinName>Ethereum</CoinName>
+            <CoinName>{token.name}</CoinName>
             <CoinAmount>
-              {ethBalance?.formatted} {ethBalance?.symbol}
+              {formatUnits(quantity, token.decimals)} {token.symbol}
             </CoinAmount>
           </Column>
         </Row>
@@ -127,28 +129,9 @@ export const Balance = forwardRef<
           {/* <Tooltip>
             <AiOutlineThunderbolt height="40px" width="40px" fill="red" />
           </Tooltip> */}
-          <UsdAmount dark={colorMode === "dark"}>
+          {token.isNative && <UsdAmount dark={colorMode === "dark"}>
             ${totalUsdAmount} USD
-          </UsdAmount>
-        </UsdAmountWrapper>
-      </BalanceItem>
-      {tokens.map(item => <BalanceItem key={item.token.address}>
-        <Row>
-          <EtherLogo width={28} height={28} />
-          <Column>
-            <CoinName>Ethereum</CoinName>
-            <CoinAmount>
-              {ethBalance?.formatted} {ethBalance?.symbol}
-            </CoinAmount>
-          </Column>
-        </Row>
-        <UsdAmountWrapper>
-          {/* <Tooltip>
-            <AiOutlineThunderbolt height="40px" width="40px" fill="red" />
-          </Tooltip> */}
-          <UsdAmount dark={colorMode === "dark"}>
-            ${totalUsdAmount} USD
-          </UsdAmount>
+          </UsdAmount>}
         </UsdAmountWrapper>
       </BalanceItem>)}
       {/* {showMore && tokens.length > 0 && <Divider my={0} py={0} />} */}

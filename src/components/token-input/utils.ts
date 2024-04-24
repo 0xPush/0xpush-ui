@@ -7,14 +7,12 @@ export const getTokenOptionList = (chain?: Chain): TokenOption[] =>
     .filter((t) => (chain ? t.chainId === chain?.id : true))
     .map((token) => ({
       token,
-      quantity: null,
+      quantity: 0n,
       balanceUSD: null,
-      isNative: token.symbol === (chain?.nativeCurrency.symbol ?? "ETH"),
+      isNative: token.isNative,
       price: null,
     }));
 
 export const getDefaultNativeToken = (chain?: Chain): TokenOption => {
-  console.log(getTokenOptionList(chain));
-
   return getTokenOptionList(chain).find((t) => t.isNative)!;
 };

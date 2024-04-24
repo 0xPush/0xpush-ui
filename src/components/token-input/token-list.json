@@ -5,7 +5,8 @@
         "name": "Ether",
         "symbol": "ETH",
         "decimals": 18,
-        "logoURI": "https://ethereum-optimism.github.io/data/ETH/logo.svg"
+        "logoURI": "https://ethereum-optimism.github.io/data/ETH/logo.svg",
+        "isNative": true
     },
     {
         "chainId": 534351,
@@ -13,6 +14,7 @@
         "name": "0xPush Mock USDT",
         "symbol": "0xMUSDT",
         "decimals": 18,
-        "logoURI": "https://assets.coingecko.com/coins/images/36440/standard/MEW.png?1711442286"
+        "logoURI": "https://assets.coingecko.com/coins/images/36440/standard/MEW.png?1711442286",
+        "isNative": false
     }
 ]

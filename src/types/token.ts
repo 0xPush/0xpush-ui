@@ -5,15 +5,13 @@ export type TokenListItem = {
   symbol: string;
   decimals: number;
   logoURI: string;
-  extensions: {
-      opListId?: "default" | "extended";
-  };
-}
+  isNative: boolean;
+};
 
 export type TokenOption = {
   token: TokenListItem;
-  quantity: number | null; // on balance
+  quantity: bigint;
   balanceUSD: number | null;
   price: number | null;
   isNative: boolean;
-}
+};
