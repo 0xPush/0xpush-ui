@@ -8,11 +8,15 @@ import {
   Text,
   Textarea,
   Tooltip,
-  useToast
+  useToast,
 } from "@chakra-ui/react";
 import styled from "@emotion/styled";
 import { TransactionReceipt, TransactionResponse } from "ethers";
-import { CONTRACT_ABI, CONTRACT_ADDRESS, usePushPresetRead } from "lib/storage-contract";
+import {
+  CONTRACT_ABI,
+  CONTRACT_ADDRESS,
+  usePushPresetRead,
+} from "lib/storage-contract";
 import { usePushWalletContext } from "providers/push-wallet-provider";
 import { config } from "providers/wagmi-web3-provider";
 import { useEffect, useState } from "react";
@@ -40,12 +44,10 @@ interface Props {
   fromConnectedWallet?: boolean;
 }
 
-export const SetupCustomization = ({
-  className,
-}: Props) => {
+export const SetupCustomization = ({ className }: Props) => {
   const { account } = usePushWalletContext();
 
-  const currentPreset = usePushPresetRead(account.address)
+  const currentPreset = usePushPresetRead(account.address);
   const { writeContractAsync } = useWriteContract();
 
   const toast = useToast();
@@ -56,7 +58,7 @@ export const SetupCustomization = ({
     setMessage(currentPreset.message);
     setOnboarding(currentPreset.onboarding);
     setFireworks(currentPreset.fireworks);
-  }, [currentPreset])
+  }, [currentPreset]);
 
   const [fromName, setFromName] = useState("");
   const [toName, setToName] = useState("");
@@ -73,19 +75,25 @@ export const SetupCustomization = ({
         abi: CONTRACT_ABI,
         address: CONTRACT_ADDRESS,
         functionName: "write",
-        args: [account.address, JSON.stringify({fireworks, onboarding, fromName, toName, message})],
-      })
+        args: [
+          account.address,
+          JSON.stringify({ fireworks, onboarding, fromName, toName, message }),
+        ],
+      });
 
-      const data = await waitForTransactionReceipt(config, {hash: res})
+      const data = await waitForTransactionReceipt(config, { hash: res });
       console.log(data);
-      toast({title: `Preset applied, tx: ${data.transactionHash}`, status: "success"})
+      toast({
+        title: `Preset applied, tx: ${data.transactionHash}`,
+        status: "success",
+      });
     } catch (e) {
       console.log(e);
       // @ts-ignore
-      toast({title: e, status: "error"})
+      toast({ title: e, status: "error" });
     }
 
-    setIsSending(false)
+    setIsSending(false);
   };
 
   return (
@@ -145,7 +153,7 @@ export const SetupCustomization = ({
           Onboarding{" "}
           <Tooltip
             label={
-              "Run step-by-step onboarding to crypto and Blast ecosystem when the push is opened"
+              "Run step-by-step onboarding to crypto and Scroll ecosystem when the push is opened"
             }
           >
             <QuestionOutlineIcon ml="4px" mb="2px" fill="gray" color="gray" />

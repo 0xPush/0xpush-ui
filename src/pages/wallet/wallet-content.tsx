@@ -5,7 +5,7 @@ import {
   Icon,
   Stack,
   Text,
-  useDisclosure
+  useDisclosure,
 } from "@chakra-ui/react";
 import styled from "@emotion/styled";
 import type { FireworksHandlers } from "@fireworks-js/react";
@@ -21,10 +21,16 @@ import { moveBg } from "components/moveBg";
 import { PushHistory } from "lib/history";
 import { usePushWalletContext } from "providers/push-wallet-provider";
 import { ActionCard } from "./action-card";
-import { Send } from "./cards/send";
+import { Send } from "./send";
 import { onboardingSteps } from "./onboarding-steps";
 import { WalletActions } from "./wallet-actions";
 import { usePushPresetRead } from "lib/storage-contract";
+import { ProjectList } from "./project-list/project-list";
+import {
+  DEFI_PROJECTS,
+  GAME_PROJECTS,
+  SOCIAL_PROJECTS,
+} from "./project-list/projects";
 
 const Container = styled.div`
   margin-top: 2vh;
@@ -43,13 +49,13 @@ const $Heading = styled(Heading)`
   ${moveBg}
 ` as typeof Heading;
 
-const Highlight = styled.span<{withRightMargin?: boolean}>`
+const Highlight = styled.span<{ withRightMargin?: boolean }>`
   border-radius: 16px;
   background-color: rgba(255, 128, 0, 0.15);
   padding: 4px 6px;
   cursor: pointer;
 
-  ${p => p.withRightMargin && "margin-right: 6px"};
+  ${(p) => p.withRightMargin && "margin-right: 6px"};
 
   &:hover {
     padding: 6px 6px;
@@ -71,7 +77,8 @@ export const WalletContent = () => {
     }, 6000);
   }, []);
 
-  const {toName,fromName, message, fireworks, onboarding} = usePushPresetRead(account.address)
+  const { toName, fromName, message, fireworks, onboarding } =
+    usePushPresetRead(account.address);
 
   const isOnboardingCompleted = useMemo(
     () => PushHistory.isOnboardingCompleted(privateKey),
@@ -153,7 +160,10 @@ export const WalletContent = () => {
             )}
             <$Heading textAlign="center" size="lg">
               You received{" "}
-              <Highlight className="onboard-highlight" withRightMargin={!!fromName}>
+              <Highlight
+                className="onboard-highlight"
+                withRightMargin={!!fromName}
+              >
                 ${totalUsdAmount}
               </Highlight>
               {fromName && `from ${fromName}`}
@@ -198,7 +208,7 @@ export const WalletContent = () => {
             <ActionCard
               onClick={() => handleActionClick("earn")}
               active={action === "earn"}
-              label="Earn"
+              label="DeFi"
             >
               <Icon width="28px" height="28px" as={FaCoins} />
             </ActionCard>
@@ -219,11 +229,21 @@ export const WalletContent = () => {
           </Stack>
         </Stack>
         <Stack align="center" mt={7} mb={3}>
-          {/* {action === "earn" && <Earn />} */}
           {action === "send" && <Send />}
           {action === "swap" && <p>Swaps are coming soon 👀</p>}
-          {/* {action === "games" && <Games />} */}
-          {/* {action === "markets" && <Social />} */}
+          {action === "earn" && (
+            <ProjectList
+              projects={DEFI_PROJECTS}
+              label="Scroll DeFi projects"
+            />
+          )}
+          {action === "games" && (
+            <ProjectList
+              projects={GAME_PROJECTS}
+              label="Play to earn and web3 games"
+            />
+          )}
+          {action === "markets" && <ProjectList projects={SOCIAL_PROJECTS} />}
         </Stack>
         <Stack align="center" my={3}>
           <Button

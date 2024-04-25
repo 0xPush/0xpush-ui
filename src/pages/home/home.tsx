@@ -1,10 +1,19 @@
+import {
+  Button,
+  Fade,
+  Heading,
+  Link,
+  ScaleFade,
+  Stack,
+  useColorMode,
+} from "@chakra-ui/react";
 import styled from "@emotion/styled";
-import { moveBg } from "../../components/moveBg";
-import { Button, Fade, Heading, Link, Stack } from "@chakra-ui/react";
+import { useEffect, useState } from "react";
+import { FaTelegram } from "react-icons/fa";
 import Typewriter from "typewriter-effect";
+import { moveBg } from "../../components/moveBg";
 import { CreateWallet } from "./create-wallet";
 import { HomeCards } from "./home-cards";
-import { FaDiscord, FaTelegram, FaTwitter } from "react-icons/fa";
 
 const Container = styled.div`
   display: flex;
@@ -56,7 +65,31 @@ const TypewriterContainer = styled.span`
   }
 `;
 
+const Banner = styled.div`
+  display: flex;
+  flex-flow: column nowrap;
+  justify-content: center;
+  align-items: center;
+  gap: 16px;
+`;
+
+const ScrollImage = styled.img`
+  user-select: none;
+  -webkit-user-drag: none;
+  width: 140px;
+`;
+
 export const Home = (): JSX.Element => {
+  const { colorMode } = useColorMode();
+
+  const [show, setShow] = useState(false);
+
+  useEffect(() => {
+    setTimeout(() => {
+      setShow(true);
+    }, 500);
+  }, []);
+
   return (
     <Container>
       <Stack justify="center" align="center" mb={10}>
@@ -79,21 +112,43 @@ export const Home = (): JSX.Element => {
         </HeadingBlock>
       </Stack>
       <Stack justify="center" align="center">
-        <Fade in={true}>
+        <ScaleFade in={true}>
           <CreateWallet />
-        </Fade>
+        </ScaleFade>
       </Stack>
-      <Stack my={20} justify="center" align="center">
-        <Fade in={true}>
+      <Stack mt={20} mb={8} justify="center" align="center">
+        <ScaleFade in={true}>
           <HomeCards />
-        </Fade>
+        </ScaleFade>
       </Stack>
+
+      <ScaleFade in={show}>
+        <Stack mb={20}>
+          <Banner>
+            <Heading size="mm">Built on</Heading>
+            <a
+              href="https://scroll.io/"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <ScrollImage
+                alt="scroll"
+                src={
+                  colorMode === "light"
+                    ? "/scroll-white.png"
+                    : "/scroll-dark.png"
+                }
+              />
+            </a>
+          </Banner>
+        </Stack>
+      </ScaleFade>
+
       <Fade in={true}>
         <Stack spacing="12px" direction="row" justify="center" align="center">
           {/* <Button
             leftIcon={<FaTwitter />}
             as={Link}
-            href="https://twitter.com/blast_push"
             target="_blank"
             rel="noopener noreferrer"
           >
@@ -111,7 +166,6 @@ export const Home = (): JSX.Element => {
           {/* <Button
             leftIcon={<FaDiscord />}
             as={Link}
-            href="https://discord.gg/aKnJWmTSTw"
             target="_blank"
             rel="noopener noreferrer"
           >

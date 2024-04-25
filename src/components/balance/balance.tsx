@@ -7,6 +7,7 @@ import { usePushWalletContext } from "../../providers/push-wallet-provider";
 
 import { useTokens } from "hooks/use-tokens";
 import { Address, formatUnits } from "viem";
+import { TokenListItem, TokenOption } from "types/token";
 
 const $Box = styled(Box)`
   display: flex;
@@ -75,6 +76,11 @@ const UsdAmount = styled.div<{ dark: boolean }>`
   font-weight: 500;
 `;
 
+const formatBalanceValue = (quantity: bigint, decimals: number) => {
+  const formatted = formatUnits(quantity, decimals);
+  return formatted.length > 7 ? parseFloat(formatted).toFixed(5) : `${formatted}`;
+}
+
 interface BalanceDisplayProps {
   className?: string;
 }
@@ -85,7 +91,7 @@ export const Balance = forwardRef<
 >(function BalanceDisplay({ className }, ref) {
   const { chain, account, totalUsdAmount } = usePushWalletContext();
 
-  const {tokens, refetchBalance} = useTokens(chain, account?.address as Address);
+  const {tokens} = useTokens(chain, account?.address as Address);
 
   //   const [nft, setNft] = useState<NftItem>();
   //   const {
@@ -101,13 +107,11 @@ export const Balance = forwardRef<
   return (
     <$Box
       className={className}
-      // @ts-ignore
       ref={ref}
       bg={bgColor[colorMode]}
       width="370px"
       maxWidth="100%"
       pt={4}
-      //   pb={tokens.length > 0 ? 1 : 4}
       pb={4}
       borderRadius="lg"
       boxShadow="md"
@@ -120,7 +124,7 @@ export const Balance = forwardRef<
           <Column>
             <CoinName>{token.name}</CoinName>
             <CoinAmount>
-              {formatUnits(quantity, token.decimals)} {token.symbol}
+              {formatBalanceValue(quantity, token.decimals)} {token.symbol}
             </CoinAmount>
           </Column>
         </Row>
@@ -133,7 +137,6 @@ export const Balance = forwardRef<
           </UsdAmount>}
         </UsdAmountWrapper>
       </BalanceItem>)}
-      {/* {showMore && tokens.length > 0 && <Divider my={0} py={0} />} */}
       {/* {tokens.length > 0 && (
         <Collapse in={showMore}>
           <Stack spacing={2}>
@@ -191,20 +194,6 @@ export const Balance = forwardRef<
             })}
           </Stack>
         </Collapse>
-      )} */}
-      {/* {tokens.length > 0 && (
-        <Stack mt={-4}>
-          <Button
-            size="sm"
-            fontWeight="500"
-            fontSize="12px"
-            variant="ghost"
-            onClick={() => setShowMore(!showMore)}
-            rightIcon={showMore ? <ChevronUpIcon /> : <ChevronDownIcon />}
-          >
-            {showMore ? "Show less" : `Show all tokens (${tokens.length + 1})`}
-          </Button>
-        </Stack>
       )} */}
     </$Box>
   );

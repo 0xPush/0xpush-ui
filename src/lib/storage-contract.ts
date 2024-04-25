@@ -102,7 +102,7 @@ export const CONTRACT_ABI = [
     stateMutability: "nonpayable",
     type: "function",
   },
-];
+] as const;
 
 export const CONTRACT_ADDRESS = "0x0f36EA243A33A4Ede08CDEaB94F46530Fb13d480";
 

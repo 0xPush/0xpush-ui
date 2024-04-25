@@ -7,18 +7,18 @@ export const onboardingSteps: Step[] = [
     content: (
       <div>
         Congratulations! You have received crypto in{" "}
-        <Link color="red" href="https://blast.io" target="_blank">
-          Blast Network.
+        <Link color="red" href="https://scroll.io" target="_blank">
+          Scroll Network.
         </Link>{" "}
         This page is a lightweight wallet. You can claim your funds and make a
-        deep dive into the Blast ecosystem. Keep this page's link a secret!
+        deep dive into the Scroll ecosystem. Keep this page's link a secret!
       </div>
     ),
   },
   {
     target: ".onboard-balance",
     content:
-      "These are your assets. You can manage them however you want. In Blast network these funds have 4% for ETH and 5% APR for stablecoins yield. Blast is not about inflation!",
+      "These are your assets. You can manage them however you want.",
   },
   {
     target: ".onboard-send",
@@ -31,7 +31,7 @@ export const onboardingSteps: Step[] = [
   {
     target: ".onboard-ecosystem",
     content:
-      "These ar the projects of the Blast ecosystem. You can try them out if you like so!",
+      "These are the projects of the Scroll ecosystem. You can try them out if you like so!",
   },
   {
     target: ".onboard-wallet-actions",
@@ -40,11 +40,6 @@ export const onboardingSteps: Step[] = [
   {
     target: ".onboard-wallet-connect",
     content:
-      "Connect an existing wallet for interaction or withdrawal of funds",
-  },
-  {
-    target: ".onboard-points",
-    content:
-      "Here you can learn about the future reward point system. Good luck!",
+      "Connect wallet for interaction or withdrawal assets. Bye!",
   },
 ];
