@@ -6,12 +6,11 @@ import {
 } from "@chakra-ui/modal";
 import { Box, Input, Modal } from "@chakra-ui/react";
 import styled from "@emotion/styled";
-import { forwardRef, useEffect, useMemo, useState } from "react";
+import { forwardRef, useMemo, useState } from "react";
 
+import { useTokens } from "hooks/use-tokens";
 import { TokenOption } from "types/token";
 import { Address, Chain, formatUnits } from "viem";
-import { getTokenOptionList } from "./utils";
-import { useMulticallBalance } from "hooks/use-multicall-balance";
 
 const List = styled.div`
   display: flex;
@@ -70,28 +69,22 @@ interface Props {
   onSelect?: (token: TokenOption) => void;
 }
 
+// TODO: useTokens
 export const TokenListModal = forwardRef<HTMLDivElement | undefined, Props>(
   function TokenListModal({ isOpen, address, chain, onClose, onSelect }, ref) {
     const [search, setSearch] = useState("");
 
-    const [balances, setBalances] = useState<Record<Address, bigint>>({});
+    const {tokens} = useTokens(chain, address);
 
-    const options = useMemo(() => getTokenOptionList(chain), [chain]);
     const filteredOptions = useMemo(
       () =>
-        options.filter(
+        tokens.filter(
           (token) =>
             token.token.symbol.toLowerCase().includes(search.toLowerCase()) ||
             token.token.name.toLowerCase().includes(search.toLowerCase())
         ),
-      [options, search]
+      [tokens, search]
     );
-
-    const getBalance = useMulticallBalance(chain, address);
-
-    useEffect(() => {
-      getBalance().then((res) => setBalances(res));
-    }, [getBalance]);
 
     const handleSelect = (token: TokenOption) => {
       onSelect?.(token);
@@ -114,7 +107,7 @@ export const TokenListModal = forwardRef<HTMLDivElement | undefined, Props>(
           </Box>
           <List>
             {filteredOptions.map((token, idx) => {
-              const balance = balances[token.token.address as Address] ?? 0n;
+              const balance = token.quantity ?? 0n;
               const formattedBalance = formatUnits(
                 balance,
                 token.token.decimals

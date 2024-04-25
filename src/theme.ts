@@ -40,7 +40,7 @@ export const theme = extendTheme({
   config,
   fonts: {
     heading: `Sora, sans-serif`,
-    body: `Inter, sans-serif`,
+    body: `Roboto, sans-serif`,
   },
   styles: {
     global: (props: StyleFunctionProps) => ({

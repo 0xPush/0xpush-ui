@@ -16,5 +16,23 @@
         "decimals": 18,
         "logoURI": "https://assets.coingecko.com/coins/images/36440/standard/MEW.png?1711442286",
         "isNative": false
+    },
+    {
+        "chainId": 534351,
+        "address": "0x5300000000000000000000000000000000000004",
+        "name": "Wrapped Ether",
+        "symbol": "WETH",
+        "decimals": 18,
+        "logoURI": "https://scroll-tech.github.io/token-list/data/WETH/logo.png",
+        "isNative": false
+    },
+    {
+        "chainId": 534351,
+        "address": "0xD9692f1748aFEe00FACE2da35242417dd05a8615",
+        "name": "Gho Token",
+        "symbol": "GHO",
+        "decimals": 18,
+        "logoURI": "https://scroll-tech.github.io/token-list/data/GHO/logo.png",
+        "isNative": false
     }
 ]

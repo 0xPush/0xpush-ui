@@ -57,12 +57,13 @@ const LogoImageWrapper = styled.div`
 `;
 
 const LogoLabel = styled.h4<{ isDark?: boolean }>`
-  font-weight: 600;
-  font-size: 20px;
-  line-height: 30px;
-  letter-spacing: -1px;
+  font-family: Sora;
+  font-weight: 700;
+  letter-spacing: -0.3px;
+  font-size: 22px;
+  line-height: 20px;
   padding: 0 5px;
-  color: ${(p) => (p.isDark ? "yellow" : "#4a2650")};
+  ${moveBg};
 `;
 
 const Actions = styled.div`
@@ -120,7 +121,7 @@ export const Header = () => {
                       height="24px"
                       color="gray.500"
                       ml={-2}
-                      mt={0.5}
+                      mt={0}
                     />
                   )}
                 </Stack>

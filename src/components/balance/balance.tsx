@@ -5,7 +5,7 @@ import styled from "@emotion/styled";
 import { forwardRef } from "react";
 import { usePushWalletContext } from "../../providers/push-wallet-provider";
 
-import { useTokens } from "hooks/use-multicall-balance";
+import { useTokens } from "hooks/use-tokens";
 import { Address, formatUnits } from "viem";
 
 const $Box = styled(Box)`
@@ -85,7 +85,7 @@ export const Balance = forwardRef<
 >(function BalanceDisplay({ className }, ref) {
   const { chain, account, totalUsdAmount } = usePushWalletContext();
 
-  const tokens = useTokens(chain, account?.address as Address);
+  const {tokens, refetchBalance} = useTokens(chain, account?.address as Address);
 
   //   const [nft, setNft] = useState<NftItem>();
   //   const {
@@ -114,7 +114,7 @@ export const Balance = forwardRef<
     >
       {tokens.length === 0 && <Box textAlign="center" minH={"100px"}><Spinner /></Box>}
       {/* <NftModal nft={nft!} isOpen={nftIsOpen} onClose={onNftClose} /> */}
-      {tokens.map(({token, quantity}) => <BalanceItem key={token.address}>
+      {tokens.filter(t => t.quantity > 0 || t.isNative).map(({token, quantity}) => <BalanceItem key={token.address}>
         <Row>
           <AssetLogo src={token.logoURI} />
           <Column>

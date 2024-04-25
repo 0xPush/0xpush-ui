@@ -66,8 +66,8 @@ export const PublicKey = ({ publicKey }: PublicKeyProps) => {
       borderRadius="lg"
       boxShadow="md"
     >
-      <Text textAlign="center" fontSize="12px" mb={2}>
-        You can send ETH to this address
+      <Text textAlign="left" fontSize="12px" mb={2}>
+        You can send assets to this address
       </Text>
       <KeyRow>
         <Content onClick={handleClick}>{publicKey}</Content>
@@ -87,7 +87,7 @@ export const PublicKey = ({ publicKey }: PublicKeyProps) => {
       <Collapse in={isOpen}>
         <Stack m={4} align="center">
           <QRCode
-            fgColor={colorMode === "light" ? "#740084" : "#d2d2d2"}
+            fgColor={colorMode === "light" ? "#1f0023" : "#d2d2d2"}
             bgColor="transparent"
             value={publicKey}
           />

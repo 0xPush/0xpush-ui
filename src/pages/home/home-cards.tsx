@@ -58,8 +58,7 @@ export const HomeCards = ({ className }: Props): JSX.Element => {
             3. Done
           </Heading>
           <Text mt={3} textAlign="center">
-            You have just sent someone crypto and they can send or use it even
-            if they don't have a crypto wallet.
+          You have just sent crypto and recipient can use it even if they don't have a crypto wallet.
           </Text>
         </Stack>
       </Card>

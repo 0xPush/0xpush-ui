@@ -26,11 +26,13 @@ import { useState } from "react";
 import {
   useAccount,
   useSendTransaction,
-  useWaitForTransactionReceipt,
   useWriteContract,
 } from "wagmi";
 import { Address, erc20Abi, formatUnits, parseUnits } from "viem";
 import { useTokenBalance } from "hooks/use-token-balance";
+import { waitForTransactionReceipt } from "wagmi/actions";
+import { config } from "providers/wagmi-web3-provider";
+import { useTokens } from "hooks/use-tokens";
 
 const Container = styled.div`
   margin-top: 2vh;
@@ -67,13 +69,11 @@ export const Deposit = ({ className }: Props): JSX.Element => {
   const toast = useToast();
   const router = useRouter();
 
-  const { data: hash, sendTransaction, isPending } = useSendTransaction();
-  const { writeContractAsync } = useWriteContract();
+  const {refetchBalance} = useTokens(chain!, wallet.address);
 
-  const { isLoading: isConfirming, isSuccess: isConfirmed } =
-    useWaitForTransactionReceipt({
-      hash,
-    });
+  const [isLoading, setIsLoading] = useState(false);
+  const { sendTransaction } = useSendTransaction();
+  const { writeContractAsync } = useWriteContract();
 
   const bgColor = { light: "white", dark: "whiteAlpha.100" };
 
@@ -93,7 +93,9 @@ export const Deposit = ({ className }: Props): JSX.Element => {
     });
   };
 
-  const handleDeposit = () => {
+  // TODO: common hook with send.tsx
+  const handleDeposit = async () => {
+    setIsLoading(true);
     if (token.isNative) {
       sendTransaction(
         {
@@ -101,27 +103,50 @@ export const Deposit = ({ className }: Props): JSX.Element => {
           value: parseUnits(amount, token.token.decimals),
         },
         {
-          onSuccess: () =>
+          onSuccess: async (hash) => {
+            const data = await waitForTransactionReceipt(config, {hash})
+            console.log(data);
+            setIsLoading(false)
             toast({
               title: `${formatUnits(parseUnits(amount, token.token.decimals), token.token.decimals)} ${token.token.symbol} sent. Tx: ${hash}.`,
               status: "success",
-            }),
+            })
+            refetchBalance();
+          },
+          onError: (e) => {
+            console.log(e)
+            // @ts-ignore
+            toast({title: e, status: "error"})
+            setIsLoading(false)
+          },
         }
       );
     } else {
-      writeContractAsync({
-        abi: erc20Abi,
-        address: token.token.address as Address,
-        functionName: "transfer",
-        args: [wallet.address, parseUnits(amount, token.token.decimals)],
-      })
-        .then((data) =>
-          toast({
-            title: `Tx sent: ${data}.`,
-            status: "success",
-          })
-        )
-        .catch((e) => console.log(e));
+
+      try {
+        const hash = await writeContractAsync({
+          abi: erc20Abi,
+          address: token.token.address as Address,
+          functionName: "transfer",
+          args: [wallet.address, parseUnits(amount, token.token.decimals)],
+        })
+
+        const data = await waitForTransactionReceipt(config, {hash});
+        console.log(data);
+
+        setIsLoading(false)
+        toast({
+          title: `${formatUnits(parseUnits(amount, token.token.decimals), token.token.decimals)} ${token.token.symbol} sent. Tx: ${hash}.`,
+          status: "success",
+        })
+      } catch(e) {
+        console.log(e)
+        // @ts-ignore
+        toast({title: e, status: "error"})
+      } finally {
+        refetchBalance();
+        setIsLoading(false);
+      }
     }
   };
 
@@ -180,7 +205,7 @@ export const Deposit = ({ className }: Props): JSX.Element => {
                   w="100%"
                   mt={4}
                   colorScheme="red"
-                  isLoading={isPending || isConfirming}
+                  isLoading={isLoading}
                   loadingText="Wait..."
                   type="submit"
                   onClick={handleDeposit}
