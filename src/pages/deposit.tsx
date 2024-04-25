@@ -1,38 +1,34 @@
-import styled from "@emotion/styled";
-import { usePushWalletContext } from "../providers/push-wallet-provider";
+import { ChevronLeftIcon } from "@chakra-ui/icons";
 import {
+  Box,
+  Button,
   Fade,
   Heading,
   Stack,
+  Text,
   useColorMode,
   useDisclosure,
-  Text,
-  Button,
   useToast,
-  Box,
 } from "@chakra-ui/react";
-import { moveBg } from "../components/moveBg";
+import styled from "@emotion/styled";
 import { useRouter } from "@tanstack/react-router";
-import { ChevronLeftIcon } from "@chakra-ui/icons";
+import { Balance, ConnectWalletBlur } from "components/balance";
+import { TokenInput, getDefaultToken } from "components/token-input";
+import { useTokenBalance } from "hooks/use-token-balance";
+import { useTokenSend } from "hooks/use-token-send";
+import { useState } from "react";
+import { AiOutlineLink, AiOutlineQrcode } from "react-icons/ai";
+import { TokenOption } from "types/token";
+import { parseUnits } from "viem";
+import {
+  useAccount
+} from "wagmi";
+import { moveBg } from "../components/moveBg";
 import { PublicKey } from "../components/public-key";
 import { QrModal } from "../components/qr-modal";
-import { copyTextToClipboard } from "../lib/copy";
-import { Balance, ConnectWalletBlur } from "components/balance";
 import { SetupCustomization } from "../components/setup-customization";
-import { AiOutlineQrcode, AiOutlineLink } from "react-icons/ai";
-import { TokenInput, getDefaultToken } from "components/token-input";
-import { TokenOption } from "types/token";
-import { useState } from "react";
-import {
-  useAccount,
-  useSendTransaction,
-  useWriteContract,
-} from "wagmi";
-import { Address, erc20Abi, formatUnits, parseUnits } from "viem";
-import { useTokenBalance } from "hooks/use-token-balance";
-import { waitForTransactionReceipt } from "wagmi/actions";
-import { config } from "providers/wagmi-web3-provider";
-import { useTokens } from "hooks/use-tokens";
+import { copyTextToClipboard } from "../lib/copy";
+import { usePushWalletContext } from "../providers/push-wallet-provider";
 
 const Container = styled.div`
   margin-top: 2vh;
@@ -69,12 +65,6 @@ export const Deposit = ({ className }: Props): JSX.Element => {
   const toast = useToast();
   const router = useRouter();
 
-  const {refetchBalance} = useTokens(chain!, wallet.address);
-
-  const [isLoading, setIsLoading] = useState(false);
-  const { sendTransaction } = useSendTransaction();
-  const { writeContractAsync } = useWriteContract();
-
   const bgColor = { light: "white", dark: "whiteAlpha.100" };
 
   const [amount, setAmount] = useState("");
@@ -85,6 +75,8 @@ export const Deposit = ({ className }: Props): JSX.Element => {
   const fromPush = !!(router.state.location.search as any).fromPush;
   const hostname = window?.location.origin;
 
+  const {sendToken, pending} = useTokenSend();
+
   const handleLinkCopy = () => {
     copyTextToClipboard(`${hostname}/w/${privateKey}`);
     toast({
@@ -93,61 +85,8 @@ export const Deposit = ({ className }: Props): JSX.Element => {
     });
   };
 
-  // TODO: common hook with send.tsx
   const handleDeposit = async () => {
-    setIsLoading(true);
-    if (token.isNative) {
-      sendTransaction(
-        {
-          to: wallet.address,
-          value: parseUnits(amount, token.token.decimals),
-        },
-        {
-          onSuccess: async (hash) => {
-            const data = await waitForTransactionReceipt(config, {hash})
-            console.log(data);
-            setIsLoading(false)
-            toast({
-              title: `${formatUnits(parseUnits(amount, token.token.decimals), token.token.decimals)} ${token.token.symbol} sent. Tx: ${hash}.`,
-              status: "success",
-            })
-            refetchBalance();
-          },
-          onError: (e) => {
-            console.log(e)
-            // @ts-ignore
-            toast({title: e, status: "error"})
-            setIsLoading(false)
-          },
-        }
-      );
-    } else {
-
-      try {
-        const hash = await writeContractAsync({
-          abi: erc20Abi,
-          address: token.token.address as Address,
-          functionName: "transfer",
-          args: [wallet.address, parseUnits(amount, token.token.decimals)],
-        })
-
-        const data = await waitForTransactionReceipt(config, {hash});
-        console.log(data);
-
-        setIsLoading(false)
-        toast({
-          title: `${formatUnits(parseUnits(amount, token.token.decimals), token.token.decimals)} ${token.token.symbol} sent. Tx: ${hash}.`,
-          status: "success",
-        })
-      } catch(e) {
-        console.log(e)
-        // @ts-ignore
-        toast({title: e, status: "error"})
-      } finally {
-        refetchBalance();
-        setIsLoading(false);
-      }
-    }
+    sendToken({token, amount, to: wallet.address})
   };
 
   const getDepositButtonLabel = () => {
@@ -205,7 +144,7 @@ export const Deposit = ({ className }: Props): JSX.Element => {
                   w="100%"
                   mt={4}
                   colorScheme="red"
-                  isLoading={isLoading}
+                  isLoading={pending}
                   loadingText="Wait..."
                   type="submit"
                   onClick={handleDeposit}

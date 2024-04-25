@@ -1,17 +1,14 @@
-import { Box, Button, FormControl, FormErrorMessage, Stack, useColorMode, useToast } from "@chakra-ui/react";
-import { css } from "@emotion/react";
+import { Box, Button, Stack, useColorMode } from "@chakra-ui/react";
 import styled from "@emotion/styled";
 import { getDefaultToken } from "components/token-input";
 import { TokenInput } from "components/token-input/token-select";
 import { StyledInput } from "components/ui/styled-input";
-import { useTokens } from "hooks/use-tokens";
+import { useTokenSend } from "hooks/use-token-send";
 import { usePushWalletContext } from "providers/push-wallet-provider";
-import { config } from "providers/wagmi-web3-provider";
 import { useEffect, useState } from "react";
 import { TokenOption } from "types/token";
-import { Address, erc20Abi, formatUnits, isAddress, parseUnits } from "viem";
-import { useAccount, useClient, useSendTransaction, useWriteContract } from "wagmi";
-import { waitForTransactionReceipt } from "wagmi/actions";
+import { Address, isAddress } from "viem";
+import { useAccount, useClient } from "wagmi";
 
 const FormLabel = styled.div`
   display: flex;
@@ -33,7 +30,6 @@ export const Send = () => {
   const { address } = useAccount();
   const {chain, account} = usePushWalletContext();
   const client = useClient();
-  const toast = useToast();
 
   const [amount, setAmount] = useState("");
   const [token, setToken] = useState<TokenOption>(
@@ -41,11 +37,7 @@ export const Send = () => {
   );
   const [to, setTo] = useState("");
 
-  const {refetchBalance} = useTokens(chain, account?.address as Address);
-
-  const [isLoading, setIsLoading] = useState(false);
-  const { sendTransaction } = useSendTransaction();
-  const { writeContractAsync } = useWriteContract();
+  const {sendToken, pending} = useTokenSend();
 
   useEffect(() => {
     if (address) {
@@ -56,63 +48,9 @@ export const Send = () => {
   const { colorMode } = useColorMode();
   const bgColor = { light: "white", dark: "whiteAlpha.100" };
 
-  // TODO: common hook with deposit.tsx
   const handleSend = async () => {
-    setIsLoading(true);
-    if (token.isNative) {
-      sendTransaction(
-        {
-          to: to as Address,
-          value: parseUnits(amount, token.token.decimals),
-          account,
-        },
-        {
-          onSuccess: async (hash) => {
-            const data = await waitForTransactionReceipt(config, {hash})
-            console.log(data);
-            setIsLoading(false)
-            toast({
-              title: `${formatUnits(parseUnits(amount, token.token.decimals), token.token.decimals)} ${token.token.symbol} sent. Tx: ${hash}.`,
-              status: "success",
-            })
-            refetchBalance();
-          },
-          onError: (e) => {
-            console.log(e)
-            // @ts-ignore
-            toast({title: e.message, status: "error"})
-            setIsLoading(false)
-          },
-        }
-      );
-    } else {
-
-      try {
-        const hash = await writeContractAsync({
-          abi: erc20Abi,
-          address: token.token.address as Address,
-          functionName: "transfer",
-          args: [to as Address, parseUnits(amount, token.token.decimals)],
-          account
-        })
-
-        const data = await waitForTransactionReceipt(config, {hash});
-        console.log(data);
-
-        setIsLoading(false)
-        toast({
-          title: `${formatUnits(parseUnits(amount, token.token.decimals), token.token.decimals)} ${token.token.symbol} sent. Tx: ${hash}.`,
-          status: "success",
-        })
-      } catch(e) {
-        console.log(e)
-        // @ts-ignore
-        toast({title: e?.message || "Unknown error", status: "error"})
-      } finally {
-        refetchBalance();
-        setIsLoading(false);
-      }
-  }}
+    sendToken({token, amount, to: to as Address, account});
+  };
 
   return (
     <Stack>
@@ -146,7 +84,7 @@ export const Send = () => {
         <Button
           w="100%"
           colorScheme="red"
-          isLoading={isLoading}
+          isLoading={pending}
           isDisabled={false || !isAddress(to)}
           onClick={handleSend}
           loadingText="Wait..."

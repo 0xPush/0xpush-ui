@@ -13,6 +13,11 @@ interface UseTokens {
   refetchBalance: () => Promise<void>;
 }
 
+interface Props {
+  chain: Chain;
+  address: Address;
+}
+
 export const useTokens = (chain: Chain, address: Address): UseTokens => {
   const client = usePublicClient();
   const queryClient = useQueryClient();
@@ -55,6 +60,7 @@ export const useTokens = (chain: Chain, address: Address): UseTokens => {
         quantity: balances[t.token.address as Address],
       }));
     },
+    enabled: !!address && !!chain,
   });
 
   const refetchBalance = async () => {
