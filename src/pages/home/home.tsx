@@ -123,7 +123,7 @@ export const Home = (): JSX.Element => {
       </Stack>
 
       <ScaleFade in={show}>
-        <Stack mb={20}>
+        <Stack mt={20} mb={20}>
           <Banner>
             <Heading size="mm">Built on</Heading>
             <a

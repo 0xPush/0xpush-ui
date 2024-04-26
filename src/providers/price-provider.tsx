@@ -1,18 +1,30 @@
-import { createContext, ReactNode, useContext, useEffect, useState } from 'react';
-import { getEthPrice } from '../lib/api';
+import {
+  createContext,
+  ReactNode,
+  useContext,
+  useEffect,
+  useState,
+} from "react";
+import { getCoinPrice } from "../lib/api";
 
 interface PriceContextValue {
-    ethPriceUsd: number;
+  ethPriceUsd: number;
 }
 
-export const PriceContext = createContext<PriceContextValue>({ ethPriceUsd: 0 });
+export const PriceContext = createContext<PriceContextValue>({
+  ethPriceUsd: 0,
+});
 export const usePrice = () => useContext(PriceContext);
 
 export const PriceProvider = ({ children }: { children: ReactNode }) => {
-    const [ethPriceUsd, setEthPriceUsd] = useState(0);
-    useEffect(() => {
-        getEthPrice().then(price => setEthPriceUsd(price));
-    }, []);
+  const [ethPriceUsd, setEthPriceUsd] = useState(0);
+  useEffect(() => {
+    getCoinPrice("ETHUSDT").then((price) => setEthPriceUsd(price));
+  }, []);
 
-    return <PriceContext.Provider value={{ ethPriceUsd }}>{children}</PriceContext.Provider>;
+  return (
+    <PriceContext.Provider value={{ ethPriceUsd }}>
+      {children}
+    </PriceContext.Provider>
+  );
 };

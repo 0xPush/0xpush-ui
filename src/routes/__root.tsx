@@ -6,6 +6,9 @@ import { Header } from "../components/layout/header";
 import { PriceProvider } from "../providers/price-provider";
 import { theme } from "../theme";
 import { WagmiWeb3Provider } from "providers/wagmi-web3-provider";
+import { GoldRushProvider } from "@covalenthq/goldrush-kit";
+
+import "@covalenthq/goldrush-kit/styles.css";
 
 const AppContainer = styled.div`
   min-height: 100dvh;
@@ -15,6 +18,8 @@ const AppContainer = styled.div`
 `;
 
 const manager = createLocalStorageManager("color-theme");
+
+const COVALENT_API_KEY = "cqt_rQbjWy6kQ8dWHCYkV74KY4VYD893";
 
 export const Route = createRootRoute({
   component: () => (
@@ -27,12 +32,14 @@ export const Route = createRootRoute({
     >
       <WagmiWeb3Provider>
         <PriceProvider>
-          <AppContainer>
-            <Header />
-            <Content>
-              <Outlet />
-            </Content>
-          </AppContainer>
+          <GoldRushProvider apikey={COVALENT_API_KEY}>
+            <AppContainer>
+              <Header />
+              <Content>
+                <Outlet />
+              </Content>
+            </AppContainer>
+          </GoldRushProvider>
         </PriceProvider>
       </WagmiWeb3Provider>
     </ChakraProvider>

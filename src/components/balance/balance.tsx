@@ -7,7 +7,6 @@ import { usePushWalletContext } from "../../providers/push-wallet-provider";
 
 import { useTokens } from "hooks/use-tokens";
 import { Address, formatUnits } from "viem";
-import { TokenListItem, TokenOption } from "types/token";
 
 const $Box = styled(Box)`
   display: flex;
@@ -78,8 +77,10 @@ const UsdAmount = styled.div<{ dark: boolean }>`
 
 const formatBalanceValue = (quantity: bigint, decimals: number) => {
   const formatted = formatUnits(quantity, decimals);
-  return formatted.length > 7 ? parseFloat(formatted).toFixed(5) : `${formatted}`;
-}
+  return formatted.length > 7
+    ? parseFloat(formatted).toFixed(5)
+    : `${formatted}`;
+};
 
 interface BalanceDisplayProps {
   className?: string;
@@ -91,7 +92,7 @@ export const Balance = forwardRef<
 >(function BalanceDisplay({ className }, ref) {
   const { chain, account, totalUsdAmount } = usePushWalletContext();
 
-  const {tokens} = useTokens(chain, account?.address as Address);
+  const { tokens } = useTokens(chain, account?.address as Address);
 
   //   const [nft, setNft] = useState<NftItem>();
   //   const {
@@ -100,7 +101,6 @@ export const Balance = forwardRef<
   //     onOpen: openNft,
   //   } = useDisclosure();
 
-  
   const { colorMode } = useColorMode();
   const bgColor = { light: "white", dark: "whiteAlpha.100" };
 
@@ -116,27 +116,37 @@ export const Balance = forwardRef<
       borderRadius="lg"
       boxShadow="md"
     >
-      {tokens.length === 0 && <Box textAlign="center" minH={"100px"}><Spinner /></Box>}
+      {tokens.length === 0 && (
+        <Box textAlign="center" minH={"100px"}>
+          <Spinner />
+        </Box>
+      )}
       {/* <NftModal nft={nft!} isOpen={nftIsOpen} onClose={onNftClose} /> */}
-      {tokens.filter(t => t.quantity > 0 || t.isNative).map(({token, quantity}) => <BalanceItem key={token.address}>
-        <Row>
-          <AssetLogo src={token.logoURI} />
-          <Column>
-            <CoinName>{token.name}</CoinName>
-            <CoinAmount>
-              {formatBalanceValue(quantity, token.decimals)} {token.symbol}
-            </CoinAmount>
-          </Column>
-        </Row>
-        <UsdAmountWrapper>
-          {/* <Tooltip>
+      {tokens
+        .filter((t) => t.quantity > 0 || t.isNative)
+        .map(({ token, quantity }) => (
+          <BalanceItem key={token.address}>
+            <Row>
+              <AssetLogo src={token.logoURI} />
+              <Column>
+                <CoinName>{token.name}</CoinName>
+                <CoinAmount>
+                  {formatBalanceValue(quantity, token.decimals)} {token.symbol}
+                </CoinAmount>
+              </Column>
+            </Row>
+            <UsdAmountWrapper>
+              {/* <Tooltip>
             <AiOutlineThunderbolt height="40px" width="40px" fill="red" />
           </Tooltip> */}
-          {token.isNative && <UsdAmount dark={colorMode === "dark"}>
-            ${totalUsdAmount} USD
-          </UsdAmount>}
-        </UsdAmountWrapper>
-      </BalanceItem>)}
+              {token.isNative && (
+                <UsdAmount dark={colorMode === "dark"}>
+                  ${totalUsdAmount} USD
+                </UsdAmount>
+              )}
+            </UsdAmountWrapper>
+          </BalanceItem>
+        ))}
       {/* {tokens.length > 0 && (
         <Collapse in={showMore}>
           <Stack spacing={2}>

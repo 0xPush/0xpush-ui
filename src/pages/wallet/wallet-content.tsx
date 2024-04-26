@@ -11,7 +11,7 @@ import styled from "@emotion/styled";
 import type { FireworksHandlers } from "@fireworks-js/react";
 import { Fireworks } from "@fireworks-js/react";
 import { useEffect, useMemo, useRef, useState } from "react";
-import { AiOutlineSend, AiOutlineSwap } from "react-icons/ai";
+import { AiOutlineHistory, AiOutlineSend, AiOutlineSwap } from "react-icons/ai";
 import { FaCoins, FaGamepad } from "react-icons/fa";
 import { IoPeople, IoWalletOutline } from "react-icons/io5";
 import Joyride from "react-joyride";
@@ -31,6 +31,12 @@ import {
   GAME_PROJECTS,
   SOCIAL_PROJECTS,
 } from "./project-list/projects";
+
+import {
+  AddressActivityListView,
+  TransactionsList,
+} from "@covalenthq/goldrush-kit";
+import { TransactionHistoryModal } from "./tx-history-modal";
 
 const Container = styled.div`
   margin-top: 2vh;
@@ -90,6 +96,14 @@ export const WalletContent = () => {
     onToggle: toggleWalletActions,
     onClose: closeWalletActions,
   } = useDisclosure({ defaultIsOpen: false });
+
+  const {
+    isOpen: showTxHistory,
+    onToggle: toggleTxHistory,
+    onClose: closeTxHistory,
+  } = useDisclosure({
+    defaultIsOpen: false,
+  });
 
   useEffect(() => {
     if (!account) {
@@ -245,7 +259,7 @@ export const WalletContent = () => {
           )}
           {action === "markets" && <ProjectList projects={SOCIAL_PROJECTS} />}
         </Stack>
-        <Stack align="center" my={3}>
+        <Stack direction="row" justify="center" align="center" my={3}>
           <Button
             className="onboard-wallet-actions"
             variant="outline"
@@ -260,6 +274,24 @@ export const WalletContent = () => {
             Wallet
             <Icon ml={2} width="16px" height="16px" as={IoWalletOutline} />
           </Button>
+          <Button
+            variant="outline"
+            colorScheme="pink"
+            size="sm"
+            onClick={() => {
+              toggleTxHistory();
+            }}
+            mb={3}
+          >
+            Tx History
+            <Icon ml={2} width="16px" height="16px" as={AiOutlineHistory} />
+          </Button>
+          <TransactionHistoryModal
+            isOpen={showTxHistory}
+            onClose={closeTxHistory}
+          />
+        </Stack>
+        <Stack>
           <Fade in={showWalletActions} unmountOnExit={true}>
             <WalletActions />
           </Fade>
