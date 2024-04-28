@@ -136,9 +136,6 @@ export const Balance = forwardRef<
               </Column>
             </Row>
             <UsdAmountWrapper>
-              {/* <Tooltip>
-            <AiOutlineThunderbolt height="40px" width="40px" fill="red" />
-          </Tooltip> */}
               {token.isNative && (
                 <UsdAmount dark={colorMode === "dark"}>
                   ${totalUsdAmount} USD
@@ -148,62 +145,35 @@ export const Balance = forwardRef<
           </BalanceItem>
         ))}
       {/* {tokens.length > 0 && (
-        <Collapse in={showMore}>
-          <Stack spacing={2}>
-            {tokens?.map((token, index) => {
-              const { tokenAmount, info, raw, nft } = token;
-              return !nft ? (
-                <BalanceItem key={raw.info.mint} nft={!!nft}>
-                  <Row>
-                    <Image
-                      width={42}
-                      height={42}
-                      src={(info?.logoURI as string) ?? CoinIcon}
-                      alt={info?.symbol || "Unknown token"}
-                    />
-                    <Column>
-                      <CoinName>{info?.name || "Unknown token"}</CoinName>
-                      <CoinAmount>
-                        {tokenAmount.uiAmount} {info?.symbol}
-                      </CoinAmount>
-                    </Column>
-                  </Row>
-                  {!info?.name && <UsdAmount>{getShortMint(token)}</UsdAmount>}
-                </BalanceItem>
-              ) : (
-                <BalanceItem key={raw.info.mint} nft={!!nft}>
-                  <Row isNft={true}>
-                    <img
-                      width={50}
-                      height={50}
-                      src={(nft.imageUrl as string) ?? CoinIcon}
-                      alt={nft.name}
-                      style={{ borderRadius: "4px" }}
-                    />
-                    <Column>
-                      <CoinName>{nft.name}</CoinName>
-                      <CoinAmount>NFT</CoinAmount>
-                    </Column>
-                  </Row>
-                  <UsdAmount>
-                    <Button
-                      size="sm"
-                      variant="outline"
-                      colorScheme="pink"
-                      marginRight="2px"
-                      onClick={() => {
-                        setNft(nft);
-                        openNft();
-                      }}
-                    >
-                      View
-                    </Button>
-                  </UsdAmount>
-                </BalanceItem>
-              );
-            })}
-          </Stack>
-        </Collapse>
+          <BalanceItem key={raw.info.mint} nft={!!nft}>
+            <Row isNft={true}>
+              <img
+                width={50}
+                height={50}
+                src={(nft.imageUrl as string) ?? CoinIcon}
+                alt={nft.name}
+                style={{ borderRadius: "4px" }}
+              />
+              <Column>
+                <CoinName>{nft.name}</CoinName>
+                <CoinAmount>NFT</CoinAmount>
+              </Column>
+            </Row>
+            <UsdAmount>
+              <Button
+                size="sm"
+                variant="outline"
+                colorScheme="pink"
+                marginRight="2px"
+                onClick={() => {
+                  setNft(nft);
+                  openNft();
+                }}
+              >
+                View
+              </Button>
+            </UsdAmount>
+          </BalanceItem>
       )} */}
     </$Box>
   );

@@ -66,6 +66,7 @@ export const useTokens = (chain: Chain, address: Address): UseTokens => {
   const refetchBalance = async () => {
     console.log("refetch balance");
     await queryClient.invalidateQueries({ queryKey: ["tokens-multicall"] });
+    await queryClient.invalidateQueries({ queryKey: ["balance"] });
   };
 
   return {
