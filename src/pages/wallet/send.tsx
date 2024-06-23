@@ -28,7 +28,7 @@ const AddressInput = styled(StyledInput)`
 
 export const Send = () => {
   const { address } = useAccount();
-  const {chain, account} = usePushWalletContext();
+  const { chain, account } = usePushWalletContext();
   const client = useClient();
 
   const [amount, setAmount] = useState("");
@@ -37,7 +37,7 @@ export const Send = () => {
   );
   const [to, setTo] = useState("");
 
-  const {sendToken, pending} = useTokenSend();
+  const { sendToken, pending } = useTokenSend();
 
   useEffect(() => {
     if (address) {
@@ -49,7 +49,7 @@ export const Send = () => {
   const bgColor = { light: "white", dark: "whiteAlpha.100" };
 
   const handleSend = async () => {
-    sendToken({token, amount, to: to as Address, account});
+    sendToken({ token, amount, to: to as Address, account });
   };
 
   return (

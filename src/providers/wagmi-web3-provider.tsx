@@ -4,9 +4,7 @@ import { defaultWagmiConfig } from "@web3modal/wagmi/react/config";
 import { ReactNode } from "react";
 
 import { WagmiProvider } from "wagmi";
-import {
-  scrollSepolia,
-} from "wagmi/chains";
+import { scrollSepolia, scroll } from "wagmi/chains";
 
 const queryClient = new QueryClient();
 
@@ -21,9 +19,7 @@ const metadata = {
   icons: [],
 };
 
-const chains = [
-  scrollSepolia
-] as const;
+const chains = [scroll, scrollSepolia] as const;
 
 export const config = defaultWagmiConfig({
   projectId,
@@ -35,7 +31,7 @@ export const config = defaultWagmiConfig({
 createWeb3Modal({
   wagmiConfig: config,
   projectId,
-  enableAnalytics: true, // Optional - defaults to your Cloud configuration
+  enableAnalytics: false, // Optional - defaults to your Cloud configuration
   enableOnramp: true, // Optional - false as default
 });
 
