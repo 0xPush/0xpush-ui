@@ -43,5 +43,23 @@
         "decimals": 18,
         "logoURI": "https://ethereum-optimism.github.io/data/ETH/logo.svg",
         "isNative": true
+    },
+    {
+        "chainId": 534352,
+        "address": "0x06eFdBFf2a14a7c8E15944D1F4A48F9F95F663A4",
+        "name": "USD Coin",
+        "symbol": "USDC",
+        "decimals": 6,
+        "logoURI": "https://scroll-tech.github.io/token-list/data/USDC/logo.svg",
+        "isNative": false
+    },
+    {
+        "chainId": 534352,
+        "address": "0x06eFdBFf2a14a7c8E15944D1F4A48F9F95F663A4",
+        "name": "Tether USD",
+        "symbol": "USDT",
+        "decimals": 6,
+        "logoURI": "https://scroll-tech.github.io/token-list/data/USDT/logo.svg",
+        "isNative": false
     }
 ]
